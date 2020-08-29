@@ -37,6 +37,8 @@ namespace TimeLine
         }
 
         protected override void OnExit(ExitEventArgs e) {
+            Logger.Log("Closing Application\n", LogLevel.DEBUG);
+
             taskbarIcon.Dispose(); // Make sure we remove TrayIcon before exiting app.
             base.OnExit(e);
         }

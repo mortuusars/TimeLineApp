@@ -17,8 +17,9 @@ namespace TimeLine
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public CommandView CommandView { get; private set; }        
+        public CommandViewModel CurrentCommandVM { get; private set; }
 
-        CommandView commandView;
         ToastMainView toastMain;
 
         public ObservableCollection<ToastControlViewModel> ToastList { get; set; }
@@ -106,19 +107,20 @@ namespace TimeLine
 
 
         public void ShowOrCloseCommandView() {
-            if (commandView == null) {
-                Logger.Log("Showing CommandWindow:", LogLevel.DEBUG);
-                commandView = new CommandView {
-                    DataContext = new CommandViewModel()
-                };
-                commandView.Show();
+            if (CommandView == null) {
+                CurrentCommandVM = new CommandViewModel();
+                
+                CommandView = new CommandView() { DataContext = CurrentCommandVM };                
+                CommandView.Show();
             }
             else {
-                Logger.Log("Closing CommandWindow..", LogLevel.DEBUG);
-                commandView.Close();
-                commandView = null;
+                CommandView.Close();
+                CommandView = null;
             }
         }
+
+
+
 
         public void ParseInput(string inputText) {
             ParsedCommandData parsedData = new CommandParser().Parse(inputText);
@@ -142,10 +144,9 @@ namespace TimeLine
                 // Mute
                 ShowToastNotification("Timer", "Started for 3 minutes" +
                     "Started for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutes" +
-                    "Started for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutes", Icons.timer);   
+                    "Started for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutes", Icons.timer);
             }
-            else if (parsedData.MainCommand == "exit") {
-                Logger.Log("Exiting Application", LogLevel.DEBUG);
+            else if (parsedData.MainCommand == "exit") {                
                 App.ExitApplication();
             }
         }
@@ -187,7 +188,7 @@ namespace TimeLine
                         else {
                             var timeToAdd = parsed.OverallSeconds();
                             Timer.Add(timeToAdd);
-                            toastMessage = timeToAdd > 0 ? $"Added {Utilities.PrettyTime(timeToAdd)} to timer" : $"Subtracted {Utilities.PrettyTime(timeToAdd, removeMinusSign : true)} from timer";
+                            toastMessage = timeToAdd > 0 ? $"Added {Utilities.PrettyTime(timeToAdd)} to timer" : $"Subtracted {Utilities.PrettyTime(timeToAdd, removeMinusSign: true)} from timer";
                         }
                         break;
                     }
@@ -196,7 +197,7 @@ namespace TimeLine
                             toastMessage = "Timer is not running";
                         }
                         else {
-                            Timer.Stop();                            
+                            Timer.Stop();
                             toastMessage = $"Stopped";
                         }
                         break;
@@ -214,7 +215,7 @@ namespace TimeLine
                 default: {
                         toastMessage = "Command is not recognized";
                         break;
-                    }                       
+                    }
             }
 
             ShowToastNotification(toastTitle, toastMessage, icon);
@@ -229,8 +230,8 @@ namespace TimeLine
         private void Timer_TimerEnded(object sender, int timeForTimer) {
             Logger.Log($"Timer for {timeForTimer} s. is ended", LogLevel.DEBUG);
 
-            Application.Current.Dispatcher.Invoke(new Action(() => { ShowToastNotification("Timer", $"{Utilities.PrettyTime(timeForTimer)} has passed.", Icons.timer, IsAlarm : true); }));
-            
+            Application.Current.Dispatcher.Invoke(new Action(() => { ShowToastNotification("Timer", $"{Utilities.PrettyTime(timeForTimer)} has passed.", Icons.timer, IsAlarm: true); }));
+
         }
 
         #endregion

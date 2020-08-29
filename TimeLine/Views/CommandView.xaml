@@ -14,6 +14,15 @@
 
     <Window.Resources>
 
+        <!-- Main Grid Style -->
+        <Style x:Key="FocusTextBox" TargetType="TextBox">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding TextBoxChangeFocus}" Value="True">
+                    <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=CommandTextBox}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        
         <!-- Command TextBox Style -->
         <Style TargetType="TextBox" x:Key="CommandTextBox">
             <Setter Property="Background" Value="Transparent"/>
@@ -27,6 +36,12 @@
             <Setter Property="TabIndex" Value="0"/>
             <Setter Property="Margin" Value="4"/>
             <Setter Property="Padding" Value="8 0 8 0"/>
+
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding TextBoxChangeFocus}" Value="True">
+                    <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=CommandTextBox}"/>
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
 
         <!-- Confirm Button -->
@@ -68,24 +83,49 @@
             </Style.Triggers>
             
         </Style>
+        
+        <!-- Suggestions Button Style -->
+        <Style TargetType="{x:Type Button}" x:Key="SuggestionButton">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="{StaticResource HalfLightBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkBrush}"/>
+            <Setter Property="FontFamily" Value="{StaticResource MontserratLight}"/>
+            <Setter Property="FontSize" Value="22"/>
+
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="{Binding CornerRadius}"/>
+                </Style>
+            </Style.Resources>
+
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation From="0.0" To="1.0" Duration="0:0:0.2" Storyboard.TargetProperty="Opacity"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
 
 
     </Window.Resources>
 
     <!-- Content -->
-    <Grid Margin="8" >
+    <Grid Margin="8"  >
         <Grid.Effect>
             <DropShadowEffect Opacity="0.3" ShadowDepth="0" BlurRadius="0" />
         </Grid.Effect>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="{Binding BaseHeight}" d:Height="60" />
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="60" d:Height="60" />
+            <RowDefinition Height="200"/>
         </Grid.RowDefinitions>
 
 
         <!-- Main Box -->
-        <Grid Grid.Row="0" Panel.ZIndex="100">
+        <Grid Grid.Row="0" FocusManager.FocusedElement="{Binding ElementName=CommandTextBox}">
 
             <Grid.Effect>
                 <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.6"/>
@@ -116,7 +156,7 @@
             
             <!-- Main Text Box Input -->
             <TextBox x:Name="CommandTextBox" Text="{Binding Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" d:Text="Timer Add 1 30"
-                     Style="{StaticResource CommandTextBox}">
+                     Style="{StaticResource CommandTextBox}" >
                 <TextBox.InputBindings>
                     <KeyBinding Key="Return" Command="{Binding ConfirmCommand}"/>
                 </TextBox.InputBindings>
@@ -143,23 +183,15 @@
             </VirtualizingStackPanel.Effect>
 
             <!-- Suggestion Buttons-->
-            <ItemsControl x:Name="suggestions" IsTabStop="false" ItemsSource="{Binding Suggestions}">
+            <ItemsControl Height="200" x:Name="suggestions" IsTabStop="false" ItemsSource="{Binding Suggestions}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
 
                         <Grid Margin="60 0">
                             <!-- Button Itself -->
-                            <Button x:Name="suggestionaButton" Content="{Binding SuggestionHeader}">
-
-                                <Button.Triggers>
-                                    <EventTrigger RoutedEvent="Loaded">
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation From="0.0" To="1.0" Duration="0:0:0.2" Storyboard.TargetProperty="Opacity"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                </Button.Triggers>
+                            <Button Style="{StaticResource SuggestionButton}"
+                                    Content="{Binding Header}"
+                                    Command="{Binding AddSuggestionCommand}">
                             </Button>
                         </Grid>
 
