@@ -9,21 +9,40 @@
              x:Name="ToastControlView">
 
     <Control.Resources>
-            <Style x:Key="TitleStyle" TargetType="TextBlock">
-                <Setter Property="FontFamily" Value="{StaticResource MontserratRegular}"/>
-                <Setter Property="FontSize" Value="16"/>
-                <Setter Property="Foreground" Value="#f4f4f4"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-                <Setter Property="Margin" Value="4 10 0 0"/>
-            </Style>
+        <Style x:Key="TitleStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource MontserratRegular}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="#f4f4f4"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="4 10 0 0"/>
+        </Style>
 
-            <Style x:Key="MessageStyle" TargetType="TextBlock" >
-                <Setter Property="FontFamily" Value="{StaticResource MontserratThin}"/>
-                <Setter Property="FontSize" Value="14"/>
-                <Setter Property="TextWrapping" Value="Wrap"/>
-                <Setter Property="Foreground" Value="#cfcfcf"/>
-                <Setter Property="Margin" Value="4 2 0 0"/>
-            </Style>
+        <Style x:Key="MessageStyle" TargetType="TextBlock" >
+            <Setter Property="FontFamily" Value="{StaticResource MontserratLight}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Foreground" Value="#cfcfcf"/>
+            <Setter Property="Margin" Value="4 2 0 0"/>
+        </Style>
+
+
+        <!-- Close Button -->
+        <Style x:Key="CloseButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="../Resources/Icons/close_64.png"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="0"/>
+
+            <Setter Property="Opacity" Value="0.5"/>
+            
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="1.0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Control.Resources>
 
 
@@ -32,7 +51,7 @@
         <Border.Effect>
             <DropShadowEffect BlurRadius="6" ShadowDepth="0" Opacity="0.5"/>
         </Border.Effect>
-        
+
         <Grid Margin="6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
@@ -51,11 +70,12 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Text="{Binding Title}" d:Text="Title" Style="{StaticResource TitleStyle}" />
-                
-                <TextBlock Grid.Row="1" Text="{Binding Message}" TextWrapping="Wrap" Style="{StaticResource MessageStyle}" FontFamily="{StaticResource PtMono}"
+
+                <TextBlock Grid.Row="1" Text="{Binding Message}" TextWrapping="Wrap" Style="{StaticResource MessageStyle}"
                            d:Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
             </Grid>
-            <Button Margin="8" Grid.Column="3" Command="{Binding CloseCommand}" Width="20" Height="20" VerticalAlignment="Top"/>
+            <Button Template="{DynamicResource ConfirmButtonTemplate}" Style="{StaticResource CloseButtonStyle}" 
+                    Margin="8" Grid.Column="3" Command="{Binding CloseCommand}" Width="16" Height="16" VerticalAlignment="Top" />
         </Grid>
     </Border>
 
