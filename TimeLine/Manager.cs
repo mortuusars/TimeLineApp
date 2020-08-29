@@ -38,7 +38,7 @@ namespace TimeLine
         #region Toast
 
         //TODO: Closing Animation?
-        public void ShowToast(string title, string message, IconType icon) {
+        public void ShowToastNotification(string title, string message, IconType icon) {
 
             ToastContent newToast = new ToastContent(title, message, icon);
 
@@ -79,12 +79,13 @@ namespace TimeLine
             ParsedCommandData parsedData = new CommandParser().Parse(inputText);
             Logger.Log($"Parsed following data from {inputText} : [{parsedData.MainCommand}], [{parsedData.OperationCommand}], [{parsedData.Hours}], " +
                 $"[{parsedData.Minutes}], [{parsedData.Seconds}]", LogLevel.DEBUG);
-            RunCommand(parsedData);
+
+            RunParsedCommand(parsedData);
         }
 
-        private void RunCommand(ParsedCommandData parsedData) {
+        private void RunParsedCommand(ParsedCommandData parsedData) {
             if (parsedData.MainCommand == "timer") {
-                TimerActions(parsedData);
+                TimerCommands(parsedData);
             }
             else if (parsedData.MainCommand == "stopwatch") {
                 //TODO: Stopwatch
@@ -94,7 +95,7 @@ namespace TimeLine
             }
             else if (parsedData.MainCommand == "mute") {
                 // Mute
-                ShowToast("Timer", "Started for 3 minutes" +
+                ShowToastNotification("Timer", "Started for 3 minutes" +
                     "Started for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutes" +
                     "Started for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutes", IconType.timer);
             }

@@ -13,7 +13,7 @@ namespace TimeLine
 
         public int TimerCountdown { get; private set; }
 
-        private void TimerActions(ParsedCommandData parsedData) {
+        private void TimerCommands(ParsedCommandData parsedData) {
             if (parsedData.OperationCommand == "" && parsedData.GetOverallSeconds() != 0) {
                 if (Timer != null) {
                     DeleteTimer();
@@ -21,7 +21,7 @@ namespace TimeLine
                 else {
                     CreateTimer();
                     Timer.Start(parsedData.GetOverallSeconds());
-                    ShowToast("Timer", $"Started for { Utilities.IntToPrettyTime(parsedData.GetOverallSeconds())}", IconType.timer);
+                    ShowToastNotification("Timer", $"Started for { Utilities.IntToPrettyTime(parsedData.GetOverallSeconds())}", IconType.timer);
                 }                
             }
             else if (parsedData.OperationCommand == "add") {
@@ -30,17 +30,17 @@ namespace TimeLine
             else if (parsedData.OperationCommand == "stop") {
                 if (Timer != null) {
                     DeleteTimer();
-                    ShowToast("Timer", $"Stopped. Remaining { Utilities.IntToPrettyTime(TimerCountdown)}", IconType.timer);
+                    ShowToastNotification("Timer", $"Stopped. Remaining { Utilities.IntToPrettyTime(TimerCountdown)}", IconType.timer);
                 }
                 else
-                    ShowToast("Timer", $"Timer is not running", IconType.timer);
+                    ShowToastNotification("Timer", $"Timer is not running", IconType.timer);
 
             }
             else if (parsedData.OperationCommand == "info") {
                 if (Timer != null)
-                    ShowToast("Timer", $"Remaining { Utilities.IntToPrettyTime(TimerCountdown)}", IconType.timer);
+                    ShowToastNotification("Timer", $"Remaining { Utilities.IntToPrettyTime(TimerCountdown)}", IconType.timer);
                 else
-                    ShowToast("Timer", $"Timer is not running", IconType.timer);
+                    ShowToastNotification("Timer", $"Timer is not running", IconType.timer);
             }
         }
         
@@ -57,12 +57,12 @@ namespace TimeLine
                 Timer.Add(timeToAdd);
 
                 if (timeToAdd < 0)
-                    ShowToast("Timer", $"Subtracted { Utilities.IntToPrettyTime(parsedData.GetOverallSeconds())} from timer", IconType.timer);
+                    ShowToastNotification("Timer", $"Subtracted { Utilities.IntToPrettyTime(parsedData.GetOverallSeconds())} from timer", IconType.timer);
                 else
-                    ShowToast("Timer", $"Added { Utilities.IntToPrettyTime(parsedData.GetOverallSeconds())} to timer", IconType.timer);
+                    ShowToastNotification("Timer", $"Added { Utilities.IntToPrettyTime(parsedData.GetOverallSeconds())} to timer", IconType.timer);
             }
             else {
-                ShowToast("Timer", $"Timer is not running", IconType.timer);
+                ShowToastNotification("Timer", $"Timer is not running", IconType.timer);
                 return;
             }
         }
@@ -81,7 +81,7 @@ namespace TimeLine
         private void Timer_TimerEnded(object sender, int timeForTimer) {
             Logger.Log($"Timer for {timeForTimer} s. is ended", LogLevel.DEBUG);
 
-            Application.Current.Dispatcher.Invoke(new Action(() => { ShowToast("Timer", $"{Utilities.IntToPrettyTime(timeForTimer)} has passed.", IconType.timer); }));
+            Application.Current.Dispatcher.Invoke(new Action(() => { ShowToastNotification("Timer", $"{Utilities.IntToPrettyTime(timeForTimer)} has passed.", IconType.timer); }));
             DeleteTimer();
         }
     }
