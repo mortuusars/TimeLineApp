@@ -34,13 +34,16 @@ namespace TimeLine.Core
         public void Stop() {
             timer.Stop();
             timer.Dispose();
+
+            // Pass 0, as timer is not running
+            Countdown?.Invoke(this, 0);
         }
 
 
 
         private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
             if (currentTime >= timerTime) {
-                TimerEnded?.Invoke(this, timerTime - startTime);
+                TimerEnded?.Invoke(this, timerTime - startTime);                
                 Stop();
             }
             else {

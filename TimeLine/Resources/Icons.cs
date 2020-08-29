@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TimeLine
 {
-    public enum IconType
+    public enum Icons
     {
         timer,
         stopwatch,

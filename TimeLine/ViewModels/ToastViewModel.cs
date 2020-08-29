@@ -21,7 +21,7 @@ namespace TimeLine.ViewModels
 
         public ICommand CloseCommand { get; set; }
 
-        public ToastViewModel(string title, string message, IconType iconType = IconType.info) {
+        public ToastViewModel(string title, string message, Icons iconType = Icons.info) {
             Title = title;
             Message = message;
             Icon = GetIcon(iconType);
@@ -33,16 +33,16 @@ namespace TimeLine.ViewModels
             //CloseCommand = new RelayCommand(act => { GetService.Manager.CloseToast(); });
         }
 
-        private string GetIcon(IconType icon) {
-            if (icon == IconType.alarm)
+        private string GetIcon(Icons icon) {
+            if (icon == Icons.alarm)
                 return "../Resources/Icons/alarm_white_64.png";
-            else if (icon == IconType.clock)
+            else if (icon == Icons.clock)
                 return "../Resources/Icons/clock_white_64.png";
-            else if (icon == IconType.hourglass)
+            else if (icon == Icons.hourglass)
                 return "../Resources/Icons/hourglass_white_64.png";
-            else if (icon == IconType.stopwatch)
+            else if (icon == Icons.stopwatch)
                 return "../Resources/Icons/stopwatch_white_64.png";
-            else if (icon == IconType.timer)
+            else if (icon == Icons.timer)
                 return "../Resources/Icons/timer_white_64.png";
             else
                 return "../Resources/Icons/info_white_64.png";

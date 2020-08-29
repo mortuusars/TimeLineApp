@@ -68,4 +68,8 @@
     <Resource Include="Resources\Logo\time_custom-size.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\ToastNotification\" />
+  </ItemGroup>
+
 </Project>

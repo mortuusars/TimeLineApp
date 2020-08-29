@@ -24,7 +24,7 @@ namespace TimeLine.Core
             Seconds = GetTimeInt(seconds);
         }
 
-        public int GetOverallSeconds()
+        public int OverallSeconds()
         {
             return (Hours * 60 * 60) + (Minutes * 60) + Seconds;
         }

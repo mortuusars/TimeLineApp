@@ -12,7 +12,7 @@ using TimeLine.Views;
 
 namespace TimeLine
 {
-    public partial class Manager : INotifyPropertyChanged
+    public class Manager : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -21,6 +21,13 @@ namespace TimeLine
         ToastMainView toastMain;
 
         public ObservableCollection<ToastContent> ToastList { get; set; }
+
+
+        // Services
+        Timer Timer;
+        // Stopwatch
+        // Alarm
+
 
         public Manager() {
             ToastList = new ObservableCollection<ToastContent>();
@@ -31,19 +38,29 @@ namespace TimeLine
             //TODO: Proper ViewModel for ToastMainWindow
             toastMain.DataContext = this;
             toastMain.Show();
+
+            CreateTimer();
         }
+
+        private void CreateTimer() {
+            Timer = new Timer();
+            Timer.TimerEnded += Timer_TimerEnded;
+            Timer.Countdown += Timer_Countdown;
+        }
+
+
 
 
 
         #region Toast
 
         //TODO: Closing Animation?
-        public void ShowToastNotification(string title, string message, IconType icon) {
+        public void ShowToastNotification(string title, string message, Icons icon) {
 
             ToastContent newToast = new ToastContent(title, message, icon);
 
             ToastList.Add(newToast);
-            
+
             // Closing Timer;
             System.Timers.Timer toastTimer = new System.Timers.Timer();
             toastTimer.Interval = 4000;
@@ -97,12 +114,97 @@ namespace TimeLine
                 // Mute
                 ShowToastNotification("Timer", "Started for 3 minutes" +
                     "Started for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutes" +
-                    "Started for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutes", IconType.timer);
+                    "Started for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutes", Icons.timer);
             }
             else if (parsedData.MainCommand == "exit") {
                 Logger.Log("Exiting Application", LogLevel.DEBUG);
                 App.ExitApplication();
             }
         }
+
+
+
+
+
+
+
+        #region Timer
+
+        //TODO: Better check for null and refactor showing toasts
+
+        public int TimerCountdown { get; private set; }
+
+        private void TimerCommands(ParsedCommandData parsed) {
+
+            string toastTitle = "Timer";
+            string toastMessage;
+            Icons icon = Icons.timer;
+
+            int overallSeconds = parsed.OverallSeconds();
+
+            switch (parsed.OperationCommand) {
+                case "": {
+                        if (overallSeconds <= 0)
+                            toastMessage = "Cannot set timer to negative time";
+                        else {
+                            Timer.Start(overallSeconds);
+                            toastMessage = $"Started for { Utilities.PrettyTime(overallSeconds)}";
+                        }
+                        break;
+                    }
+                case "add": {
+                        if (TimerCountdown <= 0) {
+                            toastMessage = "Timer is not running";
+                        }
+                        else {
+                            var timeToAdd = parsed.OverallSeconds();
+                            Timer.Add(timeToAdd);
+                            toastMessage = timeToAdd > 0 ? $"Added {Utilities.PrettyTime(timeToAdd)} to timer" : $"Subtracted {Utilities.PrettyTime(timeToAdd, removeMinusSign : true)} from timer";
+                        }
+                        break;
+                    }
+                case "stop": {
+                        if (TimerCountdown <= 0) {
+                            toastMessage = "Timer is not running";
+                        }
+                        else {
+                            Timer.Stop();                            
+                            toastMessage = $"Stopped";
+                        }
+                        break;
+                    }
+                case "info": {
+                        if (TimerCountdown <= 0) {
+                            toastMessage = "Timer is not running";
+                        }
+                        else {
+                            toastMessage = $"Remaining { Utilities.PrettyTime(TimerCountdown)}";
+                        }
+                        break;
+                    }
+                // Not recognized command
+                default: {
+                        toastMessage = "Command is not recognized";
+                        break;
+                    }                       
+            }
+
+            ShowToastNotification(toastTitle, toastMessage, icon);
+        }
+
+
+        private void Timer_Countdown(object sender, int time) {
+            Logger.Log($"Countdown: {time}", LogLevel.DEBUG);
+            TimerCountdown = time;
+        }
+
+        private void Timer_TimerEnded(object sender, int timeForTimer) {
+            Logger.Log($"Timer for {timeForTimer} s. is ended", LogLevel.DEBUG);
+
+            Application.Current.Dispatcher.Invoke(new Action(() => { ShowToastNotification("Timer", $"{Utilities.PrettyTime(timeForTimer)} has passed.", Icons.timer); }));
+            
+        }
+
+        #endregion
     }
 }
