@@ -11,7 +11,7 @@
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/Fonts.xaml"/>
-                <ResourceDictionary Source="Styles/Brushes.xaml"/>
+                <ResourceDictionary Source="Styles/Colors.xaml"/>
 
 
                 <ResourceDictionary Source="Views/Taskbar/TaskbarIconResources.xaml"/>
@@ -19,6 +19,7 @@
 
             <!-- Converters -->
             <local:StringToImageConverter x:Key="StringToImageConverter"/>
+            <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
 
 
 
@@ -26,16 +27,8 @@
 
 
 
-            <!-- Confirm Button -->
-            <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
-            <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
-            <SolidColorBrush x:Key="Button.Pressed.Background" Color="#00000000"/>
-            <SolidColorBrush x:Key="Button.Pressed.Border" Color="#00000000"/>
-            <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
-            <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
-            <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
-            
-            <ControlTemplate x:Key="ConfirmButtonTemplate" TargetType="{x:Type ButtonBase}">
+            <!-- Empty Button Style, when using image as button -->  
+            <ControlTemplate x:Key="ButtonNoStyle" TargetType="{x:Type ButtonBase}">
                 <Border x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" SnapsToDevicePixels="true">
                     <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                 </Border>
@@ -47,12 +40,12 @@
                         <Setter Property="BorderBrush" TargetName="border" Value="#00000000"/>
                     </Trigger>
                     <Trigger Property="IsPressed" Value="true">
-                        <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                        <Setter Property="BorderBrush" TargetName="border" Value="#00000000"/>
                     </Trigger>
                     <Trigger Property="IsEnabled" Value="false">
-                        <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
-                        <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
-                        <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                        <Setter Property="Background" TargetName="border" Value="#00000000"/>
+                        <Setter Property="BorderBrush" TargetName="border" Value="#00000000"/>
+                        <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="#00000000"/>
                     </Trigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>

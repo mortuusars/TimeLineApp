@@ -17,8 +17,8 @@
         <!-- Command TextBox Style -->
         <Style TargetType="TextBox" x:Key="CommandTextBox">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#303030"/>
-            <Setter Property="CaretBrush" Value="#303030"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkBrush}"/>
+            <Setter Property="CaretBrush" Value="{StaticResource DarkBrush}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FontFamily" Value="{StaticResource MontserratRegular}"/>
             <Setter Property="FontSize" Value="42"/>
@@ -30,7 +30,7 @@
         </Style>
 
         <!-- Confirm Button -->
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}" x:Key="ConfirmButton">            
+        <Style TargetType="{x:Type Button}" x:Key="ConfirmButton">            
             <Setter Property="Effect">
                 <Setter.Value>
                     <DropShadowEffect BlurRadius="6" ShadowDepth="0" Opacity="0.2"/>
@@ -92,9 +92,9 @@
             </Grid.Effect>
 
             <!-- Background border. Almost not visible. But keeps nice rounded corner -->
-            <Border Grid.Row="0" Background="#e1e1e1" CornerRadius="5"/>
+            <Border Grid.Row="0" Background="{StaticResource VeryLightBrush}" CornerRadius="5"/>
             <!-- Gray Fill Background -->
-            <Border Grid.Row="0" Margin="4" BorderThickness="0" CornerRadius="4" Background="#c3c3c3"/>
+            <Border Grid.Row="0" Margin="4" BorderThickness="0" CornerRadius="4" Background="{StaticResource HalfLightBrush}"/>
 
             <!-- Inner Shadow Border-->
             <Border Grid.Row="0" Margin="4" Background="Transparent" ClipToBounds="True" CornerRadius="4">
@@ -107,7 +107,7 @@
 
 
             <!-- Overlay border. Hiding InnerShadow corners-->
-            <Border BorderBrush="#e1e1e1" CornerRadius="6" BorderThickness="4"/>
+            <Border BorderBrush="{StaticResource VeryLightBrush}" CornerRadius="6" BorderThickness="4"/>
 
             
             
@@ -115,7 +115,7 @@
             
             
             <!-- Main Text Box Input -->
-            <TextBox x:Name="CommandTextBox" Text="{Binding Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+            <TextBox x:Name="CommandTextBox" Text="{Binding Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" d:Text="Timer Add 1 30"
                      Style="{StaticResource CommandTextBox}">
                 <TextBox.InputBindings>
                     <KeyBinding Key="Return" Command="{Binding ConfirmCommand}"/>
@@ -125,7 +125,7 @@
             
             
             <!-- Confirm Button -->
-            <Button Template="{DynamicResource ConfirmButtonTemplate}" Style="{StaticResource ConfirmButton}" 
+            <Button Template="{DynamicResource ButtonNoStyle}" Style="{StaticResource ConfirmButton}" 
                     Command="{Binding ConfirmCommand}">                
                 <Button.InputBindings>
                     <MouseBinding Gesture="RightClick" Command="{Binding EraseCommand}"/>

@@ -6,16 +6,23 @@
         xmlns:local="clr-namespace:TimeLine.Views"
         
         mc:Ignorable="d"
-        Title="ToastMainView" Height="600" Width="400" 
+        Title="ToastMainView" Height="640" Width="500" 
         ResizeMode="NoResize" WindowStyle="None" Background="Transparent" AllowsTransparency="True" ShowActivated="False" ShowInTaskbar="False" Topmost="True"
         >
 
+    <Window.Resources>
+        <ScaleTransform ScaleY="-1" x:Key="NegativeTransform"/>
+        
+        <ItemsPanelTemplate x:Key="ItemsControlBottom">
+            <StackPanel Margin="8" VerticalAlignment="Bottom" HorizontalAlignment="Center" LayoutTransform="{StaticResource NegativeTransform}"/>
+        </ItemsPanelTemplate>
+    </Window.Resources>
     
     <DockPanel HorizontalAlignment="Right" VerticalAlignment="Bottom">
-        <ItemsControl ItemsSource="{Binding ToastList}">
+        <ItemsControl ItemsSource="{Binding ToastList}" ItemsPanel="{StaticResource ItemsControlBottom}">
             <ItemsControl.ItemTemplate>
-                <DataTemplate >
-                    <StackPanel Margin="8"  VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                <DataTemplate>
+                    <StackPanel Margin="8" LayoutTransform="{StaticResource NegativeTransform}">
                         <local:ToastControl/>
                     </StackPanel>
                     <DataTemplate.Triggers>
@@ -36,6 +43,5 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-
     </DockPanel>
 </Window>

@@ -17,6 +17,9 @@ namespace TimeLine.Models
         public string Message { get; set; }
         public string Icon { get; set; }
 
+        //TODO: Postpone button?
+        public bool PostponeButtonIsVisible { get; set; } = false;
+
         public bool IsRemoving { get; set; }
 
         public ICommand CloseCommand { get; private set; }
