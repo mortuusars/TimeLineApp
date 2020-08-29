@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Threading;
 using Hardcodet.Wpf.TaskbarNotification;
 using MortuusLogger;
 using TimeLine.Core;
@@ -90,9 +91,13 @@ namespace TimeLine
         }
 
         public void CloseToast(ToastControlViewModel toast, bool fromCommand = false) {
-            ToastList.Remove(toast);
+            toast.Close();
             if (fromCommand)
                 StopSound();
+        }
+
+        public void RemoveToastFromList(ToastControlViewModel toast) {
+            ToastList.Remove(toast);
         }
 
         #endregion

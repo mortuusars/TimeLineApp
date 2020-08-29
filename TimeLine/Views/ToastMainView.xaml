@@ -9,16 +9,33 @@
         Title="ToastMainView" Height="600" Width="400" 
         ResizeMode="NoResize" WindowStyle="None" Background="Transparent" AllowsTransparency="True" ShowActivated="False" ShowInTaskbar="False" Topmost="True"
         >
+
+    
     <DockPanel HorizontalAlignment="Right" VerticalAlignment="Bottom">
         <ItemsControl ItemsSource="{Binding ToastList}">
             <ItemsControl.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate >
                     <StackPanel Margin="8"  VerticalAlignment="Bottom" HorizontalAlignment="Right">
                         <local:ToastControl/>
                     </StackPanel>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsRemoving}" Value="true">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard >
+                                        <DoubleAnimation Duration="{StaticResource ToastFadeOutDuration}" Storyboard.TargetProperty="Opacity" From="1" To="0">
+                                            <DoubleAnimation.EasingFunction>
+                                                <PowerEase Power="2"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-             
+
     </DockPanel>
 </Window>

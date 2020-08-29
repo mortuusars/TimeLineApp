@@ -7,7 +7,8 @@
 
     <Application.Resources>
         <ResourceDictionary>
-            
+
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/Fonts.xaml"/>
                 <ResourceDictionary Source="Styles/Brushes.xaml"/>
@@ -19,11 +20,12 @@
             <!-- Converters -->
             <local:StringToImageConverter x:Key="StringToImageConverter"/>
 
-            
-            
-            
-            
-            
+
+
+            <Duration x:Key="ToastFadeOutDuration">0:0:0.2</Duration>
+
+
+
             <!-- Confirm Button -->
             <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
             <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>

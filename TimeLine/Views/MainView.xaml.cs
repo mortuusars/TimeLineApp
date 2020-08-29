@@ -16,6 +16,7 @@ namespace TimeLine.Views
         }
 
         private void GlobalHotkey_Handle() {
+            //GetService.Manager.ShowToastNotification("Test", "alskdjn", Icons.hourglass);
             GetService.Manager.ShowOrCloseCommandView();
         }
 

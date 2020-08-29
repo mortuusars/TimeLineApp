@@ -9,6 +9,9 @@
              x:Name="ToastControlView">
 
     <Control.Resources>
+
+        
+        
         <Style x:Key="TitleStyle" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="{StaticResource MontserratRegular}"/>
             <Setter Property="FontSize" Value="16"/>
