@@ -1,0 +1,48 @@
+﻿using System.Windows;
+using Hardcodet.Wpf.TaskbarNotification;
+using Hardcodet.Wpf.TaskbarNotification.Interop;
+using MortuusLogger;
+using TimeLine.ViewModels;
+using TimeLine.Views;
+
+namespace TimeLine
+{
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
+    {
+        private MainView mainView;
+        private TaskbarIcon taskbarIcon;
+
+        protected override void OnStartup(StartupEventArgs e) {
+            base.OnStartup(e);
+
+            // Log setup
+            Logger.LoggerInstance = new FileLogger("log.txt");
+            Logger.LoggerInstance.GotException += (s, e) => { MessageBox.Show($"Error writing to log file: {e.Message}"); };
+            Logger.LoggingLevel = LogLevel.DEBUG;
+
+
+            // Dependency injection
+
+
+            taskbarIcon = (TaskbarIcon)FindResource("TrayIcon");
+
+            mainView = new MainView {
+                DataContext = new MainViewModel()
+            };
+            mainView.Show();
+            mainView.Hide();
+        }
+
+        protected override void OnExit(ExitEventArgs e) {
+            taskbarIcon.Dispose(); // Make sure we remove TrayIcon before exiting app.
+            base.OnExit(e);
+        }
+
+        public static void ExitApplication() {
+            Application.Current.Shutdown();
+        }
+    }
+}

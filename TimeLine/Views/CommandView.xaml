@@ -1,0 +1,171 @@
+﻿<Window x:Class="TimeLine.Views.CommandView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimeLine" 
+        mc:Ignorable="d"
+        Left="{Binding Left, Mode=TwoWay}"
+        Top="{Binding Top, Mode=TwoWay}"   
+        Title="CommandWindow" Height="auto" Width="{Binding WindowWidth, Mode=TwoWay, FallbackValue=400}"
+        WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="Manual" AllowsTransparency="True" Topmost="True" ShowInTaskbar="False"  ShowActivated="True"
+        Background="Transparent"        
+        >
+
+    <Window.Resources>
+
+        <!-- Command TextBox Style -->
+        <Style TargetType="TextBox" x:Key="CommandTextBox">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#303030"/>
+            <Setter Property="CaretBrush" Value="#303030"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontFamily" Value="{StaticResource MontserratRegular}"/>
+            <Setter Property="FontSize" Value="42"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="TabIndex" Value="0"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="8 0 8 0"/>
+        </Style>
+
+        <!-- Confirm Button -->
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}" x:Key="ConfirmButton">            
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="6" ShadowDepth="0" Opacity="0.2"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="0"/>            
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="IsTabStop" Value="False"/>
+
+            <Setter Property="Width" Value="60"/>
+            <Setter Property="Height" Value="34"/>
+
+
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="../Resources/Icons/send_128.png" Stretch="Uniform"/>
+                </Setter.Value>
+            </Setter>
+            
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="../Resources/Icons/send_128-pressed.png" Stretch="Uniform"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="../Resources/Icons/send_128-pressed.png" Stretch="Uniform"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+            
+        </Style>
+
+
+    </Window.Resources>
+
+    <!-- Content -->
+    <Grid Margin="8" >
+        <Grid.Effect>
+            <DropShadowEffect Opacity="0.3" ShadowDepth="0" BlurRadius="0" />
+        </Grid.Effect>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding BaseHeight}" d:Height="60" />
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+
+        <!-- Main Box -->
+        <Grid Grid.Row="0" Panel.ZIndex="100">
+
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.6"/>
+            </Grid.Effect>
+
+            <!-- Background border. Almost not visible. But keeps nice rounded corner -->
+            <Border Grid.Row="0" Background="#e1e1e1" CornerRadius="5"/>
+            <!-- Gray Fill Background -->
+            <Border Grid.Row="0" Margin="4" BorderThickness="0" CornerRadius="4" Background="#c3c3c3"/>
+
+            <!-- Inner Shadow Border-->
+            <Border Grid.Row="0" Margin="4" Background="Transparent" ClipToBounds="True" CornerRadius="4">
+                <Border  Background="Transparent" BorderBrush="Black" BorderThickness="3"  Margin="-4" CornerRadius="4">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.6"/>
+                    </Border.Effect>
+                </Border>
+            </Border>
+
+
+            <!-- Overlay border. Hiding InnerShadow corners-->
+            <Border BorderBrush="#e1e1e1" CornerRadius="6" BorderThickness="4"/>
+
+            
+            
+            
+            
+            
+            <!-- Main Text Box Input -->
+            <TextBox x:Name="CommandTextBox" Text="{Binding Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     Style="{StaticResource CommandTextBox}">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Return" Command="{Binding ConfirmCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
+
+            
+            
+            <!-- Confirm Button -->
+            <Button Template="{DynamicResource ConfirmButtonTemplate}" Style="{StaticResource ConfirmButton}" 
+                    Command="{Binding ConfirmCommand}">                
+                <Button.InputBindings>
+                    <MouseBinding Gesture="RightClick" Command="{Binding EraseCommand}"/>
+                </Button.InputBindings>                
+            </Button>
+        </Grid>
+
+
+
+        <!-- Suggestions Box -->
+        <VirtualizingStackPanel Grid.Row="1">
+
+            <VirtualizingStackPanel.Effect>
+                <DropShadowEffect Opacity="0.3" ShadowDepth="0" BlurRadius="0" />
+            </VirtualizingStackPanel.Effect>
+
+            <!-- Suggestion Buttons-->
+            <ItemsControl x:Name="suggestions" IsTabStop="false" ItemsSource="{Binding Suggestions}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+
+                        <Grid Margin="60 0">
+                            <!-- Button Itself -->
+                            <Button x:Name="suggestionaButton" Content="{Binding SuggestionHeader}">
+
+                                <Button.Triggers>
+                                    <EventTrigger RoutedEvent="Loaded">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation From="0.0" To="1.0" Duration="0:0:0.2" Storyboard.TargetProperty="Opacity"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Button.Triggers>
+                            </Button>
+                        </Grid>
+
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </VirtualizingStackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,71 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\Logo\time_custom-size.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Fonts\Montserrat-Black.ttf" />
+    <None Remove="Resources\Fonts\Montserrat-Bold.ttf" />
+    <None Remove="Resources\Fonts\Montserrat-ExtraBold.ttf" />
+    <None Remove="Resources\Fonts\Montserrat-ExtraLight.ttf" />
+    <None Remove="Resources\Fonts\Montserrat-Italic.ttf" />
+    <None Remove="Resources\Fonts\Montserrat-Light.ttf" />
+    <None Remove="Resources\Fonts\Montserrat-LightItalic.ttf" />
+    <None Remove="Resources\Fonts\Montserrat-Medium.ttf" />
+    <None Remove="Resources\Fonts\Montserrat-Regular.ttf" />
+    <None Remove="Resources\Fonts\Montserrat-SemiBold.ttf" />
+    <None Remove="Resources\Fonts\Montserrat-Thin.ttf" />
+    <None Remove="Resources\Fonts\PTMono-Regular.ttf" />
+    <None Remove="Resources\Icons\alarm_white_64.png" />
+    <None Remove="Resources\Icons\clock_white_64.png" />
+    <None Remove="Resources\Icons\hourglass_white_64.png" />
+    <None Remove="Resources\Icons\info_white_64.png" />
+    <None Remove="Resources\Icons\send_128-pressed.png" />
+    <None Remove="Resources\Icons\send_128.png" />
+    <None Remove="Resources\Icons\settings_64.png" />
+    <None Remove="Resources\Icons\stopwatch_white_64.png" />
+    <None Remove="Resources\Icons\timer_white_64.png" />
+    <None Remove="Resources\Logo\time_custom-size.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf.NetCore" Version="1.0.13" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.2.8" />
+    <PackageReference Include="WpfScreenHelper" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Library\MortuusLogger\MortuusLogger\MortuusLogger.csproj" />
+    <ProjectReference Include="..\TimeLine.Core\TimeLine.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Fonts\Montserrat-Black.ttf" />
+    <Resource Include="Resources\Fonts\Montserrat-Bold.ttf" />
+    <Resource Include="Resources\Fonts\Montserrat-ExtraBold.ttf" />
+    <Resource Include="Resources\Fonts\Montserrat-ExtraLight.ttf" />
+    <Resource Include="Resources\Fonts\Montserrat-Italic.ttf" />
+    <Resource Include="Resources\Fonts\Montserrat-Light.ttf" />
+    <Resource Include="Resources\Fonts\Montserrat-LightItalic.ttf" />
+    <Resource Include="Resources\Fonts\Montserrat-Medium.ttf" />
+    <Resource Include="Resources\Fonts\Montserrat-Regular.ttf" />
+    <Resource Include="Resources\Fonts\Montserrat-SemiBold.ttf" />
+    <Resource Include="Resources\Fonts\Montserrat-Thin.ttf" />
+    <Resource Include="Resources\Fonts\PTMono-Regular.ttf" />
+    <Resource Include="Resources\Icons\alarm_white_64.png" />
+    <Resource Include="Resources\Icons\clock_white_64.png" />
+    <Resource Include="Resources\Icons\hourglass_white_64.png" />
+    <Resource Include="Resources\Icons\info_white_64.png" />
+    <Resource Include="Resources\Icons\send_128-pressed.png" />
+    <Resource Include="Resources\Icons\send_128.png" />
+    <Resource Include="Resources\Icons\settings_64.png" />
+    <Resource Include="Resources\Icons\stopwatch_white_64.png" />
+    <Resource Include="Resources\Icons\timer_white_64.png" />
+    <Resource Include="Resources\Logo\time_custom-size.ico" />
+  </ItemGroup>
+
+</Project>
