@@ -32,7 +32,7 @@
                                     <Storyboard >
                                         <DoubleAnimation Duration="{StaticResource ToastFadeOutDuration}" Storyboard.TargetProperty="Opacity" From="1" To="0">
                                             <DoubleAnimation.EasingFunction>
-                                                <PowerEase Power="2"/>
+                                                <PowerEase Power="4" EasingMode="EaseOut"/>
                                             </DoubleAnimation.EasingFunction>
                                         </DoubleAnimation>
                                     </Storyboard>

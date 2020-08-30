@@ -160,8 +160,11 @@ namespace TimeLine
                     "Started for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutes" +
                     "Started for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutes", Icons.timer);
             }
-            else if (parsedData.MainCommand == "exit") {                
+            else if (parsedData.MainCommand == "exit") {
                 App.ExitApplication();
+            }
+            else {
+                ShowToastNotification("TimeLine", "Command is not recognized", Icons.info);
             }
         }
 
@@ -197,7 +200,7 @@ namespace TimeLine
             switch (parsed.OperationCommand) {
                 case "": {
                         if (overallSeconds <= 0)
-                            toastMessage = "Cannot set timer to negative time";
+                            toastMessage = "Cannot set timer to that time";
                         else {
                             Timer.Start(overallSeconds);
                             toastMessage = $"Started for { Utilities.PrettyTime(overallSeconds)}";
