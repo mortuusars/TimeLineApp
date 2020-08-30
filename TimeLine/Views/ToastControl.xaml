@@ -64,7 +64,11 @@
 
             <Image Margin="0" Grid.Column="0" Source="{Binding Icon, Converter={StaticResource StringToImageConverter}}" d:Source="../Resources/Icons/timer_white_64.png" 
                RenderOptions.BitmapScalingMode="HighQuality" Width="48" Height="48" VerticalAlignment="Top" />
-
+            <Rectangle Width="48" Height="48" VerticalAlignment="Top" Fill="{Binding IconTintColor}" d:Fill="LightGreen" Opacity="0.7">               
+                <Rectangle.OpacityMask>
+                    <ImageBrush ImageSource="{Binding Icon}" d:ImageSource="../Resources/Icons/timer_white_64.png"/>
+                </Rectangle.OpacityMask>
+            </Rectangle>
 
             <StackPanel Margin="14 0 8 0" Grid.Column="1" Grid.RowSpan="2" >                
 

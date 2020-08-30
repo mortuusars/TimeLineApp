@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using TimeLine.ViewModels;
 
@@ -16,6 +17,7 @@ namespace TimeLine.Models
         public string Title { get; set; }
         public string Message { get; set; }
         public string Icon { get; set; }
+        public SolidColorBrush IconTintColor { get; set; }
 
         //TODO: Postpone button?
         public bool PostponeButtonIsVisible { get; set; } = false;
@@ -29,9 +31,12 @@ namespace TimeLine.Models
             Title = title;
             Message = message;
             Icon = GetIcon(icon);
+            IconTintColor = GetTintColor(icon);
 
             CloseCommand = new RelayCommand( act => { GetService.Manager.CloseToast(this, fromCommand : true); });
         }
+
+        
 
         public void Close() {
             IsRemoving = true;
@@ -51,17 +56,33 @@ namespace TimeLine.Models
 
         private string GetIcon(Icons icon) {
             if (icon == Icons.alarm)
-                return "../Resources/Icons/alarm_white_64.png";
+                return "pack://application:,,,/Resources/Icons/alarm_white_64.png";
             else if (icon == Icons.clock)
-                return "../Resources/Icons/clock_white_64.png";
+                return "pack://application:,,,/Resources/Icons/clock_white_64.png";
             else if (icon == Icons.hourglass)
-                return "../Resources/Icons/hourglass_white_64.png";
+                return "pack://application:,,,/Resources/Icons/hourglass_white_64.png";
             else if (icon == Icons.stopwatch)
-                return "../Resources/Icons/stopwatch_white_64.png";
+                return "pack://application:,,,/Resources/Icons/stopwatch_white_64.png";
             else if (icon == Icons.timer)
-                return "../Resources/Icons/timer_white_64.png";
+                return "pack://application:,,,/Resources/Icons/timer_white_64.png";
             else
-                return "../Resources/Icons/info_white_64.png";
+                return "pack://application:,,,/Resources/Icons/info_white_64.png";
+        }
+
+        private SolidColorBrush GetTintColor(Icons icon) {
+            switch (icon) {
+                case Icons.timer:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#b8e58a");  // Green
+                case Icons.stopwatch:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#a1c8e5");  // Light Blue
+                case Icons.alarm:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#e5c4a1");  // Orange
+                case Icons.clock:
+                case Icons.hourglass:
+                case Icons.info:
+                default:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#FFFFFF");  // White
+            }
         }
     }
 }

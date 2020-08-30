@@ -58,16 +58,36 @@
     <Resource Include="Resources\Fonts\Montserrat-SemiBold.ttf" />
     <Resource Include="Resources\Fonts\Montserrat-Thin.ttf" />
     <Resource Include="Resources\Fonts\PTMono-Regular.ttf" />
-    <Resource Include="Resources\Icons\alarm_white_64.png" />
-    <Resource Include="Resources\Icons\clock_white_64.png" />
-    <Resource Include="Resources\Icons\close_64.png" />
-    <Resource Include="Resources\Icons\hourglass_white_64.png" />
-    <Resource Include="Resources\Icons\info_white_64.png" />
-    <Resource Include="Resources\Icons\send_128-pressed.png" />
-    <Resource Include="Resources\Icons\send_128.png" />
-    <Resource Include="Resources\Icons\settings_64.png" />
-    <Resource Include="Resources\Icons\stopwatch_white_64.png" />
-    <Resource Include="Resources\Icons\timer_white_64.png" />
+    <Resource Include="Resources\Icons\alarm_white_64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\clock_white_64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\close_64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\hourglass_white_64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\info_white_64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\send_128-pressed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\send_128.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\settings_64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\stopwatch_white_64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\timer_white_64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Logo\time_custom-size.ico" />
   </ItemGroup>
 

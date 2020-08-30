@@ -158,9 +158,11 @@ namespace TimeLine
             }
             else if (parsedData.MainCommand == "stopwatch") {
                 //TODO: Stopwatch
+                ShowToastNotification("Stopwatch", "test", Icons.stopwatch);
             }
             else if (parsedData.MainCommand == "alarm") {
                 //TODO: alarm
+                ShowToastNotification("Alarm", "test", Icons.alarm);
             }
             else if (parsedData.MainCommand == "mute") {
                 // Mute
