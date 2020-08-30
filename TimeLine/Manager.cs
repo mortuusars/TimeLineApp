@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Threading;
-using Hardcodet.Wpf.TaskbarNotification;
 using MortuusLogger;
 using TimeLine.Core;
 using TimeLine.Models;
@@ -29,7 +27,6 @@ namespace TimeLine
         // Stopwatch
         // Alarm
 
-        
 
         public Manager() {
             ToastList = new ObservableCollection<ToastControlViewModel>();
@@ -49,20 +46,13 @@ namespace TimeLine
 
         #region Sound
 
-        NetCoreAudio.Player soundPlayer = new NetCoreAudio.Player();
-
         public void PlaySound() {
-            if (soundPlayer.Playing) {
-                soundPlayer.Stop();
-                PlaySound();
-            }
-            else {
-                soundPlayer.Play("Resources/Sounds/subtle.wav");
-            }
+            SoundPlayer.Stop();
+            SoundPlayer.Play();
         }
 
         public void StopSound() {
-            soundPlayer.Stop();
+            SoundPlayer.Stop();
         }
 
         #endregion
