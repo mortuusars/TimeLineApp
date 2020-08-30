@@ -21,7 +21,6 @@ namespace TimeLine
         public CommandViewModel CurrentCommandVM { get; private set; }
 
         ToastMainView toastMain;
-
         public ObservableCollection<ToastControlViewModel> ToastList { get; set; }
 
 
@@ -30,7 +29,7 @@ namespace TimeLine
         // Stopwatch
         // Alarm
 
-        NetCoreAudio.Player soundPlayer = new NetCoreAudio.Player();
+        
 
         public Manager() {
             ToastList = new ObservableCollection<ToastControlViewModel>();
@@ -45,12 +44,12 @@ namespace TimeLine
             CreateTimer();
         }
 
-        private void CreateTimer() {
-            Timer = new Timer();
-            Timer.TimerEnded += Timer_TimerEnded;
-            Timer.Countdown += Timer_Countdown;
-        }
+        
 
+
+        #region Sound
+
+        NetCoreAudio.Player soundPlayer = new NetCoreAudio.Player();
 
         public void PlaySound() {
             if (soundPlayer.Playing) {
@@ -66,13 +65,53 @@ namespace TimeLine
             soundPlayer.Stop();
         }
 
+        #endregion
 
 
+        #region Command Window
+
+        /// <summary>
+        /// Creates and shows Command Window. Closes if window is open. Closing begins animation.
+        /// </summary>
+        public void ShowOrCloseCommandView() {
+            if (CommandView == null) {
+                CurrentCommandVM = new CommandViewModel();
+
+                CommandView = new CommandView() { DataContext = CurrentCommandVM };
+                CommandView.Show();
+                CommandView.Activate();
+            }
+            else {                
+                CurrentCommandVM.Closing = true;
+
+                DispatcherTimer dispatcherTimer = new DispatcherTimer();
+                dispatcherTimer.Interval = ((Duration)App.Current.FindResource("WindowFadeDuration")).TimeSpan;
+                dispatcherTimer.Tick += (s, e) => { CloseCommandWindow(); dispatcherTimer.Stop(); };
+
+                dispatcherTimer.Start();
+            }
+        }
+
+        private void CloseCommandWindow() {
+            if (CommandView != null) {
+                CommandView.Close();
+                CommandView = null;
+            }
+        }
+
+        #endregion
 
 
         #region Toast
 
-        //TODO: Closing Animation?
+        /// <summary>
+        /// Shows Toast Notification in the corner. It will automatically close after short delay. 
+        /// IsAlarm = true - plays a sound and makes toast stay open indefinitely.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <param name="icon"></param>
+        /// <param name="IsAlarm">Plays sound and makes toast stay until manually closed.</param>
         public void ShowToastNotification(string title, string message, Icons icon, bool IsAlarm = false) {
 
             ToastControlViewModel newToast = new ToastControlViewModel(title, message, icon);
@@ -102,23 +141,6 @@ namespace TimeLine
         }
 
         #endregion
-
-
-
-
-        public void ShowOrCloseCommandView() {
-            if (CommandView == null) {
-                CurrentCommandVM = new CommandViewModel();
-                
-                CommandView = new CommandView() { DataContext = CurrentCommandVM };                
-                CommandView.Show();
-            }
-            else {
-                CommandView.Close();
-                CommandView = null;
-            }
-        }
-
 
 
 
@@ -162,6 +184,15 @@ namespace TimeLine
         //TODO: Better check for null and refactor showing toasts
 
         public int TimerCountdown { get; private set; }
+
+        /// <summary>
+        /// Invoked from constructor.
+        /// </summary>
+        private void CreateTimer() {
+            Timer = new Timer();
+            Timer.TimerEnded += Timer_TimerEnded;
+            Timer.Countdown += Timer_Countdown;
+        }
 
         private void TimerCommands(ParsedCommandData parsed) {
 
@@ -233,6 +264,16 @@ namespace TimeLine
             Application.Current.Dispatcher.Invoke(new Action(() => { ShowToastNotification("Timer", $"{Utilities.PrettyTime(timeForTimer)} has passed.", Icons.timer, IsAlarm: true); }));
 
         }
+
+        #endregion
+
+
+        #region Stopwatch
+
+        #endregion
+
+
+        #region Alarm
 
         #endregion
     }

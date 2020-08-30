@@ -23,21 +23,14 @@ namespace TimeLine.ViewModels
         public int WindowWidth { get; set; } = 400;
         public int BaseHeight { get; set; } = 70;
 
+        public bool Closing { get; set; }
+
         private string input;
         public string Input
         {
             get { return input; }
             set { input = value; GetSuggestions(); }
         }
-
-        private bool textBoxChangeFocus = true;
-
-        public bool TextBoxChangeFocus
-        {
-            get { return textBoxChangeFocus; }
-            set { textBoxChangeFocus = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TextBoxChangeFocus)));}
-        }
-
 
         public ObservableCollection<Suggestion> Suggestions { get; set; }
 
@@ -51,10 +44,7 @@ namespace TimeLine.ViewModels
         HashSet<string> suggestionWords = new HashSet<string>() { "Timer", "Stopwatch", "Alarm", "Mute", "Exit", "Add", "Stop", "Skip", "1m", "2m" };
         List<Suggestion> baseSuggestions = new List<Suggestion>() { new Suggestion("Timer"), new Suggestion("Stopwatch"), new Suggestion("Alarm"), new Suggestion("Exit"), };
         
-        List<string> oldSuggestions;
 
-
-        
 
 
         public CommandViewModel() {

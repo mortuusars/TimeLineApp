@@ -43,6 +43,7 @@ namespace TimeLine.Models
             timer.Tick += (sender, e) => 
             { 
                 GetService.Manager.RemoveToastFromList(this); 
+                timer.Stop();
             };
             timer.Start();
         }

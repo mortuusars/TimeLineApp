@@ -8,21 +8,30 @@
         Left="{Binding Left, Mode=TwoWay}"
         Top="{Binding Top, Mode=TwoWay}"   
         Title="CommandWindow" Height="auto" Width="{Binding WindowWidth, Mode=TwoWay, FallbackValue=400}"
-        WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="Manual" AllowsTransparency="True" Topmost="True" ShowInTaskbar="False"  ShowActivated="True"
-        Background="Transparent"        
+        WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="Manual" AllowsTransparency="True" Topmost="True" ShowInTaskbar="False"  ShowActivated="True" FocusManager.FocusedElement="{Binding ElementName=CommandTextBox}"
+        Background="Transparent" Opacity="0"       
+        KeyDown="Window_KeyDown"
         >
 
+    <!-- Window Fade In Animation -->
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <EventTrigger.Actions>
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="{StaticResource WindowFadeDuration}" From="0" To="1">
+                            <DoubleAnimation.EasingFunction>
+                                <PowerEase EasingMode="EaseIn" Power="2"/>
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger.Actions>
+        </EventTrigger>
+    </Window.Triggers>
+    
     <Window.Resources>
-
-        <!-- Main Grid Style -->
-        <Style x:Key="FocusTextBox" TargetType="TextBox">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding TextBoxChangeFocus}" Value="True">
-                    <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=CommandTextBox}"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-        
+       
         <!-- Command TextBox Style -->
         <Style TargetType="TextBox" x:Key="CommandTextBox">
             <Setter Property="Background" Value="Transparent"/>
@@ -32,39 +41,33 @@
             <Setter Property="FontFamily" Value="{StaticResource MontserratRegular}"/>
             <Setter Property="FontSize" Value="42"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="TabIndex" Value="0"/>
             <Setter Property="Margin" Value="4"/>
             <Setter Property="Padding" Value="8 0 8 0"/>
-
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding TextBoxChangeFocus}" Value="True">
-                    <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=CommandTextBox}"/>
-                </DataTrigger>
-            </Style.Triggers>
         </Style>
 
         <!-- Confirm Button -->
-        <Style TargetType="{x:Type Button}" x:Key="ConfirmButton">            
+        <Style TargetType="{x:Type Button}" x:Key="ConfirmButton">
             <Setter Property="Effect">
                 <Setter.Value>
                     <DropShadowEffect BlurRadius="6" ShadowDepth="0" Opacity="0.2"/>
                 </Setter.Value>
             </Setter>
-            <Setter Property="BorderThickness" Value="0"/>            
+
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
             <Setter Property="IsTabStop" Value="False"/>
 
             <Setter Property="Width" Value="60"/>
             <Setter Property="Height" Value="34"/>
 
-
             <Setter Property="Background">
                 <Setter.Value>
                     <ImageBrush ImageSource="../Resources/Icons/send_128.png" Stretch="Uniform"/>
                 </Setter.Value>
             </Setter>
-            
+
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background">
@@ -81,9 +84,9 @@
                     </Setter>
                 </Trigger>
             </Style.Triggers>
-            
+
         </Style>
-        
+
         <!-- Suggestions Button Style -->
         <Style TargetType="{x:Type Button}" x:Key="SuggestionButton">
             <Setter Property="Height" Value="30"/>
@@ -109,27 +112,48 @@
             </Style.Triggers>
         </Style>
 
-
     </Window.Resources>
+    
 
-    <!-- Content -->
+
+
+<!-- Content -->
     <Grid Margin="8"  >
         <Grid.Effect>
-            <DropShadowEffect Opacity="0.3" ShadowDepth="0" BlurRadius="0" />
+            <DropShadowEffect Opacity="0.5" ShadowDepth="2" Direction="-90" BlurRadius="14" />
         </Grid.Effect>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="60" d:Height="60" />
+            <RowDefinition Height="70" d:Height="70" />
             <RowDefinition Height="200"/>
         </Grid.RowDefinitions>
 
+        <!-- "Window" Fade Out Animation -->
+        <Grid.Style>
+            <Style>
+                <Style.Triggers>
+                    
+                    <DataTrigger Binding="{Binding Closing}" Value="true">
+                        <DataTrigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="{StaticResource WindowFadeDuration}">
+                                        <DoubleAnimation.EasingFunction>
+                                            <PowerEase EasingMode="EaseOut" Power="2"/>
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </DataTrigger.EnterActions>
+                    </DataTrigger>
+                    
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
+        
 
         <!-- Main Box -->
-        <Grid Grid.Row="0" FocusManager.FocusedElement="{Binding ElementName=CommandTextBox}">
-
-            <Grid.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.6"/>
-            </Grid.Effect>
+        <Grid Grid.Row="0" FocusManager.FocusedElement="{Binding ElementName=CommandTextBox}">            
 
             <!-- Background border. Almost not visible. But keeps nice rounded corner -->
             <Border Grid.Row="0" Background="{StaticResource VeryLightBrush}" CornerRadius="5"/>
@@ -176,12 +200,7 @@
 
 
         <!-- Suggestions Box -->
-        <VirtualizingStackPanel Grid.Row="1">
-
-            <VirtualizingStackPanel.Effect>
-                <DropShadowEffect Opacity="0.3" ShadowDepth="0" BlurRadius="0" />
-            </VirtualizingStackPanel.Effect>
-
+        <StackPanel Grid.Row="1">  
             <!-- Suggestion Buttons-->
             <ItemsControl Height="200" x:Name="suggestions" IsTabStop="false" ItemsSource="{Binding Suggestions}">
                 <ItemsControl.ItemTemplate>
@@ -191,13 +210,12 @@
                             <!-- Button Itself -->
                             <Button Style="{StaticResource SuggestionButton}"
                                     Content="{Binding Header}"
-                                    Command="{Binding AddSuggestionCommand}">
-                            </Button>
+                                    Command="{Binding AddSuggestionCommand}"/>
                         </Grid>
 
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </VirtualizingStackPanel>
+        </StackPanel>
     </Grid>
 </Window>

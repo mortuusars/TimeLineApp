@@ -12,13 +12,13 @@ namespace TimeLine.Views
         public CommandView() {
             InitializeComponent();
 
-            CommandTextBox.PreviewKeyDown += CommandTextBox_PreviewKeyDown;
+            CommandTextBox.PreviewKeyDown += CommandTextBox_PreviewKeyDown;            
 
             //CommandTextBox.Focus();
         }
 
         private void CommandTextBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e) {
-            if (e.Key == System.Windows.Input.Key.Down) {
+            if (e.Key == Key.Down) {
                 var keyboardFocus = Keyboard.FocusedElement as UIElement;
 
                 if (keyboardFocus != null) {
@@ -26,6 +26,11 @@ namespace TimeLine.Views
                 }
                 e.Handled = true;
             }
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e) {
+            if (e.Key == Key.Escape)
+                GetService.Manager.ShowOrCloseCommandView();
         }
 
         /// <summary>
@@ -39,5 +44,7 @@ namespace TimeLine.Views
             CommandTextBox.CaretIndex = CommandTextBox.Text.Length;
             CommandTextBox.Focus();
         }
+
+        
     }
 }
