@@ -64,6 +64,13 @@ namespace TimeLine
         /// Creates and shows Command Window. Closes if window is open. Closing begins animation.
         /// </summary>
         public void ShowOrCloseCommandView() {
+            
+            var newCommandView = new RunCommandView();
+            newCommandView.Show();
+            newCommandView.Activate();
+
+            return;
+
             if (CommandView == null) {
                 CurrentCommandVM = new CommandViewModel();
 

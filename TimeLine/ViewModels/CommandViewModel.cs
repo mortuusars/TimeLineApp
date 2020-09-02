@@ -20,16 +20,18 @@ namespace TimeLine.ViewModels
         public int Left { get; set; }
         public int Top { get; set; }
 
-        public int WindowWidth { get; set; } = 400;
+        public int WindowWidth { get; set; } = 500;
         public int BaseHeight { get; set; } = 70;
 
         public bool Closing { get; set; }
+
+        public bool GhostTextIsVisible { get; set; } = true;
 
         private string input;
         public string Input
         {
             get { return input; }
-            set { input = value; GetSuggestions(); }
+            set { input = value; SetGhostTextVisibility(); GetSuggestions(); }
         }
 
         public ObservableCollection<Suggestion> Suggestions { get; set; }
@@ -127,11 +129,18 @@ namespace TimeLine.ViewModels
             GetService.Manager.ParseInput(Input);
         }
 
+        private void SetGhostTextVisibility() {
+            if (string.IsNullOrEmpty(Input))
+                GhostTextIsVisible = true;
+            else
+                GhostTextIsVisible = false;
+        }
+
 
         #endregion
 
 
-        
+
 
 
         private void GetSuggestions() {

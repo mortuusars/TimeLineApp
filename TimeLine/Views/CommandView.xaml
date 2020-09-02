@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         Left="{Binding Left, Mode=TwoWay}"
         Top="{Binding Top, Mode=TwoWay}"   
-        Title="CommandWindow" Height="auto" Width="{Binding WindowWidth, Mode=TwoWay, FallbackValue=400}"
+        Title="CommandWindow" Height="auto" Width="{Binding WindowWidth, Mode=TwoWay}"
         WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="Manual" AllowsTransparency="True" Topmost="True" ShowInTaskbar="False"  ShowActivated="True" FocusManager.FocusedElement="{Binding ElementName=CommandTextBox}"
-        Background="Transparent" Opacity="0"       
+        Background="Transparent" Opacity="1"       
         KeyDown="Window_KeyDown"
         >
 
@@ -173,11 +173,11 @@
             <!-- Overlay border. Hiding InnerShadow corners-->
             <Border BorderBrush="{StaticResource VeryLightBrush}" CornerRadius="6" BorderThickness="4"/>
 
-            
-            
-            
-            
-            
+
+
+
+            <TextBox Style="{StaticResource CommandTextBox}" Text="Enter command..." Opacity="0.4" Visibility="{Binding GhostTextIsVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+
             <!-- Main Text Box Input -->
             <TextBox x:Name="CommandTextBox" Text="{Binding Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" d:Text="Timer Add 1 30"
                      Style="{StaticResource CommandTextBox}" >
@@ -190,10 +190,10 @@
             
             <!-- Confirm Button -->
             <Button Template="{DynamicResource ButtonNoStyle}" Style="{StaticResource ConfirmButton}" 
-                    Command="{Binding ConfirmCommand}">                
+                    Command="{Binding ConfirmCommand}">
                 <Button.InputBindings>
                     <MouseBinding Gesture="RightClick" Command="{Binding EraseCommand}"/>
-                </Button.InputBindings>                
+                </Button.InputBindings>
             </Button>
         </Grid>
 
