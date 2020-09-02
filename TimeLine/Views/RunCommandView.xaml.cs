@@ -19,6 +19,31 @@ namespace TimeLine.Views
     {
         public RunCommandView() {
             InitializeComponent();
+
+            CommandTextBox.PreviewKeyDown += CommandTextBox_PreviewKeyDown;
+
+        }
+
+
+        public void AppendString(string header) {
+            throw new NotImplementedException();
+        }
+
+
+        private void CommandTextBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e) {
+            if (e.Key == Key.Down) {
+                var keyboardFocus = Keyboard.FocusedElement as UIElement;
+
+                if (keyboardFocus != null) {
+                    keyboardFocus.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                }
+                e.Handled = true;
+            }
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e) {
+            if (e.Key == Key.Escape)
+                GetService.Manager.ShowOrCloseCommandView();
         }
     }
 }

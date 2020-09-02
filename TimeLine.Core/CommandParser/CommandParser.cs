@@ -71,6 +71,9 @@ namespace TimeLine.Core
 
         private void CreateWordList(string text)
         {
+            if (text == null)
+                text = "";
+
             text = text.Trim().ToLower();
             text = Regex.Replace(text, @"\s+", " ");
             wordList = text.Split(' ').ToList();

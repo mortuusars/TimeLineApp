@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="RunCommandView" 
         Width="600" Height="400" ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" ShowActivated="True"
-        Background="Transparent" AllowsTransparency="True">
+        Background="Transparent" AllowsTransparency="True" FocusManager.FocusedElement="{Binding ElementName=CommandTextBox}"
+        KeyDown="Window_KeyDown">
 
     <Window.Resources>
         <DropShadowEffect x:Key="DropShadowWindow" ShadowDepth="6" BlurRadius="40" Direction="-90" Opacity="0.5"/>
@@ -77,8 +78,28 @@
                     </Button.InputBindings>
                 </Button>
 
-                <TextBox Grid.Column="1" Margin="10 0" Padding="0 4" d:Text="Timer add 1h 30m" Background="Transparent" Foreground="{StaticResource DarkBrush}" BorderThickness="0" 
-                         FontFamily="{StaticResource MontserratRegular}" FontSize="44" VerticalAlignment="Center"/>
+                
+                
+                
+                
+                <!-- The TextBox -->
+                
+                <TextBox  x:Name="CommandTextBox"
+                         Grid.Column="1" Margin="10 0" Padding="0 4" 
+                         Text="{Binding Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" d:Text="Timer add 1h 30m" 
+                         Background="Transparent" Foreground="{StaticResource DarkBrush}" BorderThickness="0" VerticalAlignment="Center"
+                         FontFamily="{StaticResource MontserratRegular}" FontSize="44">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Return" Command="{Binding ConfirmCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+                
+                
+                
+                
+                
+                
+                
             </Grid>
         </Border>
 
