@@ -120,7 +120,7 @@ namespace TimeLine
                 App.ExitApplication();
             }
             else {
-                GetService.ToastManager.ShowToastNotification("TimeLine", "Command is not recognized", Icons.info);
+                GetService.ToastManager.ShowToastNotification("TimeLine", "Command is not recognized", Icons.error);
             }
         }
 
@@ -155,8 +155,10 @@ namespace TimeLine
 
             switch (parsed.OperationCommand) {
                 case "": {
-                        if (overallSeconds <= 0)
+                        if (overallSeconds <= 0) {
                             toastMessage = "Cannot set timer to that time";
+                            icon = Icons.error;
+                        }
                         else {
                             Timer.Start(overallSeconds);
                             toastMessage = $"Started for { Utilities.PrettyTime(overallSeconds)}";
@@ -166,6 +168,7 @@ namespace TimeLine
                 case "add": {
                         if (TimerCountdown <= 0) {
                             toastMessage = "Timer is not running";
+                            icon = Icons.error;
                         }
                         else {
                             var timeToAdd = parsed.OverallSeconds();
@@ -177,6 +180,7 @@ namespace TimeLine
                 case "stop": {
                         if (TimerCountdown <= 0) {
                             toastMessage = "Timer is not running";
+                            icon = Icons.error;
                         }
                         else {
                             Timer.Stop();
@@ -187,6 +191,7 @@ namespace TimeLine
                 case "info": {
                         if (TimerCountdown <= 0) {
                             toastMessage = "Timer is not running";
+                            icon = Icons.error;
                         }
                         else {
                             toastMessage = $"Remaining { Utilities.PrettyTime(TimerCountdown)}";
@@ -196,6 +201,7 @@ namespace TimeLine
                 // Not recognized command
                 default: {
                         toastMessage = "Command is not recognized";
+                        icon = Icons.error;
                         break;
                     }
             }

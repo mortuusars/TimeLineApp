@@ -11,6 +11,7 @@ namespace TimeLine
         alarm,
         clock,
         hourglass,
-        info
+        info,
+        error
     }
 }

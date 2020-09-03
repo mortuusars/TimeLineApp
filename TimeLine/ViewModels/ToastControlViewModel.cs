@@ -55,6 +55,8 @@ namespace TimeLine
                 return "pack://application:,,,/Resources/Icons/stopwatch_white_64.png";
             else if (icon == Icons.timer)
                 return "pack://application:,,,/Resources/Icons/timer_white_64.png";
+            else if (icon == Icons.error)
+                return "pack://application:,,,/Resources/Icons/error_white_64.png";
             else
                 return "pack://application:,,,/Resources/Icons/info_white_64.png";
         }
@@ -62,13 +64,16 @@ namespace TimeLine
         private SolidColorBrush GetTintColor(Icons icon) {
             switch (icon) {
                 case Icons.timer:
-                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#b8e58a");  // Green
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#a4e58a");  // Green
                 case Icons.stopwatch:
                     return (SolidColorBrush)new BrushConverter().ConvertFromString("#a1c8e5");  // Light Blue
                 case Icons.alarm:
                     return (SolidColorBrush)new BrushConverter().ConvertFromString("#e5c4a1");  // Orange
+                case Icons.error:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#da3e32");  // Red
                 case Icons.clock:
                 case Icons.hourglass:
+                
                 case Icons.info:
                 default:
                     return (SolidColorBrush)new BrushConverter().ConvertFromString("#FFFFFF");  // White
