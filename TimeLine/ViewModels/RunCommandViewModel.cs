@@ -31,11 +31,11 @@ namespace TimeLine
             get { return suggestionsHeight; }
             set { 
                 if (value == 0) {
-                    FoldBorder = true;
+                    FadeBorder = true;
                     suggestionsHeight = value;
                 }                    
                 else {
-                    FoldBorder = false;
+                    FadeBorder = false;
                     suggestionsHeight = value;
                 }
             }
@@ -44,7 +44,8 @@ namespace TimeLine
 
         public bool Closing { get; set; }
 
-        public bool FoldBorder { get; set; }
+        public bool FadeBorder { get; set; }
+
         public bool GhostTextIsVisible { get; set; } = true;
 
         private string input;
@@ -188,7 +189,12 @@ namespace TimeLine
 
             SetSuggestionsCornerRadius();
 
-            SuggestionsHeight = Suggestions.Count > 0 ? (Suggestions.Count * suggestionButtonHeight) + 2 : 0;
+            if (Suggestions.Count == 0)
+                FadeBorder = true;
+            else
+                FadeBorder = false;
+
+            SuggestionsHeight = Suggestions.Count > 0 ? (Suggestions.Count * suggestionButtonHeight) + 2 : suggestionsHeight;
 
         }
 
@@ -199,8 +205,6 @@ namespace TimeLine
                 Suggestions[0].CornerRadius = new CornerRadius(6, 6, 0, 0);
                 Suggestions[Suggestions.Count - 1].CornerRadius = new CornerRadius(0, 0, 6, 6);                
             }
-            else
-                SuggestionsHeight = 0;
         }
 
 

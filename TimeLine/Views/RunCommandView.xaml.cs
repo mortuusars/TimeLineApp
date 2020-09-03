@@ -77,11 +77,5 @@ namespace TimeLine.Views
             if (e.Key == Key.Escape)
                 GetService.Manager.ShowOrCloseCommandView();
         }
-
-        private void FoldingAnimationCompleted(object sender, EventArgs e) {
-            var binding = new Binding("SuggestionsHeight");
-            BindingOperations.SetBinding(SuggestionsBorder, Border.HeightProperty, binding);
-            SuggestionsBorder.Opacity = 1;
-        }
     }
 }

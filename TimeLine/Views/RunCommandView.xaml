@@ -6,15 +6,29 @@
         xmlns:local="clr-namespace:TimeLine.Views"
         mc:Ignorable="d"
         Title="RunCommandView" 
-        Width="600" Height="400" ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" ShowActivated="True"
+        Width="600" Height="500" ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" ShowActivated="True"
         Background="Transparent" AllowsTransparency="True" Topmost="True" FocusManager.FocusedElement="{Binding ElementName=CommandTextBox}"
-        KeyDown="Window_KeyDown">
+        KeyDown="Window_KeyDown" Opacity="0.96">
 
     <Window.Resources>
         <DropShadowEffect x:Key="DropShadowWindow" ShadowDepth="6" BlurRadius="40" Direction="-90" Opacity="0.5"/>
 
-        <Storyboard x:Key="FoldingAnimation" Completed="FoldingAnimationCompleted">
-            <DoubleAnimation Duration="0:0:0.1" To="0" Storyboard.TargetProperty="Opacity" FillBehavior="Stop" />
+        <!-- Suggestion Border animations-->        
+
+        <Storyboard x:Key="FadeInAnimation" >
+            <DoubleAnimation Duration="0:0:0.1" From="0" To="1" Storyboard.TargetProperty="Opacity" >
+                <DoubleAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseIn"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+
+        <Storyboard x:Key="FadeOutAnimation" >
+            <DoubleAnimation Duration="0:0:0.1" From="1" To="0" Storyboard.TargetProperty="Opacity" >
+                <DoubleAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseIn"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
         </Storyboard>
 
         <!-- Confirm Button -->
@@ -72,7 +86,7 @@
                 <EventTrigger RoutedEvent="Loaded">
                     <BeginStoryboard>
                         <Storyboard>
-                            <DoubleAnimation From="0.0" To="1.0" Duration="0:0:0.3" Storyboard.TargetProperty="Height"/>
+                            <DoubleAnimation From="0.0" To="1.0" Duration="0:0:0.3" Storyboard.TargetProperty="Opacity"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
@@ -118,7 +132,7 @@
                 <!-- The TextBox -->
 
                 <TextBox  x:Name="CommandTextBox"
-                         Grid.Column="1" Margin="14 0 0 0" Padding="0 4" 
+                         Grid.Column="1" Margin="8 0 0 0" Padding="0 6" 
                          Text="{Binding Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" d:Text="Timer add 1h 30m" 
                          Background="Transparent" Foreground="{StaticResource DarkBrush}" BorderThickness="0" VerticalAlignment="Center"
                          FontFamily="{StaticResource MontserratRegular}" FontSize="44">
@@ -141,7 +155,7 @@
         <!-- Suggestions Bar -->
         <Border x:Name="SuggestionsBorder" Height="{Binding SuggestionsHeight}" Effect="{StaticResource DropShadowWindow}" Grid.Row="1"  CornerRadius="6" 
                  d:Height="200" Width="240"
-                Background="{StaticResource VeryLightBrush}" BorderThickness="1" BorderBrush="{StaticResource HalfLightBrush}" >
+                Background="{StaticResource LightBrush}" BorderThickness="1" BorderBrush="{StaticResource HalfLightBrush}">
             
             <ItemsControl ItemsSource="{Binding Suggestions}" IsTabStop="False">
                 <!-- Suggestion Buttons-->
@@ -164,7 +178,7 @@
                 <EventTrigger RoutedEvent="Loaded">
                     <BeginStoryboard>
                         <Storyboard>
-                            <DoubleAnimation From="0.0" To="1.0" Duration="0:0:0.2" Storyboard.TargetProperty="Opacity"/>
+                            <DoubleAnimation From="0.0" To="1.0" Duration="0:0:0.2" Storyboard.TargetProperty="Opacity" FillBehavior="Stop"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>                
@@ -173,10 +187,13 @@
             <Border.Style>
                 <Style>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding FoldBorder}" Value="True">
+                        <DataTrigger Binding="{Binding FadeBorder}" Value="True">
                             <DataTrigger.EnterActions>
-                                <BeginStoryboard Storyboard="{StaticResource FoldingAnimation}"/>
+                                <BeginStoryboard Storyboard="{StaticResource FadeOutAnimation}"/>
                             </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}"/>
+                            </DataTrigger.ExitActions>
                         </DataTrigger>                        
                     </Style.Triggers>
                 </Style>
