@@ -11,12 +11,19 @@ namespace TimeLine.Views
     /// </summary>
     public partial class MainView : Window
     {
-        public MainView() {
+        public static Window Main;
+
+        public MainView() {            
             InitializeComponent();
+            Main = this;
+
+            this.Show();
+            this.Hide();
+
+            //var temp = GetService.Manager.GetHashCode();
         }
 
         private void GlobalHotkey_Handle() {
-            //GetService.Manager.ShowToastNotification("Test", "alskdjn", Icons.hourglass);
             GetService.Manager.ShowOrCloseCommandView();
         }
 

@@ -25,7 +25,7 @@
 
 
             <!-- Window Properties -->
-            <Duration x:Key="ToastFadeOutDuration">0:0:0.5</Duration>
+            <Duration x:Key="ToastFadeOutDuration">0:0:0.8</Duration>
             <Duration x:Key="WindowFadeDuration">0:0:0.2</Duration>
 
 

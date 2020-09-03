@@ -1,12 +1,18 @@
-﻿<Window x:Class="TimeLine.Views.ToastMainView"
+﻿<Window x:Class="TimeLine.Views.ToastHolderView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TimeLine.Views"
-        
+        xmlns:local="clr-namespace:TimeLine.Views"        
         mc:Ignorable="d"
-        Title="ToastMainView" Height="640" Width="500" 
+        
+        Title="ToastHolderView" 
+        
+        Width="{Binding Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        Height="{Binding Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        Left="{Binding Left, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        Top="{Binding Top, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                
+        
         ResizeMode="NoResize" WindowStyle="None" Background="Transparent" AllowsTransparency="True" ShowActivated="False" ShowInTaskbar="False" Topmost="True"
         >
 

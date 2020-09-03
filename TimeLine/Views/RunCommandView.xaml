@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="RunCommandView" 
         Width="600" Height="400" ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" ShowActivated="True"
-        Background="Transparent" AllowsTransparency="True" FocusManager.FocusedElement="{Binding ElementName=CommandTextBox}"
+        Background="Transparent" AllowsTransparency="True" Topmost="True" FocusManager.FocusedElement="{Binding ElementName=CommandTextBox}"
         KeyDown="Window_KeyDown">
 
     <Window.Resources>
@@ -23,7 +23,7 @@
                 </Setter.Value>
             </Setter>
 
-            <Setter Property="BorderThickness" Value="0"/> 
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Background">
                 <Setter.Value>
                     <ImageBrush ImageSource="../Resources/Icons/send_128.png" Stretch="Uniform"/>
@@ -48,6 +48,35 @@
             </Style.Triggers>
 
         </Style>
+        
+        
+
+        <!-- Suggestions Button Style -->
+        <Style TargetType="{x:Type Button}" x:Key="SuggestionButton">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="{StaticResource HalfLightBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkBrush}"/>
+            <Setter Property="FontFamily" Value="{StaticResource MontserratLight}"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="BorderThickness" Value="0"/>
+
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="{Binding CornerRadius}"/>
+                </Style>
+            </Style.Resources>
+
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation From="0.0" To="1.0" Duration="0:0:0.2" Storyboard.TargetProperty="Opacity"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+
 
     </Window.Resources>
 
@@ -60,16 +89,17 @@
         </Grid.RowDefinitions>
 
         <Border  Margin="30"  Effect="{StaticResource DropShadowWindow}" Height="65" Background="{StaticResource VeryLightBrush}" CornerRadius="6" BorderThickness="1" BorderBrush="{StaticResource HalfLightBrush}">
-         
+
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <!-- Confirm Button -->
-                <Button Grid.Column="2" Template="{DynamicResource ButtonNoStyle}" 
+                <Button Grid.Column="2" IsTabStop="False"
+                        Template="{DynamicResource ButtonNoStyle}" 
                         Style="{StaticResource ConfirmButton}" 
                         Command="{Binding ConfirmCommand}"
                         Width="40" Height="40" Margin="14 0">
@@ -78,12 +108,12 @@
                     </Button.InputBindings>
                 </Button>
 
-                
-                
-                
-                
+
+
+
+
                 <!-- The TextBox -->
-                
+
                 <TextBox  x:Name="CommandTextBox"
                          Grid.Column="1" Margin="10 0" Padding="0 4" 
                          Text="{Binding Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" d:Text="Timer add 1h 30m" 
@@ -93,18 +123,39 @@
                         <KeyBinding Key="Return" Command="{Binding ConfirmCommand}"/>
                     </TextBox.InputBindings>
                 </TextBox>
-                
-                
-                
-                
-                
-                
-                
+
+
+
+
+
+
+
             </Grid>
         </Border>
 
 
-        <Border Margin="120 10 120 40" Effect="{StaticResource DropShadowWindow}" Grid.Row="1"  CornerRadius="6" Height="200" Background="{StaticResource VeryLightBrush}" BorderThickness="1" BorderBrush="{StaticResource HalfLightBrush}"/>
+        
+        <!-- Suggestions Bar -->
+        <Border x:Name="SuggestionsBorder" Margin="120 0" Effect="{StaticResource DropShadowWindow}" Grid.Row="1"  CornerRadius="6" 
+                Height="{Binding SuggestionsBarHeight}" d:Height="0"
+                Background="{StaticResource VeryLightBrush}" BorderThickness="1" BorderBrush="{StaticResource HalfLightBrush}" >
+            <ItemsControl ItemsSource="{Binding Suggestions}" IsTabStop="False">
+                <!-- Suggestion Buttons-->
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+
+                        <StackPanel >
+                            <!-- Button Itself -->
+                            <Button Style="{StaticResource SuggestionButton}"
+                                    Content="{Binding Header}"
+                                    Command="{Binding AddSuggestionCommand}" ClipToBounds="True" >                                
+                            </Button>
+                        </StackPanel>
+
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
 
 
     </Grid>

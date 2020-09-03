@@ -9,7 +9,7 @@ using MortuusLogger;
 using TimeLine.Models;
 using WpfScreenHelper;
 
-namespace TimeLine.ViewModels
+namespace TimeLine
 {
     public class RunCommandViewModel : INotifyPropertyChanged
     {
@@ -22,6 +22,8 @@ namespace TimeLine.ViewModels
 
         public int WindowWidth { get; set; } = 500;
         public int BaseHeight { get; set; } = 70;
+
+        public int SuggestionsBarHeight { get; set; } = 0;
 
         public bool Closing { get; set; }
 
@@ -151,7 +153,6 @@ namespace TimeLine.ViewModels
                 Suggestions = GetNextSuggestions();
             }
             else {
-                /*
                 string lastWord = new List<string>(Input.ToLower().Trim().Split(" ")).FindLast(word => word.Length != 0);
 
                 if (lastWord == null)
@@ -163,12 +164,18 @@ namespace TimeLine.ViewModels
                     if (word.ToLower().StartsWith(lastWord)) {
                         Suggestions.Add(new Suggestion(word));
                     }
-                }   
-                */
+                }
+                                
             }
             
-            if (Suggestions.Count != 0)
-                Suggestions[Suggestions.Count-1].CornerRadius = new CornerRadius(0, 0, 20, 20);
+            if (Suggestions.Count > 0) {
+                Suggestions[0].CornerRadius = new CornerRadius(6, 6, 0, 0);
+                Suggestions[Suggestions.Count-1].CornerRadius = new CornerRadius(0, 0, 6, 6);
+
+                SuggestionsBarHeight = Suggestions.Count * 40;
+            }
+            else
+                SuggestionsBarHeight = 0;
         }
 
         private ObservableCollection<Suggestion> GetNextSuggestions() {

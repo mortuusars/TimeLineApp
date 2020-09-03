@@ -32,8 +32,6 @@ namespace TimeLine
             mainView = new MainView {
                 DataContext = new MainViewModel()
             };
-            mainView.Show();
-            mainView.Hide();
         }
 
         protected override void OnExit(ExitEventArgs e) {

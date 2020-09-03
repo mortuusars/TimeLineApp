@@ -18,9 +18,6 @@ namespace TimeLine
         public RunCommandView CommandView { get; private set; }        
         public RunCommandViewModel CurrentCommandVM { get; private set; }
 
-        ToastMainView toastMain;
-        public ObservableCollection<ToastControlViewModel> ToastList { get; set; }
-
 
         // Services
         Timer Timer;
@@ -28,17 +25,10 @@ namespace TimeLine
         // Alarm
 
 
-        public Manager() {
-            ToastList = new ObservableCollection<ToastControlViewModel>();
+        public Manager() { 
 
-            toastMain = new ToastMainView();
-            toastMain.Left = WpfScreenHelper.Screen.PrimaryScreen.Bounds.Right - toastMain.Width;
-            toastMain.Top = WpfScreenHelper.Screen.PrimaryScreen.Bounds.Bottom - toastMain.Height * 1.05;
-            //TODO: Proper ViewModel for ToastMainWindow
-            toastMain.DataContext = this;
-            toastMain.Show();
+            InitializeTimer();
 
-            CreateTimer();
         }
 
         
@@ -93,46 +83,6 @@ namespace TimeLine
         #endregion
 
 
-        #region Toast
-
-        /// <summary>
-        /// Shows Toast Notification in the corner. It will automatically close after short delay. 
-        /// IsAlarm = true - plays a sound and makes toast stay open indefinitely.
-        /// </summary>
-        /// <param name="title"></param>
-        /// <param name="message"></param>
-        /// <param name="icon"></param>
-        /// <param name="IsAlarm">Plays sound and makes toast stay until manually closed.</param>
-        public void ShowToastNotification(string title, string message, Icons icon, bool IsAlarm = false) {
-
-            ToastControlViewModel newToast = new ToastControlViewModel(title, message, icon);
-
-            ToastList.Add(newToast);
-
-            if (IsAlarm == false) {
-                // Closing Timer;
-                System.Timers.Timer toastTimer = new System.Timers.Timer();
-                toastTimer.Interval = 4000;
-                toastTimer.Elapsed += (s, e) => { Application.Current.Dispatcher.Invoke(new Action(() => { CloseToast(newToast); })); toastTimer.Stop(); toastTimer.Dispose(); };
-                toastTimer.Start();
-            }
-            else {
-                PlaySound();
-            }
-        }
-
-        public void CloseToast(ToastControlViewModel toast, bool fromCommand = false) {
-            toast.Close();
-            if (fromCommand)
-                StopSound();
-        }
-
-        public void RemoveToastFromList(ToastControlViewModel toast) {
-            ToastList.Remove(toast);
-        }
-
-        #endregion
-
 
 
         public void ParseInput(string inputText) {
@@ -149,15 +99,15 @@ namespace TimeLine
             }
             else if (parsedData.MainCommand == "stopwatch") {
                 //TODO: Stopwatch
-                ShowToastNotification("Stopwatch", "test", Icons.stopwatch);
+                GetService.ToastManager.ShowToastNotification("Stopwatch", "test", Icons.stopwatch);
             }
             else if (parsedData.MainCommand == "alarm") {
                 //TODO: alarm
-                ShowToastNotification("Alarm", "test", Icons.alarm);
+                GetService.ToastManager.ShowToastNotification("Alarm", "test", Icons.alarm);
             }
             else if (parsedData.MainCommand == "mute") {
                 // Mute
-                ShowToastNotification("Timer", "Started for 3 minutes" +
+                GetService.ToastManager.ShowToastNotification("Timer", "Started for 3 minutes" +
                     "Started for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutes" +
                     "Started for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutes", Icons.timer);
             }
@@ -165,7 +115,7 @@ namespace TimeLine
                 App.ExitApplication();
             }
             else {
-                ShowToastNotification("TimeLine", "Command is not recognized", Icons.info);
+                GetService.ToastManager.ShowToastNotification("TimeLine", "Command is not recognized", Icons.info);
             }
         }
 
@@ -184,7 +134,7 @@ namespace TimeLine
         /// <summary>
         /// Invoked from constructor.
         /// </summary>
-        private void CreateTimer() {
+        private void InitializeTimer() {
             Timer = new Timer();
             Timer.TimerEnded += Timer_TimerEnded;
             Timer.Countdown += Timer_Countdown;
@@ -245,7 +195,7 @@ namespace TimeLine
                     }
             }
 
-            ShowToastNotification(toastTitle, toastMessage, icon);
+            GetService.ToastManager.ShowToastNotification(toastTitle, toastMessage, icon);
         }
 
 
@@ -257,7 +207,8 @@ namespace TimeLine
         private void Timer_TimerEnded(object sender, int timeForTimer) {
             Logger.Log($"Timer for {timeForTimer} s. is ended", LogLevel.DEBUG);
 
-            Application.Current.Dispatcher.Invoke(new Action(() => { ShowToastNotification("Timer", $"{Utilities.PrettyTime(timeForTimer)} has passed.", Icons.timer, IsAlarm: true); }));
+            Application.Current.Dispatcher.Invoke(new Action(() => { 
+                GetService.ToastManager.ShowToastNotification("Timer", $"{Utilities.PrettyTime(timeForTimer)} has passed.", Icons.timer, IsAlarm: true); }));
 
         }
 

@@ -8,7 +8,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using TimeLine.ViewModels;
 
-namespace TimeLine.Models
+namespace TimeLine
 {
     public class ToastControlViewModel : INotifyPropertyChanged
     {
@@ -22,10 +22,15 @@ namespace TimeLine.Models
         //TODO: Postpone button?
         public bool PostponeButtonIsVisible { get; set; } = false;
 
+        /// <summary>
+        /// Triggers FadeOut animation in ToastControl
+        /// </summary>
         public bool IsRemoving { get; set; }
 
         public ICommand CloseCommand { get; private set; }
-        public object FindResource { get; private set; }
+
+
+        public Duration FadeAnimationDuration = (Duration)App.Current.FindResource("ToastFadeOutDuration");
 
         public ToastControlViewModel(string title, string message, Icons icon) {
             Title = title;
@@ -33,26 +38,12 @@ namespace TimeLine.Models
             Icon = GetIcon(icon);
             IconTintColor = GetTintColor(icon);
 
-            CloseCommand = new RelayCommand( act => { GetService.Manager.CloseToast(this, fromCommand : true); });
+            CloseCommand = new RelayCommand( act => { 
+                GetService.ToastManager.CloseToastNotification(this); 
+                //TODO: Move sound to GetService
+                //GetService.Sound.Stop();
+            });
         }
-
-        
-
-        public void Close() {
-            IsRemoving = true;
-
-            var FadeDuration = (Duration)App.Current.FindResource("ToastFadeOutDuration");
-
-            var timer = new DispatcherTimer();
-            timer.Interval = FadeDuration.TimeSpan;
-            timer.Tick += (sender, e) => 
-            { 
-                GetService.Manager.RemoveToastFromList(this); 
-                timer.Stop();
-            };
-            timer.Start();
-        }
-
 
         private string GetIcon(Icons icon) {
             if (icon == Icons.alarm)

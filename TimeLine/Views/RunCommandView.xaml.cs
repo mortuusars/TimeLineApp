@@ -17,6 +17,9 @@ namespace TimeLine.Views
     /// </summary>
     public partial class RunCommandView : Window
     {
+
+        RunCommandViewModel ViewModel;
+
         public RunCommandView() {
             InitializeComponent();
 
@@ -25,8 +28,19 @@ namespace TimeLine.Views
         }
 
 
+
+
+
+        /// <summary>
+        /// Append suggestion to current TextBox text.
+        /// </summary>
+        /// <param name="header"></param>
         public void AppendString(string header) {
-            throw new NotImplementedException();
+            ViewModel = (RunCommandViewModel)this.DataContext;
+            ViewModel.AppendSuggestion(header);
+
+            CommandTextBox.CaretIndex = CommandTextBox.Text.Length;
+            CommandTextBox.Focus();
         }
 
 
