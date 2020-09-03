@@ -7,6 +7,8 @@ namespace TimeLine.Models
     {
         public string Header { get; set; }
 
+        public int SuggestionButtonHeight { get { return RunCommandViewModel.suggestionButtonHeight; } }
+
         public CornerRadius CornerRadius { get; set; }
 
         public ICommand AddSuggestionCommand { get; set; }

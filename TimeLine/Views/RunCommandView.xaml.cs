@@ -63,11 +63,25 @@ namespace TimeLine.Views
                 }
                 e.Handled = true;
             }
+            else if (e.Key == Key.Up) {
+                var keyboardFocus = Keyboard.FocusedElement as UIElement;
+
+                if (keyboardFocus != null) {
+                    keyboardFocus.MoveFocus(new TraversalRequest(FocusNavigationDirection.Previous));
+                }
+                e.Handled = true;
+            }
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e) {
             if (e.Key == Key.Escape)
                 GetService.Manager.ShowOrCloseCommandView();
+        }
+
+        private void FoldingAnimationCompleted(object sender, EventArgs e) {
+            var binding = new Binding("SuggestionsHeight");
+            BindingOperations.SetBinding(SuggestionsBorder, Border.HeightProperty, binding);
+            SuggestionsBorder.Opacity = 1;
         }
     }
 }

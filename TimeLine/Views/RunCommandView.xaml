@@ -13,7 +13,9 @@
     <Window.Resources>
         <DropShadowEffect x:Key="DropShadowWindow" ShadowDepth="6" BlurRadius="40" Direction="-90" Opacity="0.5"/>
 
-
+        <Storyboard x:Key="FoldingAnimation" Completed="FoldingAnimationCompleted">
+            <DoubleAnimation Duration="0:0:0.1" To="0" Storyboard.TargetProperty="Opacity" FillBehavior="Stop" />
+        </Storyboard>
 
         <!-- Confirm Button -->
         <Style TargetType="{x:Type Button}" x:Key="ConfirmButton">
@@ -53,8 +55,8 @@
 
         <!-- Suggestions Button Style -->
         <Style TargetType="{x:Type Button}" x:Key="SuggestionButton">
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Background" Value="{StaticResource HalfLightBrush}"/>
+            <Setter Property="Height" Value="{Binding SuggestionButtonHeight}"/>
+            <Setter Property="Background" Value="{StaticResource LightBrush}"/>
             <Setter Property="Foreground" Value="{StaticResource DarkBrush}"/>
             <Setter Property="FontFamily" Value="{StaticResource MontserratLight}"/>
             <Setter Property="FontSize" Value="22"/>
@@ -70,11 +72,12 @@
                 <EventTrigger RoutedEvent="Loaded">
                     <BeginStoryboard>
                         <Storyboard>
-                            <DoubleAnimation From="0.0" To="1.0" Duration="0:0:0.2" Storyboard.TargetProperty="Opacity"/>
+                            <DoubleAnimation From="0.0" To="1.0" Duration="0:0:0.3" Storyboard.TargetProperty="Height"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
             </Style.Triggers>
+            
         </Style>
 
 
@@ -115,7 +118,7 @@
                 <!-- The TextBox -->
 
                 <TextBox  x:Name="CommandTextBox"
-                         Grid.Column="1" Margin="10 0" Padding="0 4" 
+                         Grid.Column="1" Margin="14 0 0 0" Padding="0 4" 
                          Text="{Binding Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" d:Text="Timer add 1h 30m" 
                          Background="Transparent" Foreground="{StaticResource DarkBrush}" BorderThickness="0" VerticalAlignment="Center"
                          FontFamily="{StaticResource MontserratRegular}" FontSize="44">
@@ -136,9 +139,10 @@
 
         
         <!-- Suggestions Bar -->
-        <Border x:Name="SuggestionsBorder" Margin="120 0" Effect="{StaticResource DropShadowWindow}" Grid.Row="1"  CornerRadius="6" 
-                Height="{Binding SuggestionsBarHeight}" d:Height="0"
+        <Border x:Name="SuggestionsBorder" Height="{Binding SuggestionsHeight}" Effect="{StaticResource DropShadowWindow}" Grid.Row="1"  CornerRadius="6" 
+                 d:Height="200" Width="240"
                 Background="{StaticResource VeryLightBrush}" BorderThickness="1" BorderBrush="{StaticResource HalfLightBrush}" >
+            
             <ItemsControl ItemsSource="{Binding Suggestions}" IsTabStop="False">
                 <!-- Suggestion Buttons-->
                 <ItemsControl.ItemTemplate>
@@ -148,13 +152,35 @@
                             <!-- Button Itself -->
                             <Button Style="{StaticResource SuggestionButton}"
                                     Content="{Binding Header}"
-                                    Command="{Binding AddSuggestionCommand}" ClipToBounds="True" >                                
+                                    Command="{Binding AddSuggestionCommand}" >                                
                             </Button>
                         </StackPanel>
 
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+            
+            <Border.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation From="0.0" To="1.0" Duration="0:0:0.2" Storyboard.TargetProperty="Opacity"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>                
+            </Border.Triggers>
+
+            <Border.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding FoldBorder}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource FoldingAnimation}"/>
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>                        
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
         </Border>
 
 

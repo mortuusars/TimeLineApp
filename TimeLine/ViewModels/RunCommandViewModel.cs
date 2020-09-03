@@ -15,6 +15,8 @@ namespace TimeLine
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public static int suggestionButtonHeight = 42;
+
         #region Bindable Properties
 
         public int Left { get; set; }
@@ -23,10 +25,26 @@ namespace TimeLine
         public int WindowWidth { get; set; } = 500;
         public int BaseHeight { get; set; } = 70;
 
-        public int SuggestionsBarHeight { get; set; } = 0;
+        private int suggestionsHeight;
+        public int SuggestionsHeight
+        {
+            get { return suggestionsHeight; }
+            set { 
+                if (value == 0) {
+                    FoldBorder = true;
+                    suggestionsHeight = value;
+                }                    
+                else {
+                    FoldBorder = false;
+                    suggestionsHeight = value;
+                }
+            }
+        }
+
 
         public bool Closing { get; set; }
 
+        public bool FoldBorder { get; set; }
         public bool GhostTextIsVisible { get; set; } = true;
 
         private string input;
@@ -167,16 +185,24 @@ namespace TimeLine
                 }
                                 
             }
-            
-            if (Suggestions.Count > 0) {
-                Suggestions[0].CornerRadius = new CornerRadius(6, 6, 0, 0);
-                Suggestions[Suggestions.Count-1].CornerRadius = new CornerRadius(0, 0, 6, 6);
 
-                SuggestionsBarHeight = Suggestions.Count * 40;
+            SetSuggestionsCornerRadius();
+
+            SuggestionsHeight = Suggestions.Count > 0 ? (Suggestions.Count * suggestionButtonHeight) + 2 : 0;
+
+        }
+
+        private void SetSuggestionsCornerRadius() {
+            if (Suggestions.Count == 1)
+                Suggestions[0].CornerRadius = new CornerRadius(6, 6, 6, 6);
+            else if (Suggestions.Count > 1) {
+                Suggestions[0].CornerRadius = new CornerRadius(6, 6, 0, 0);
+                Suggestions[Suggestions.Count - 1].CornerRadius = new CornerRadius(0, 0, 6, 6);                
             }
             else
-                SuggestionsBarHeight = 0;
+                SuggestionsHeight = 0;
         }
+
 
         private ObservableCollection<Suggestion> GetNextSuggestions() {
             string lastWord = new List<string>(Input.ToLower().Trim().Split(" ")).FindLast(word => word.Length != 0);
