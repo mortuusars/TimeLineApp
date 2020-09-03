@@ -15,9 +15,10 @@ namespace TimeLine
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public RunCommandView CommandView { get; private set; }        
+        public RunCommandView CommandView { get; private set; }
         public RunCommandViewModel CurrentCommandVM { get; private set; }
 
+        public bool TimerIsRunning { get { return Timer.IsRunning; } }
 
         // Services
         Timer Timer;
@@ -25,11 +26,11 @@ namespace TimeLine
         // Alarm
 
 
-        public Manager() { 
+        public Manager() {
             InitializeTimer();
         }
 
-        
+
 
 
         #region Sound
@@ -60,7 +61,8 @@ namespace TimeLine
                 CommandView.Show();
                 CommandView.Activate();
             }
-            else {                
+            else {
+                //TODO: closing animation
                 CurrentCommandVM.Closing = true;
 
                 DispatcherTimer dispatcherTimer = new DispatcherTimer();
@@ -210,8 +212,10 @@ namespace TimeLine
         private void Timer_TimerEnded(object sender, int timeForTimer) {
             Logger.Log($"Timer for {timeForTimer} s. is ended", LogLevel.DEBUG);
 
-            Application.Current.Dispatcher.Invoke(new Action(() => { 
-                GetService.ToastManager.ShowToastNotification("Timer", $"{Utilities.PrettyTime(timeForTimer)} has passed.", Icons.timer, IsAlarm: true); }));
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                GetService.ToastManager.ShowToastNotification("Timer", $"{Utilities.PrettyTime(timeForTimer)} has passed.", Icons.timer, IsAlarm: true);
+            }));
 
         }
 

@@ -174,8 +174,14 @@ namespace TimeLine.ViewModels
         private ObservableCollection<Suggestion> GetNextSuggestions() {
             string lastWord = new List<string>(Input.ToLower().Trim().Split(" ")).FindLast(word => word.Length != 0);
 
-            if (lastWord == "timer" || lastWord == "t")
-                return new ObservableCollection<Suggestion>() { new Suggestion("Stop"), new Suggestion("Add"), new Suggestion("Info"), new Suggestion("3m"), new Suggestion("10m"), new Suggestion("25m") };
+            if (lastWord == "timer" || lastWord == "t") {
+                if (GetService.Manager.TimerIsRunning)
+                    return new ObservableCollection<Suggestion>() { new Suggestion("Stop"), new Suggestion("Add"), 
+                        new Suggestion("Info") };
+                else
+                    return new ObservableCollection<Suggestion>() { new Suggestion("3m"), new Suggestion("5m"), new Suggestion("10m"), new Suggestion("25m"), new Suggestion("1h") };
+            }
+                
             else if (lastWord == "stopwatch" || lastWord == "s")
                 return new ObservableCollection<Suggestion>() { new Suggestion("Start"), new Suggestion("Pause"), new Suggestion("Reset"), new Suggestion("Close") };
             else if (lastWord == "alarm" || lastWord == "a")

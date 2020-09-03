@@ -9,6 +9,8 @@ namespace TimeLine.Core
         public event EventHandler<int> TimerEnded;
         public event EventHandler<int> Countdown;
 
+        public bool IsRunning { get; set; }
+
         int startTime;
         int currentTime;
         int timerTime;
@@ -25,6 +27,7 @@ namespace TimeLine.Core
             timerTime = currentTime + time;
 
             timer.Start();
+            IsRunning = true;
         }
 
         public void Add(int timeToAdd) {
@@ -35,6 +38,7 @@ namespace TimeLine.Core
             timer.Stop();
             timer.Dispose();
 
+            IsRunning = false;
             // Pass 0, as timer is not running
             Countdown?.Invoke(this, 0);
         }
@@ -43,7 +47,7 @@ namespace TimeLine.Core
 
         private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
             if (currentTime >= timerTime) {
-                TimerEnded?.Invoke(this, timerTime - startTime);                
+                TimerEnded?.Invoke(this, timerTime - startTime);
                 Stop();
             }
             else {

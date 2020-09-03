@@ -64,9 +64,15 @@ namespace TimeLine
         #endregion
 
 
-        HashSet<string> suggestionWords = new HashSet<string>() { "Timer", "Stopwatch", "Alarm", "Mute", "Exit", "Add", "Stop", "Skip", "1m", "2m" };
-        List<Suggestion> baseSuggestions = new List<Suggestion>() { new Suggestion("Timer"), new Suggestion("Stopwatch"), new Suggestion("Alarm") };
-        
+        HashSet<string> baseSuggestions = new HashSet<string>() { "Timer", "Stopwatch", "Alarm" };
+
+        HashSet<string> timerRunningSuggestions = new HashSet<string>() { "Add", "Stop", "Info" };
+        HashSet<string> timerTimeSuggestions = new HashSet<string>() { "3m", "5m", "10m", "15m", "25m", "1h" };
+
+        HashSet<string> stopwatchSuggestions = new HashSet<string>() { "Start", "Reset", "Close", "Pause" };
+        HashSet<string> stopwatchRunningSuggestions = new HashSet<string>() { "Pause", "Reset", "Close" };
+
+        HashSet<string> alarmSuggestions = new HashSet<string>() { "Skip", "Clear" };        
 
 
 
@@ -165,27 +171,45 @@ namespace TimeLine
 
 
         private void GetSuggestions() {
+            
+            string lowercaseInput = string.IsNullOrWhiteSpace(Input) ? "" : Input.ToLower();
+
+            HashSet<string> suggestionsSet = new HashSet<string>();
+            
+            string lastWord = " ";
+
             if (string.IsNullOrWhiteSpace(Input)) {
-                Suggestions = new ObservableCollection<Suggestion>(baseSuggestions);
-            }
-            else if (Input[Input.Length - 1] == ' ') {
-                Suggestions = GetNextSuggestions();
+                suggestionsSet = baseSuggestions;
             }
             else {
-                string lastWord = new List<string>(Input.ToLower().Trim().Split(" ")).FindLast(word => word.Length != 0);
+                lastWord = new List<string>(lowercaseInput.Split(" ")).FindLast(word => word.Length != 0);              
 
-                if (lastWord == null)
-                    lastWord = " ";
-
-                Suggestions = new ObservableCollection<Suggestion>();
-
-                foreach (var word in suggestionWords) {
-                    if (word.ToLower().StartsWith(lastWord)) {
-                        Suggestions.Add(new Suggestion(word));
-                    }
-                }
-                                
+                if (lowercaseInput.Contains("timer ") || lowercaseInput.Contains("t "))
+                    suggestionsSet = GetService.Manager.TimerIsRunning ? timerRunningSuggestions : timerTimeSuggestions;
+                else if (lowercaseInput.Contains("stopwatch ") || lowercaseInput.Contains("s "))
+                    //TODO: stopwatch running
+                    suggestionsSet = stopwatchSuggestions;
+                else if (lowercaseInput.Contains("alarm ") || lowercaseInput.Contains("a "))
+                    suggestionsSet = alarmSuggestions;
+                else
+                    suggestionsSet = baseSuggestions;
             }
+
+            Suggestions = new ObservableCollection<Suggestion>();
+
+
+            if (string.IsNullOrWhiteSpace(Input) || Input[Input.Length - 1] == ' ') {
+                foreach (var word in suggestionsSet) {
+                    Suggestions.Add(new Suggestion(word));
+                }
+            }                
+            else {
+                foreach (var word in suggestionsSet) {
+                    if (word.ToLower().StartsWith(lastWord))
+                        Suggestions.Add(new Suggestion(word));
+                }
+            }
+
 
             SetSuggestionsCornerRadius();
 
@@ -205,25 +229,6 @@ namespace TimeLine
                 Suggestions[0].CornerRadius = new CornerRadius(6, 6, 0, 0);
                 Suggestions[Suggestions.Count - 1].CornerRadius = new CornerRadius(0, 0, 6, 6);                
             }
-        }
-
-
-        private ObservableCollection<Suggestion> GetNextSuggestions() {
-            string lastWord = new List<string>(Input.ToLower().Trim().Split(" ")).FindLast(word => word.Length != 0);
-
-            if (lastWord == "timer" || lastWord == "t")
-                return new ObservableCollection<Suggestion>() { new Suggestion("Stop"), new Suggestion("Add"), new Suggestion("Info"), new Suggestion("3m"), new Suggestion("10m"), new Suggestion("25m") };
-            else if (lastWord == "stopwatch" || lastWord == "s")
-                return new ObservableCollection<Suggestion>() { new Suggestion("Start"), new Suggestion("Pause"), new Suggestion("Reset"), new Suggestion("Close") };
-            else if (lastWord == "alarm" || lastWord == "a")
-                return new ObservableCollection<Suggestion>() { new Suggestion("Clear"), new Suggestion("Skip") };
-            else {
-                if (lastWord == "add")
-                    return new ObservableCollection<Suggestion>() { new Suggestion("1m"), new Suggestion("2m"), new Suggestion("3m"), new Suggestion("5m"), new Suggestion("10m") };                
-            }
-
-
-            return new ObservableCollection<Suggestion>();
         }
     }
 }
