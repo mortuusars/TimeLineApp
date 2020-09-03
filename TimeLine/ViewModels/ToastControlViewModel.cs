@@ -40,8 +40,7 @@ namespace TimeLine
 
             CloseCommand = new RelayCommand( act => { 
                 GetService.ToastManager.CloseToastNotification(this); 
-                //TODO: Move sound to GetService
-                //GetService.Sound.Stop();
+                GetService.SoundPlayer.Stop();
             });
         }
 

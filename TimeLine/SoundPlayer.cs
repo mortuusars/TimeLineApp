@@ -4,22 +4,30 @@ using System.Windows.Media;
 
 namespace TimeLine
 {
-    public static class SoundPlayer
+    public class SoundPlayer
     {
         //TODO: Properties
-        static readonly string soundPath = "Resources/Sounds/subtle.wav";
-        static readonly int soundVolume = 50;
+        readonly string soundPath = "Resources/Sounds/subtle.wav";
+        readonly int defaultVolume = 60;
 
         const int FadeDelayMilliseconds = 30;
 
-        static MediaPlayer player = new MediaPlayer();
 
-        static double volumeBeforeMute;
-        static bool isPlaying;
-        static bool isMuted;
+        public bool IsPlaying { get; set; }
+        public bool IsMuted { get; set; }
 
-        public static void Play() {
-            player.MediaEnded += (s, e) => { isPlaying = false; };
+
+        MediaPlayer player;
+        double volumeBeforeMute;
+
+        public SoundPlayer() {
+            player = new MediaPlayer();
+            SetVolume(defaultVolume);
+        }
+
+        #region Public Methods        
+
+        public void Play() {
 
             try {
                 player.Open(new Uri(soundPath, UriKind.Relative));
@@ -29,101 +37,55 @@ namespace TimeLine
                 return;
             }
 
-            SetVolume(soundVolume);
+            player.MediaEnded += (s, e) => { OnPlaybackEnd(); };
 
-            isPlaying = true;
+            IsPlaying = true;
             player.Play();
 
         }
 
-        public static void Stop() {
+        public void Stop() {
             player.Stop();
-            isPlaying = false;
+            OnPlaybackEnd();
         }
 
-        /*
-        public static async void Play() {
-            player.MediaEnded += Player_MediaEnded;
-
-            if (isPlaying == true)
-                return;
-
-            player.Open(new Uri(soundPath, UriKind.Relative));
-            isPlaying = true;
-
-            player.Stop();
-
+        public void Mute() {
+            volumeBeforeMute = player.Volume;
             SetVolume(0);
-            player.Play();
-
-            FadeIn();
-            await Task.Delay(FadeDelayMilliseconds * soundVolume);
+            IsMuted = true;
         }
 
-        private static void Player_MediaEnded(object sender, EventArgs e) {
-            isPlaying = false;
+        public void UnMute() {
+            SetVolume(volumeBeforeMute);
+            IsMuted = false;
         }
         
 
-
-
-        public static async void Stop() {
-            FadeOut();
-            await Task.Delay(FadeDelayMilliseconds * soundVolume);
-            player.Stop();
-            isPlaying = false;
-        }
-
-        */
-
-        /// <summary>
-        /// Returns True if sound is playing and can be paused.
-        /// </summary>
-        /// <returns></returns>
-        public static bool IsPlaying() {
-            return isPlaying;
-        }
-
-        /// <summary>
-        /// Change sound volume.  
-        /// </summary>
-        /// <param name="volume">Number from 0 to 100.</param>
-        public static void SetVolume(int volume) {
+        public void SetVolume(int volume) {
             player.Volume = volume / 100.0f;
         }
 
-        public static void ToggleMute() {
-            if (isMuted) {
-                player.Volume = volumeBeforeMute;
-                isMuted = false;
-            }
-            else {
-                volumeBeforeMute = player.Volume;
-                player.Volume = 0;
-                isMuted = true;
-            }
-
+        public void SetVolume(double volume) {
+            player.Volume = volume;
         }
 
-        public static double GetVolume() {
-            return player.Volume;
+        #endregion
+
+        private void OnPlaybackEnd() {
+            IsPlaying = false; 
+            player.Close();
         }
 
 
-        private static async void FadeIn() {
-            if (isMuted)
-                return;
 
-            int volumeFadeIn = 0;
-            while (volumeFadeIn < soundVolume) {
-                volumeFadeIn += 1;
-                SetVolume(volumeFadeIn);
-                await Task.Delay(FadeDelayMilliseconds);
-            }
-        }
 
-        private static async void FadeOut() {
-            if (isMuted)
+
+
+        /*
+         
+
+        private async void FadeOut() {
+            if (IsMuted)
                 return;
 
             int volumeFade = soundVolume;
@@ -134,5 +96,7 @@ namespace TimeLine
                 await Task.Delay(FadeDelayMilliseconds);
             }
         }
+
+        */
     }
 }

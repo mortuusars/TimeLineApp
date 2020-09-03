@@ -17,17 +17,11 @@
 
         <Storyboard x:Key="FadeInAnimation" >
             <DoubleAnimation Duration="0:0:0.1" From="0" To="1" Storyboard.TargetProperty="Opacity" >
-                <DoubleAnimation.EasingFunction>
-                    <CircleEase EasingMode="EaseIn"/>
-                </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
         </Storyboard>
 
         <Storyboard x:Key="FadeOutAnimation" >
             <DoubleAnimation Duration="0:0:0.1" From="1" To="0" Storyboard.TargetProperty="Opacity" >
-                <DoubleAnimation.EasingFunction>
-                    <CircleEase EasingMode="EaseIn"/>
-                </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
         </Storyboard>
 

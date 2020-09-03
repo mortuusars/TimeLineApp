@@ -65,7 +65,7 @@ namespace TimeLine
 
 
         HashSet<string> suggestionWords = new HashSet<string>() { "Timer", "Stopwatch", "Alarm", "Mute", "Exit", "Add", "Stop", "Skip", "1m", "2m" };
-        List<Suggestion> baseSuggestions = new List<Suggestion>() { new Suggestion("Timer"), new Suggestion("Stopwatch"), new Suggestion("Alarm"), new Suggestion("Exit"), };
+        List<Suggestion> baseSuggestions = new List<Suggestion>() { new Suggestion("Timer"), new Suggestion("Stopwatch"), new Suggestion("Alarm") };
         
 
 

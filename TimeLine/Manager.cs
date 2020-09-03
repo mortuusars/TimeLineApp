@@ -26,16 +26,14 @@ namespace TimeLine
 
 
         public Manager() { 
-
             InitializeTimer();
-
         }
 
         
 
 
         #region Sound
-
+        /*
         public void PlaySound() {
             SoundPlayer.Stop();
             SoundPlayer.Play();
@@ -44,7 +42,7 @@ namespace TimeLine
         public void StopSound() {
             SoundPlayer.Stop();
         }
-
+        */
         #endregion
 
 
@@ -106,10 +104,15 @@ namespace TimeLine
                 GetService.ToastManager.ShowToastNotification("Alarm", "test", Icons.alarm);
             }
             else if (parsedData.MainCommand == "mute") {
-                // Mute
-                GetService.ToastManager.ShowToastNotification("Timer", "Started for 3 minutes" +
-                    "Started for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutes" +
-                    "Started for 3 minutesStarted for 3 minutesStarted for 3 minutesStarted for 3 minutes", Icons.timer);
+
+                if (GetService.SoundPlayer.IsMuted == true) {
+                    GetService.SoundPlayer.UnMute();
+                    GetService.ToastManager.ShowToastNotification("TimeLine", "sound unmuted", Icons.info);
+                }
+                else {
+                    GetService.SoundPlayer.Mute();
+                    GetService.ToastManager.ShowToastNotification("TimeLine", "sound muted", Icons.info);
+                }
             }
             else if (parsedData.MainCommand == "exit") {
                 App.ExitApplication();
