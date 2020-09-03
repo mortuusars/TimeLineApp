@@ -8,6 +8,13 @@
     
 
     <ContextMenu x:Key="TrayMenu" x:Shared="false">
+        <!-- Open RunCommand Window -->
+        <MenuItem Header="Enter command.." Command="{Binding RunCommandWindowCommand}">
+            <MenuItem.Icon>
+                <Image Source="../../Resources/Icons/settings_64.png"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        
         <MenuItem Header="Configuration" Command="{Binding ConfigCommand}">
             <MenuItem.Icon>
                 <Image Source="../../Resources/Icons/settings_64.png"/>

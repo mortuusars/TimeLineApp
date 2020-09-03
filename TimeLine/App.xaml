@@ -14,7 +14,7 @@
                 <ResourceDictionary Source="Styles/Colors.xaml"/>
 
 
-                <ResourceDictionary Source="Views/Taskbar/TaskbarIconResources.xaml"/>
+                <ResourceDictionary Source="Styles/TaskbarIconStyle.xaml"/>
                 
                 
             </ResourceDictionary.MergedDictionaries>

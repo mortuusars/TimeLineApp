@@ -11,7 +11,7 @@ namespace TimeLine
         public ToastManager() {
 
             toastHolderViewModel = new ToastHolderViewModel();
-            toastHolder = new ToastHolderView() { DataContext = toastHolderViewModel };            
+            toastHolder = new ToastHolderView() { DataContext = toastHolderViewModel, Owner = MainView.Main };            
             
             toastHolder.Show();
         }
@@ -27,6 +27,11 @@ namespace TimeLine
             toastHolderViewModel.ShowToast(title, message, icon, IsAlarm);
         }
 
+        /// <summary>
+        /// Closes Toast with fading animation.
+        /// </summary>
+        /// <param name="toast"></param>
+        /// <param name="fromCommand"></param>
         public void CloseToastNotification(ToastControlViewModel toast, bool fromCommand = false) {
             toastHolderViewModel.CloseToast(toast);
         }

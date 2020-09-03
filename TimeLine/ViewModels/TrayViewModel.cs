@@ -10,13 +10,18 @@ namespace TimeLine.ViewModels
     {
         public ICommand ExitCommand { get; private set; }
         public ICommand ConfigCommand { get; private set; }
+        public ICommand RunCommandWindowCommand { get; private set; }
 
         public TrayViewModel() {
-            
-            ExitCommand = new RelayCommand(act => { App.ExitApplication(); });
+
+            RunCommandWindowCommand = new RelayCommand(act => { GetService.Manager.ShowOrCloseCommandView(); });
+
             ConfigCommand = new RelayCommand(act => { MessageBox.Show("Opened config window", "Config", 
                                                         MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, 
                                                         MessageBoxOptions.ServiceNotification); });
+
+            ExitCommand = new RelayCommand(act => { App.ExitApplication(); });
+
         }
     }
 }

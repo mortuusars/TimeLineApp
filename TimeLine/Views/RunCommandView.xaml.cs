@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -17,14 +19,22 @@ namespace TimeLine.Views
     /// </summary>
     public partial class RunCommandView : Window
     {
+        [DllImport("user32.dll", SetLastError = false)]
+        static extern IntPtr GetDesktopWindow();
 
         RunCommandViewModel ViewModel;
 
         public RunCommandView() {
             InitializeComponent();
 
-            CommandTextBox.PreviewKeyDown += CommandTextBox_PreviewKeyDown;
+            // Remove window from Alt+Tab
+            SourceInitialized += (s, e) =>
+            {
+                var win = new WindowInteropHelper(this);
+                win.Owner = GetDesktopWindow();
+            };
 
+            CommandTextBox.PreviewKeyDown += CommandTextBox_PreviewKeyDown;
         }
 
 
