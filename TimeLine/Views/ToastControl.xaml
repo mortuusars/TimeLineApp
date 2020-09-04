@@ -14,16 +14,16 @@
         
         <Style x:Key="TitleStyle" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="{StaticResource MontserratRegular}"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Foreground" Value="{StaticResource VeryLightBrush}"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="{StaticResource VeryDarkBrush}"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
 
         <Style x:Key="MessageStyle" TargetType="TextBlock" >
             <Setter Property="FontFamily" Value="{StaticResource MontserratLight}"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="16"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="Foreground" Value="{StaticResource HalfLightBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkBrush}"/>
         </Style>
 
 
@@ -47,13 +47,15 @@
     </Control.Resources>
 
 
-    <Border Background="{StaticResource DarkBrush}" Width="336" Height="auto" Margin="6 6 6 16 " Padding="4" BorderThickness="1" CornerRadius="4">
-
+    <Border Background="{StaticResource LighterBrush}" 
+            Width="340" Height="80" Margin="8 8 8 16 " Padding="4" 
+            BorderThickness="1" CornerRadius="4">
         <Border.Effect>
             <DropShadowEffect BlurRadius="12" ShadowDepth="4" Direction="-90" Opacity="0.6"/>
         </Border.Effect>
 
-        <Grid Margin="10">
+        
+        <Grid Margin="8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
@@ -61,29 +63,42 @@
             </Grid.ColumnDefinitions>
 
             
-
-            <Image Margin="0" Grid.Column="0" Source="{Binding Icon, Converter={StaticResource StringToImageConverter}}" d:Source="../Resources/Icons/timer_white_64.png" 
-               RenderOptions.BitmapScalingMode="HighQuality" Width="48" Height="48" VerticalAlignment="Top" />
-            <Rectangle Width="48" Height="48" VerticalAlignment="Top" Fill="{Binding IconTintColor}" d:Fill="LightGreen" Opacity="0.7">               
+            <!-- Icon -->
+            <Image Margin="0" Grid.Column="0" Source="{Binding Icon, Converter={StaticResource StringToImageConverter}}" d:Source="../Resources/Icons/timer_64.png" 
+                   RenderOptions.BitmapScalingMode="HighQuality" 
+                   Width="28" Height="28" VerticalAlignment="Top" />
+            <Rectangle Width="28" Height="28" VerticalAlignment="Top" Fill="{Binding IconTintColor}" d:Fill="Green" Opacity="1">               
                 <Rectangle.OpacityMask>
-                    <ImageBrush ImageSource="{Binding Icon}" d:ImageSource="../Resources/Icons/timer_white_64.png"/>
+                    <ImageBrush ImageSource="{Binding Icon}" d:ImageSource="../Resources/Icons/timer_64.png"/>
                 </Rectangle.OpacityMask>
             </Rectangle>
 
-            <StackPanel Margin="14 0 8 0" Grid.Column="1" Grid.RowSpan="2" >                
+            
+            <!-- Text -->
+            <StackPanel Margin="11 0 8 0" Grid.Column="1" Grid.RowSpan="2" >                
 
                 <!-- TITLE -->
-                <TextBlock Style="{StaticResource TitleStyle}" 
+                <TextBlock Style="{StaticResource TitleStyle}" Margin="0 -3"
                            Text="{Binding Title}" d:Text="Title" />
                 
                 <!-- MESSAGE-->
                 <TextBlock Style="{StaticResource MessageStyle}" Margin="0 4 0 0" 
-                           Text="{Binding Message}" TextWrapping="Wrap" d:Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
+                           Text="{Binding Message}" TextWrapping="Wrap" d:Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit." LineHeight="18" LineStackingStrategy="BlockLineHeight"  />
                            
             </StackPanel>
             
-            <Button Template="{DynamicResource ButtonNoStyle}" Style="{StaticResource CloseButtonStyle}" 
+            
+            <!-- Close Button -->
+            <Button x:Name="closeButton"
+                    Template="{DynamicResource ButtonNoStyle}" 
+                    Style="{StaticResource CloseButtonStyle}" 
                     Grid.Column="3" Command="{Binding CloseCommand}" Width="12" Height="12" VerticalAlignment="Top" />
+            <Rectangle  Grid.Column="3" VerticalAlignment="Top"
+                        Width="12" Height="12" Fill="{StaticResource BlackBrush}" IsHitTestVisible="False">
+                <Rectangle.OpacityMask>
+                    <VisualBrush Visual="{Binding ElementName=closeButton}"/>
+                </Rectangle.OpacityMask>
+            </Rectangle>
         </Grid>
     </Border>
 

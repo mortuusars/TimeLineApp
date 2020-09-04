@@ -10,7 +10,6 @@ namespace TimeLine
         stopwatch,
         alarm,
         clock,
-        hourglass,
         info,
         error
     }

@@ -20,17 +20,16 @@
     <None Remove="Resources\Fonts\Montserrat-SemiBold.ttf" />
     <None Remove="Resources\Fonts\Montserrat-Thin.ttf" />
     <None Remove="Resources\Fonts\PTMono-Regular.ttf" />
-    <None Remove="Resources\Icons\alarm_white_64.png" />
-    <None Remove="Resources\Icons\clock_white_64.png" />
+    <None Remove="Resources\Icons\alarm_64.png" />
+    <None Remove="Resources\Icons\clock_64.png" />
     <None Remove="Resources\Icons\close_64.png" />
-    <None Remove="Resources\Icons\error_white_64.png" />
-    <None Remove="Resources\Icons\hourglass_white_64.png" />
-    <None Remove="Resources\Icons\info_white_64.png" />
+    <None Remove="Resources\Icons\error_64.png" />
+    <None Remove="Resources\Icons\info_64.png" />
     <None Remove="Resources\Icons\send_128-pressed.png" />
     <None Remove="Resources\Icons\send_128.png" />
     <None Remove="Resources\Icons\settings_64.png" />
-    <None Remove="Resources\Icons\stopwatch_white_64.png" />
-    <None Remove="Resources\Icons\timer_white_64.png" />
+    <None Remove="Resources\Icons\stopwatch_64.png" />
+    <None Remove="Resources\Icons\timer_64.png" />
     <None Remove="Resources\Logo\time_custom-size.ico" />
   </ItemGroup>
 
@@ -58,22 +57,13 @@
     <Resource Include="Resources\Fonts\Montserrat-SemiBold.ttf" />
     <Resource Include="Resources\Fonts\Montserrat-Thin.ttf" />
     <Resource Include="Resources\Fonts\PTMono-Regular.ttf" />
-    <Resource Include="Resources\Icons\alarm_white_64.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\clock_white_64.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    <Resource Include="Resources\Icons\alarm_64.png" />
+    <Resource Include="Resources\Icons\clock_64.png" />
     <Resource Include="Resources\Icons\close_64.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Icons\error_white_64.png" />
-    <Resource Include="Resources\Icons\hourglass_white_64.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\info_white_64.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    <Resource Include="Resources\Icons\error_64.png" />
+    <Resource Include="Resources\Icons\info_64.png" />
     <Resource Include="Resources\Icons\send_128-pressed.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -83,12 +73,8 @@
     <Resource Include="Resources\Icons\settings_64.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Icons\stopwatch_white_64.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\timer_white_64.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    <Resource Include="Resources\Icons\stopwatch_64.png" />
+    <Resource Include="Resources\Icons\timer_64.png" />
     <Resource Include="Resources\Logo\time_custom-size.ico" />
   </ItemGroup>
 

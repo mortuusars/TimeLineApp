@@ -5,6 +5,7 @@
     <Color x:Key="VeryDark">#202020</Color>
     <Color x:Key="Dark">#303030</Color>
     <Color x:Key="HalfLight">#BFBFBF</Color>
+    <Color x:Key="Lighter">#e0e0e0</Color>
     <Color x:Key="Light">#EAEAEA</Color>
     <Color x:Key="VeryLight">#EFEFEF</Color>
     <Color x:Key="White">#FFFFFF</Color>
@@ -13,6 +14,7 @@
     <SolidColorBrush x:Key="VeryDarkBrush" Color="{StaticResource VeryDark}"/>
     <SolidColorBrush x:Key="DarkBrush" Color="{StaticResource Dark}"/>
     <SolidColorBrush x:Key="HalfLightBrush" Color="{StaticResource HalfLight}"/>
+    <SolidColorBrush x:Key="LighterBrush" Color="{StaticResource Lighter}"/>
     <SolidColorBrush x:Key="LightBrush" Color="{StaticResource Light}"/>
     <SolidColorBrush x:Key="VeryLightBrush" Color="{StaticResource VeryLight}"/>
     <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}"/>

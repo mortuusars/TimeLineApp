@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TimeLine.Views"
         mc:Ignorable="d"
         Title="RunCommandView" 
-        Width="600" Height="500" ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" ShowActivated="True"
+        Width="600" Height="420" ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" ShowActivated="True"
         Background="Transparent" AllowsTransparency="True" Topmost="True" FocusManager.FocusedElement="{Binding ElementName=CommandTextBox}"
         KeyDown="Window_KeyDown" Opacity="0.96">
 

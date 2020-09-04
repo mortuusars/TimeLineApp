@@ -41,7 +41,7 @@ namespace TimeLine
                 
                 var timerToClosing = new DispatcherTimer();
                 //TODO: Easier changing of parameters like this:   <move them to some kind of settings>
-                timerToClosing.Interval = TimeSpan.FromSeconds(4);
+                timerToClosing.Interval = TimeSpan.FromSeconds(6);
                 timerToClosing.Tick += (sender, e) =>
                 {
                     CloseToast(newToast);
@@ -60,7 +60,7 @@ namespace TimeLine
 
             // Create timer to remove toast from list after animation is done playing
             var timer = new DispatcherTimer();            
-            timer.Interval = toast.FadeAnimationDuration.TimeSpan;
+            timer.Interval = toast.FadeAnimationDuration.TimeSpan + toast.SlideAnimationDuration;
             timer.Tick += (sender, e) =>
             {
                 RemoveToastFromList(toast);
