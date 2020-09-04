@@ -77,5 +77,14 @@ namespace TimeLine.Views
             if (e.Key == Key.Escape)
                 GetService.Manager.ShowOrCloseCommandView();
         }
+
+
+        private void GhostTextStartAnimation_Completed(object sender, EventArgs e) {
+            GhostTextBlock.Opacity = 1;
+        }
+
+        private void GhostTextEndAnimation_Completed(object sender, EventArgs e) {
+            GhostTextBlock.Opacity = 0;
+        }
     }
 }

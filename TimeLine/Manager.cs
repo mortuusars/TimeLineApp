@@ -160,6 +160,8 @@ namespace TimeLine
                             icon = Icons.error;
                         }
                         else {
+                            if (Timer.IsRunning)
+                                Timer.Stop();
                             Timer.Start(overallSeconds);
                             toastMessage = $"Started for { Utilities.PrettyTime(overallSeconds)}";
                         }

@@ -43,9 +43,9 @@ namespace TimeLine
 
 
         public bool Closing { get; set; }
-
         public bool FadeBorder { get; set; }
 
+        public string GhostText { get; set; } = "Type a command..";
         public bool GhostTextIsVisible { get; set; } = true;
 
         private string input;
@@ -64,17 +64,6 @@ namespace TimeLine
         #endregion
 
 
-        HashSet<string> baseSuggestions = new HashSet<string>() { "Timer", "Stopwatch", "Alarm" };
-
-        HashSet<string> timerRunningSuggestions = new HashSet<string>() { "Add", "Stop", "Info" };
-        HashSet<string> timerTimeSuggestions = new HashSet<string>() { "3m", "5m", "10m", "15m", "25m", "1h" };
-
-        HashSet<string> stopwatchSuggestions = new HashSet<string>() { "Start", "Reset", "Close", "Pause" };
-        HashSet<string> stopwatchRunningSuggestions = new HashSet<string>() { "Pause", "Reset", "Close" };
-
-        HashSet<string> alarmSuggestions = new HashSet<string>() { "Skip", "Clear" };        
-
-
 
         public RunCommandViewModel() {
             ConfirmCommand = new RelayCommand(act => { ConfirmAndClose(); });
@@ -86,6 +75,8 @@ namespace TimeLine
 
             GetSuggestions();
         }
+
+
 
         #region Position
 
@@ -167,8 +158,17 @@ namespace TimeLine
         #endregion
 
 
+        #region Suggestions
 
+        HashSet<string> baseSuggestions = new HashSet<string>() { "Timer", "Stopwatch", "Alarm" };
 
+        HashSet<string> timerRunningSuggestions = new HashSet<string>() { "Add", "Stop", "Info" };
+        HashSet<string> timerTimeSuggestions = new HashSet<string>() { "3m", "5m", "10m", "15m", "25m", "1h" };
+
+        HashSet<string> stopwatchSuggestions = new HashSet<string>() { "Start", "Reset", "Close", "Pause" };
+        HashSet<string> stopwatchRunningSuggestions = new HashSet<string>() { "Pause", "Reset", "Close" };
+
+        HashSet<string> alarmSuggestions = new HashSet<string>() { "Skip", "Clear" };
 
         private void GetSuggestions() {
             
@@ -230,5 +230,7 @@ namespace TimeLine
                 Suggestions[Suggestions.Count - 1].CornerRadius = new CornerRadius(0, 0, 6, 6);                
             }
         }
+
+        #endregion
     }
 }

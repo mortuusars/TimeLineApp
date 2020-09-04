@@ -12,7 +12,7 @@
 
     <Window.Resources>
         <DropShadowEffect x:Key="DropShadowWindow" ShadowDepth="6" BlurRadius="40" Direction="-90" Opacity="0.5"/>
-
+        
         <!-- Suggestion Border animations-->        
 
         <Storyboard x:Key="FadeInAnimation" >
@@ -24,6 +24,30 @@
             <DoubleAnimation Duration="0:0:0.1" From="1" To="0" Storyboard.TargetProperty="Opacity" >
             </DoubleAnimation>
         </Storyboard>
+
+
+
+
+        <Storyboard x:Key="GhostTextStartAnimation" Completed="GhostTextStartAnimation_Completed">
+            <DoubleAnimation Duration="0:0:0.1" Storyboard.TargetProperty="Opacity" From="0" To="1" FillBehavior="Stop">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <ThicknessAnimation Duration="0:0:0.1" Storyboard.TargetProperty="Margin" From="70, 0, 0, 0" To="10, 0, 0, 0" FillBehavior="Stop"/>
+        </Storyboard>
+
+        <Storyboard x:Key="GhostTextEndAnimation" Completed="GhostTextEndAnimation_Completed">
+            <DoubleAnimation Duration="0:0:0.1" Storyboard.TargetProperty="Opacity" From="1" To="0" FillBehavior="Stop">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <ThicknessAnimation Duration="0:0:0.1" Storyboard.TargetProperty="Margin" From="10, 0, 0, 0" To="70, 0, 0, 0" FillBehavior="Stop"/>
+        </Storyboard>
+
+
+
 
         <!-- Confirm Button -->
         <Style TargetType="{x:Type Button}" x:Key="ConfirmButton">
@@ -125,8 +149,8 @@
 
                 <!-- The TextBox -->
 
-                <TextBox  x:Name="CommandTextBox"
-                         Grid.Column="1" Margin="8 0 0 0" Padding="0 6" 
+                <TextBox x:Name="CommandTextBox"
+                         Grid.Column="1" Margin="10 0 0 0" Padding="0 4" 
                          Text="{Binding Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" d:Text="Timer add 1h 30m" 
                          Background="Transparent" Foreground="{StaticResource DarkBrush}" BorderThickness="0" VerticalAlignment="Center"
                          FontFamily="{StaticResource MontserratRegular}" FontSize="44">
@@ -135,12 +159,31 @@
                     </TextBox.InputBindings>
                 </TextBox>
 
-
-
-
-
-
-
+                <TextBlock x:Name="GhostTextBlock"
+                           Grid.Column="1" Margin="10 0 0 0" Padding="0 4" VerticalAlignment="Center"
+                           Background="Transparent" Foreground="{StaticResource HalfLightBrush}" Opacity="1"
+                           Text="{Binding GhostText}" d:Text="Enter command.."
+                           FontFamily="{StaticResource MontserratRegular}" FontSize="38"
+                           IsHitTestVisible="False">
+                    
+                    <TextBlock.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding GhostTextIsVisible}" Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource GhostTextStartAnimation}"/>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding GhostTextIsVisible}" Value="False">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource GhostTextEndAnimation}"/>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                    
+                </TextBlock>
             </Grid>
         </Border>
 

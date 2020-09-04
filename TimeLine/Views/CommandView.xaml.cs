@@ -38,11 +38,11 @@ namespace TimeLine.Views
         /// </summary>
         /// <param name="header"></param>
         public void AppendString(string header) {
-            var VM = (CommandViewModel)this.DataContext;
-            VM.AppendSuggestion(header);
+            //var VM = (CommandViewModel)this.DataContext;
+            //VM.AppendSuggestion(header);
             
-            CommandTextBox.CaretIndex = CommandTextBox.Text.Length;
-            CommandTextBox.Focus();
+            //CommandTextBox.CaretIndex = CommandTextBox.Text.Length;
+            //CommandTextBox.Focus();
         }
 
         
