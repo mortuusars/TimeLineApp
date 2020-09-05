@@ -32,6 +32,8 @@ namespace TimeLine
 
             ToastList.Add(newToast);
 
+            GetService.Manager.AddHistoryItem(new Models.HistoryItem(title, message, icon));
+
             // Play sound and don't close toast if it is "ALARM"
             if (IsAlarm == true) {
                 GetService.SoundPlayer.Play();

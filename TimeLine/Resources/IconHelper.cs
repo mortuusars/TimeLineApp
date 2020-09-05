@@ -6,7 +6,7 @@ namespace TimeLine
 {
     public static class IconHelper
     {
-        public static string GetIcon(Icons icon) {
+        public static string GetIconPath(Icons icon) {
             if (icon == Icons.alarm)
                 return "pack://application:,,,/Resources/Icons/alarm_64.png";
             else if (icon == Icons.clock)

@@ -35,7 +35,7 @@ namespace TimeLine
         public ToastControlViewModel(string title, string message, Icons icon) {
             Title = title;
             Message = message;
-            Icon = IconHelper.GetIcon(icon);
+            Icon = IconHelper.GetIconPath(icon);
             IconTintColor = GetTintColor(icon);
 
             CloseCommand = new RelayCommand( act => { 

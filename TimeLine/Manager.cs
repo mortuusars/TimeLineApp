@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Threading;
@@ -20,7 +20,9 @@ namespace TimeLine
 
         public bool TimerIsRunning { get { return Timer.IsRunning; } }
 
-        // Services
+
+        public HistoryViewModel HistoryVM;
+
         Timer Timer;
         // Stopwatch
         // Alarm
@@ -28,23 +30,16 @@ namespace TimeLine
 
         public Manager() {
             InitializeTimer();
+
+            HistoryVM = new HistoryViewModel();
         }
 
+        public void AddHistoryItem(HistoryItem historyitem) {
+            if (HistoryVM.HistoryList.Count > 10)
+                HistoryVM.HistoryList.RemoveAt(0);
 
-
-
-        #region Sound
-        /*
-        public void PlaySound() {
-            SoundPlayer.Stop();
-            SoundPlayer.Play();
+            HistoryVM.HistoryList.Add(historyitem);
         }
-
-        public void StopSound() {
-            SoundPlayer.Stop();
-        }
-        */
-        #endregion
 
 
         #region Command Window
@@ -83,7 +78,7 @@ namespace TimeLine
         #endregion
 
 
-
+        #region Parsing Command
 
         public void ParseInput(string inputText) {
             ParsedCommandData parsedData = new CommandParser().Parse(inputText);
@@ -116,6 +111,10 @@ namespace TimeLine
                     GetService.ToastManager.ShowToastNotification("TimeLine", "sound muted", Icons.info);
                 }
             }
+            else if (parsedData.MainCommand == "history") {
+                HistoryView history = new HistoryView() { DataContext = HistoryVM };
+                history.Show();
+            }
             else if (parsedData.MainCommand == "exit") {
                 App.ExitApplication();
             }
@@ -124,10 +123,7 @@ namespace TimeLine
             }
         }
 
-
-
-
-
+        #endregion
 
 
         #region Timer

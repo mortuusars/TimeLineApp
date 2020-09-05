@@ -14,7 +14,7 @@ namespace TimeLine.Core
             "timer", "t", 
             "stopwatch", "s", 
             "alarm", "a", 
-            "mute", "exit" 
+            "mute", "history", "exit" 
         };
         readonly HashSet<string> operationWords = new HashSet<string>() 
         { 
@@ -43,7 +43,7 @@ namespace TimeLine.Core
             CreateWordList(text);
 
             ParseProgram();
-            if (mainCommand == "exit" || mainCommand == "mute")
+            if (mainCommand == "exit" || mainCommand == "mute" || mainCommand == "history")
                 return new ParsedCommandData(mainCommand);
             RemoveWordFromList();
             ChangeOneLetterMainCommand();

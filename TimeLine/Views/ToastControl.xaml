@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TimeLine.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="110" d:DesignWidth="360"
+             d:DesignHeight="110" d:DesignWidth="380"
              x:Name="ToastControlView">
 
     <Control.Resources>
@@ -48,12 +48,15 @@
 
 
     <Border Background="{StaticResource LighterBrush}" 
-            Width="340" Height="80" Margin="8 8 8 16 " Padding="4" 
+            Width="356" Height="80" Margin="8 8 8 16 " Padding="4" 
             BorderThickness="1" CornerRadius="4">
         <Border.Effect>
             <DropShadowEffect BlurRadius="12" ShadowDepth="4" Direction="-90" Opacity="0.6"/>
         </Border.Effect>
 
+        <Border.InputBindings>
+            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding CloseCommand}"/>
+        </Border.InputBindings>
         
         <Grid Margin="8">
             <Grid.ColumnDefinitions>
@@ -75,7 +78,7 @@
 
             
             <!-- Text -->
-            <StackPanel Margin="11 0 8 0" Grid.Column="1" Grid.RowSpan="2" >                
+            <StackPanel Margin="11 0 0 0" Grid.Column="1" Grid.RowSpan="2" >                
 
                 <!-- TITLE -->
                 <TextBlock Style="{StaticResource TitleStyle}" Margin="0 -3"

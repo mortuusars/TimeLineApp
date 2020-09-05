@@ -8,18 +8,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace TimeLine.Views
 {
     /// <summary>
-    /// Interaction logic for ToastControl.xaml
+    /// Interaction logic for HistoryView.xaml
     /// </summary>
-    public partial class ToastControl : UserControl
+    public partial class HistoryView : Window
     {
-        public ToastControl() {
-            InitializeComponent();            
-        }        
+        public HistoryView() {
+            InitializeComponent();
+        }
     }
 }

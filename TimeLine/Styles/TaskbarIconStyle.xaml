@@ -32,6 +32,8 @@
     <tb:TaskbarIcon x:Key="TrayIcon"
                     IconSource="../../Resources/Logo/time_custom-size.ico"
                     ToolTipText="TimeLine"
+                    LeftClickCommand="{Binding RunCommandWindowCommand}"
+                    DoubleClickCommand="{Binding TrayDoubleClickCommand}"
                     ContextMenu="{StaticResource TrayMenu}"
                     >
 
