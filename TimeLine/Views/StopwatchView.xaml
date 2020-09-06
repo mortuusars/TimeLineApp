@@ -1,0 +1,81 @@
+﻿<Window x:Class="TimeLine.Views.StopwatchView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimeLine.Views"
+        mc:Ignorable="d"
+        Title="StopwatchView" 
+        Height="84" Width="326" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="False" Topmost="True"
+        Background="Transparent" AllowsTransparency="True" >
+
+    <Window.Resources>
+        <DropShadowEffect x:Key="Shadow" BlurRadius="26" ShadowDepth="4" Direction="-90" Opacity="0.5"/>
+
+        <!--#region Buttons Style -->
+
+        <Style x:Key="DefaultButton" TargetType="Button">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="26"/>
+            <Setter Property="Height" Value="26"/>
+        </Style>
+
+        <Style x:Key="StartPauseButton" TargetType="Button" BasedOn="{StaticResource DefaultButton}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="/Resources/Icons/play_64.png" Stretch="UniformToFill"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding StopwatchRunning}" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="/Resources/Icons/pause_64.png" Stretch="UniformToFill"/>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="StopButton" TargetType="Button" BasedOn="{StaticResource DefaultButton}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="/Resources/Icons/stop_64.png"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!--#endregion-->
+
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource PtMono}"/>
+        </Style>
+
+    </Window.Resources>
+    
+    <Border Margin="18" Background="{StaticResource LightBrush}" CornerRadius="6" Effect="{StaticResource Shadow}">
+        <Grid Margin="4">            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="42"/>
+                <ColumnDefinition Width="42"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Margin="2"
+                    Style="{StaticResource StartPauseButton}" 
+                    Template="{DynamicResource ButtonNoStyle}"
+                    Command="{Binding StartPauseCommand}"/>
+            <Button Grid.Column="1" Margin="2"
+                    Style="{StaticResource StopButton}" 
+                    Template="{DynamicResource ButtonNoStyle}" 
+                    Command="{Binding StopCommand}"
+                    />
+
+            <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10 1 0 0"
+                       Style="{StaticResource TextBlockStyle}"
+                       Text="{Binding Time}" d:Text="00:00:01"
+                       FontSize="38"/>
+
+        </Grid>
+    </Border>
+</Window>

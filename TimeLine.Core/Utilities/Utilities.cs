@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TimeLine.Core
 {
@@ -12,7 +10,7 @@ namespace TimeLine.Core
             string minutesFull = span.Minutes < 10 ? $"0{span.Minutes}" : span.Minutes.ToString();
             string secondsFull = span.Seconds < 10 ? $"0{span.Seconds}" : span.Seconds.ToString();
 
-            
+
 
             // Hours
             string hrs = span.Hours > 1 ? $"{span.Hours} hours" : $"{span.Hours} hour";                   // Singular or plural;
@@ -69,6 +67,12 @@ namespace TimeLine.Core
 
             // Remove minus sign from string, if needed
             return removeMinusSign ? prettyTime.Replace('-', '\0') : prettyTime;
+        }
+
+        public static string CurrentTimeToString(DateTimeOffset time) {            
+            string minute = time.Minute < 10 ? $"0{time.Minute}" : time.Minute.ToString();
+            string hour = time.Hour < 10 ? $"0{time.Hour}" : time.Hour.ToString();
+            return $"{hour}:{minute}";
         }
     }
 }

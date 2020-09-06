@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using TimeLine.Core;
 
 namespace TimeLine.Models
 {
@@ -15,12 +14,7 @@ namespace TimeLine.Models
             Title = title;
             Message = message;
             Icon = IconHelper.GetIconPath(icon);
-            Time = CurrentTimeString();
-        }
-
-        private string CurrentTimeString() {
-            var time = DateTimeOffset.Now;
-            return $"{time.Hour}:{time.Minute}";
+            Time = Utilities.CurrentTimeToString(DateTimeOffset.Now);
         }
     }
 }

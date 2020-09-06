@@ -24,7 +24,7 @@ namespace TimeLine
         public HistoryViewModel HistoryVM;
 
         Timer Timer;
-        // Stopwatch
+        StopwatchView StopwatchView;
         // Alarm
 
 
@@ -93,8 +93,16 @@ namespace TimeLine
                 TimerCommands(parsedData);
             }
             else if (parsedData.MainCommand == "stopwatch") {
-                //TODO: Stopwatch
-                GetService.ToastManager.ShowToastNotification("Stopwatch", "test", Icons.stopwatch);
+                
+                if (StopwatchView == null) {
+                    StopwatchView = new StopwatchView();
+                    StopwatchView.DataContext = new StopwatchViewModel();
+
+                    StopwatchView.Show();
+                }
+                else 
+                    StopwatchView = null;
+
             }
             else if (parsedData.MainCommand == "alarm") {
                 //TODO: alarm
@@ -132,9 +140,7 @@ namespace TimeLine
 
         public int TimerCountdown { get; private set; }
 
-        /// <summary>
-        /// Invoked from constructor.
-        /// </summary>
+        
         private void InitializeTimer() {
             Timer = new Timer();
             Timer.TimerEnded += Timer_TimerEnded;

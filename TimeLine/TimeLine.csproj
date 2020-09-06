@@ -25,10 +25,13 @@
     <None Remove="Resources\Icons\close_64.png" />
     <None Remove="Resources\Icons\error_64.png" />
     <None Remove="Resources\Icons\info_64.png" />
+    <None Remove="Resources\Icons\pause_64.png" />
+    <None Remove="Resources\Icons\play_64.png" />
     <None Remove="Resources\Icons\send_128-pressed.png" />
     <None Remove="Resources\Icons\send_128.png" />
     <None Remove="Resources\Icons\settings_64.png" />
     <None Remove="Resources\Icons\stopwatch_64.png" />
+    <None Remove="Resources\Icons\stop_64.png" />
     <None Remove="Resources\Icons\timer_64.png" />
     <None Remove="Resources\Logo\time_custom-size.ico" />
   </ItemGroup>
@@ -64,6 +67,8 @@
     </Resource>
     <Resource Include="Resources\Icons\error_64.png" />
     <Resource Include="Resources\Icons\info_64.png" />
+    <Resource Include="Resources\Icons\pause_64.png" />
+    <Resource Include="Resources\Icons\play_64.png" />
     <Resource Include="Resources\Icons\send_128-pressed.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -74,6 +79,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Icons\stopwatch_64.png" />
+    <Resource Include="Resources\Icons\stop_64.png" />
     <Resource Include="Resources\Icons\timer_64.png" />
     <Resource Include="Resources\Logo\time_custom-size.ico" />
   </ItemGroup>
