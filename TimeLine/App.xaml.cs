@@ -21,7 +21,7 @@ namespace TimeLine
             // Log setup
             Logger.LoggerInstance = new FileLogger("log.txt");
             Logger.LoggerInstance.GotException += (s, e) => { MessageBox.Show($"Error writing to log file: {e.Message}"); };
-            Logger.LoggingLevel = LogLevel.DEBUG;
+            Logger.LoggingLevel = LogLevel.INFO;
 
 
             // Dependency injection

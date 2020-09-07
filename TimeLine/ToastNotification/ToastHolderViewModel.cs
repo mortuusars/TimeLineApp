@@ -8,6 +8,7 @@ namespace TimeLine
 {
     public class ToastHolderViewModel
     {
+        public event EventHandler LastToastClosed;
 
         public double Width { get; set; } = 500;
         public double Height { get; set; } = 640;
@@ -74,6 +75,8 @@ namespace TimeLine
 
         private void RemoveToastFromList(ToastControlViewModel toast) {
             ToastList.Remove(toast);
+            if (ToastList.Count == 0)
+                LastToastClosed?.Invoke(this, EventArgs.Empty);
         }
 
 

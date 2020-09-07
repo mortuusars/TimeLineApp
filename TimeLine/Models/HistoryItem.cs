@@ -14,7 +14,7 @@ namespace TimeLine.Models
             Title = title;
             Message = message;
             Icon = IconHelper.GetIconPath(icon);
-            Time = Utilities.CurrentTimeToString(DateTimeOffset.Now);
+            Time = Utilities.TimeToString(DateTimeOffset.Now);
         }
     }
 }

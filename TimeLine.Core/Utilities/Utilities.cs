@@ -69,7 +69,7 @@ namespace TimeLine.Core
             return removeMinusSign ? prettyTime.Replace('-', '\0') : prettyTime;
         }
 
-        public static string CurrentTimeToString(DateTimeOffset time) {            
+        public static string TimeToString(DateTimeOffset time) {            
             string minute = time.Minute < 10 ? $"0{time.Minute}" : time.Minute.ToString();
             string hour = time.Hour < 10 ? $"0{time.Hour}" : time.Hour.ToString();
             return $"{hour}:{minute}";

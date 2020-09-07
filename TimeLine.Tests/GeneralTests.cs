@@ -8,9 +8,9 @@ namespace TimeLine.Tests
     {
         [Fact]
         public void CurrentTimeToString_ReturnsWithZeroesIfNeeded() {
-            Assert.Equal("15:00", Utilities.CurrentTimeToString(DateTime.Parse("15:00")));
-            Assert.Equal("02:03", Utilities.CurrentTimeToString(DateTime.Parse("02:03")));
-            Assert.Equal("00:00", Utilities.CurrentTimeToString(DateTime.Parse("00:00")));
+            Assert.Equal("15:00", Utilities.TimeToString(DateTime.Parse("15:00")));
+            Assert.Equal("02:03", Utilities.TimeToString(DateTime.Parse("02:03")));
+            Assert.Equal("00:00", Utilities.TimeToString(DateTime.Parse("00:00")));
         }
     }
 }

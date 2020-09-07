@@ -25,8 +25,8 @@
                         <TextBlock Grid.Column="3" Margin="6 0" Text="{Binding Time}" FontSize="16" FontFamily="{StaticResource MontserratRegular}"/>
                     </Grid>
                 </DataTemplate>
-                
-            </ItemsControl.ItemTemplate>            
+
+            </ItemsControl.ItemTemplate>
         </ItemsControl>
 
     </Grid>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -9,18 +10,18 @@ namespace TimeLine.Core
     /// </summary>
     public class CommandParser
     {
-        readonly HashSet<string> mainWords = new HashSet<string>() 
-        { 
-            "timer", "t", 
-            "stopwatch", "s", 
-            "alarm", "a", 
-            "mute", "history", "exit" 
+        readonly HashSet<string> mainWords = new HashSet<string>()
+        {
+            "timer", "t",
+            "stopwatch", "s",
+            "alarm", "a",
+            "mute", "history", "exit"
         };
-        readonly HashSet<string> operationWords = new HashSet<string>() 
-        { 
+        readonly HashSet<string> operationWords = new HashSet<string>()
+        {
             "add", "stop", "info",
-            "start", "reset", "pause", "close", 
-            "clear", "skip" 
+            "start", "reset", "pause", "close",
+            "clear", "skip", "list"
         };
 
         private List<string> wordList;
@@ -38,15 +39,14 @@ namespace TimeLine.Core
         /// </summary>
         /// <param name="text">String from user</param>
         /// <returns></returns>
-        public ParsedCommandData Parse(string text)
-        {
+        public ParsedCommandData Parse(string text) {
             CreateWordList(text);
 
             ParseProgram();
             if (mainCommand == "exit" || mainCommand == "mute" || mainCommand == "history")
                 return new ParsedCommandData(mainCommand);
             RemoveWordFromList();
-            ChangeOneLetterMainCommand();
+            ChangeOneLetterToWord();
 
 
             ParseOperation();
@@ -56,11 +56,14 @@ namespace TimeLine.Core
 
             GetTime();
 
+            CheckTimeForAlarm();            
+
             return new ParsedCommandData(mainCommand, operationCommand, hours, minutes, seconds);
         }
 
-        private void ChangeOneLetterMainCommand()
-        {
+        
+
+        private void ChangeOneLetterToWord() {
             if (mainCommand == "t")
                 mainCommand = "timer";
             else if (mainCommand == "s")
@@ -69,8 +72,7 @@ namespace TimeLine.Core
                 mainCommand = "alarm";
         }
 
-        private void CreateWordList(string text)
-        {
+        private void CreateWordList(string text) {
             if (text == null)
                 text = "";
 
@@ -79,12 +81,9 @@ namespace TimeLine.Core
             wordList = text.Split(' ').ToList();
         }
 
-        private void ParseProgram()
-        {
-            foreach (var word in wordList)
-            {
-                if (mainWords.Contains(word))
-                {
+        private void ParseProgram() {
+            foreach (var word in wordList) {
+                if (mainWords.Contains(word)) {
                     mainCommand = word;
                     wordToRemove = word;
                     break;
@@ -92,12 +91,9 @@ namespace TimeLine.Core
             }
         }
 
-        private void ParseOperation()
-        {
-            foreach (var word in wordList)
-            {
-                if (operationWords.Contains(word))
-                {
+        private void ParseOperation() {
+            foreach (var word in wordList) {
+                if (operationWords.Contains(word)) {
                     operationCommand = word;
                     wordToRemove = word;
                     break;
@@ -105,52 +101,42 @@ namespace TimeLine.Core
             }
         }
 
-        private void RemoveWordFromList()
-        {
+        private void RemoveWordFromList() {
             wordList.Remove(wordToRemove);
             wordToRemove = "";
         }
 
-        private void GetTime()
-        {
+        private void GetTime() {
             wordList.Reverse();
 
             Regex regex = new Regex(@"-?\d*");
 
             int i = 0;
 
-            foreach (var item in wordList)
-            {
+            foreach (var item in wordList) {
                 string trimmedItem = item.Trim();
-                if (new Regex(@"\d+s", RegexOptions.IgnoreCase).IsMatch(trimmedItem))
-                {
+                if (new Regex(@"\d+s", RegexOptions.IgnoreCase).IsMatch(trimmedItem)) {
                     seconds = regex.Match(trimmedItem).Value;
                     i = 1;
                 }
-                else if (new Regex(@"\d+m", RegexOptions.IgnoreCase).IsMatch(trimmedItem))
-                {
+                else if (new Regex(@"\d+m", RegexOptions.IgnoreCase).IsMatch(trimmedItem)) {
                     minutes = regex.Match(trimmedItem).Value;
                     i = 2;
                 }
-                else if (new Regex(@"\d+h", RegexOptions.IgnoreCase).IsMatch(trimmedItem))
-                {
+                else if (new Regex(@"\d+h", RegexOptions.IgnoreCase).IsMatch(trimmedItem)) {
                     hours = regex.Match(trimmedItem).Value;
                     i = 3;
-                }                
-                else if (new Regex(@"\d+", RegexOptions.IgnoreCase).IsMatch(trimmedItem))
-                {
-                    if (i == 0)
-                    {
+                }
+                else if (new Regex(@"\d+", RegexOptions.IgnoreCase).IsMatch(trimmedItem)) {
+                    if (i == 0) {
                         seconds = regex.Match(trimmedItem).Value;
                         i = 1;
                     }
-                    else if (i == 1)
-                    {
+                    else if (i == 1) {
                         minutes = regex.Match(trimmedItem).Value;
                         i = 2;
                     }
-                    else if (i == 2)
-                    {
+                    else if (i == 2) {
                         hours = regex.Match(trimmedItem).Value;
                         i = 3;
                     }
@@ -158,5 +144,20 @@ namespace TimeLine.Core
             }
         }
 
+        private void CheckTimeForAlarm() {
+            if (mainCommand == "alarm" && hours == "") {
+                hours = minutes;
+                minutes = seconds;
+
+                if (hours == "") {
+                    hours = minutes;
+                    minutes = "";
+                }
+            }
+
+            if (hours == "") {
+                hours = "-1";
+            }
+        }
     }
 }

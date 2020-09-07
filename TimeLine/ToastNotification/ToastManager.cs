@@ -5,15 +5,28 @@ namespace TimeLine
 {
     public class ToastManager
     {
-        private Window toastHolder;
+        private Window toastHolderView;
         private ToastHolderViewModel toastHolderViewModel;
 
         public ToastManager() {
 
-            toastHolderViewModel = new ToastHolderViewModel();
-            toastHolder = new ToastHolderView() { DataContext = toastHolderViewModel, Owner = MainView.Main };            
-            
-            toastHolder.Show();
+        }
+
+        private void CreateTostHolder() {            
+            if (toastHolderView == null) {
+                toastHolderViewModel = new ToastHolderViewModel();
+                toastHolderViewModel.LastToastClosed += CloseHolderOnLastToastClosed;
+                toastHolderView = new ToastHolderView() { DataContext = toastHolderViewModel, Owner = MainView.Main };
+
+                toastHolderView.Show();
+            }
+        }
+
+        private void CloseHolderOnLastToastClosed(object sender, System.EventArgs e) {
+            toastHolderView.Close();
+            toastHolderView = null;
+
+            toastHolderViewModel = null;
         }
 
 
@@ -23,6 +36,8 @@ namespace TimeLine
         /// </summary>
         /// <param name="IsAlarm">Plays sound and makes toast stay until manually closed.</param>
         public void ShowToastNotification(string title, string message, Icons icon, bool IsAlarm = false) {
+            if (toastHolderView == null || toastHolderViewModel == null)
+                CreateTostHolder();
 
             toastHolderViewModel.ShowToast(title, message, icon, IsAlarm);
         }

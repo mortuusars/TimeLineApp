@@ -14,8 +14,7 @@ namespace TimeLine.Core
         public int Minutes { get; set; }
         public int Seconds { get; set; }
 
-        public ParsedCommandData(string main, string operation = "", string hours = "", string minutes = "", string seconds = "")
-        {
+        public ParsedCommandData(string main, string operation = "", string hours = "", string minutes = "", string seconds = "") {
             MainCommand = main;
             OperationCommand = operation;
 
@@ -24,25 +23,22 @@ namespace TimeLine.Core
             Seconds = GetTimeInt(seconds);
         }
 
-        public int OverallSeconds()
-        {
-            return (Hours * 60 * 60) + (Minutes * 60) + Seconds;
+        public int OverallSeconds() {
+            return (Hours * 60 * 60 + (Minutes * 60) + Seconds);
         }
 
-        private int GetTimeInt(string str)
-        {
-            if (str != "")
-            {
-                int number = Convert.ToInt32(String.Join("", str.Where(char.IsDigit)));
-                if (str.Contains("-"))
-                {
+        private int GetTimeInt(string str) {
+            if (str != "") {
+                string numberString = String.Join("", str.Where(char.IsDigit));
+                int number = Convert.ToInt32(numberString);
+
+                if (str.Contains("-")) {
                     number *= -1;
                 }
                 return number;
             }
-            else 
+            else
                 return 0;
-            
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using TimeLine.Core;
-using TimeLine.Views;
-
+﻿
 namespace TimeLine
 {
     public static class GetService

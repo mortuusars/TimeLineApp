@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Threading;
@@ -25,13 +24,63 @@ namespace TimeLine
 
         Timer Timer;
         StopwatchView StopwatchView;
-        // Alarm
+        AlarmManager Alarm;
 
 
         public Manager() {
             InitializeTimer();
-
+            InitializeAlarm();
+           
             HistoryVM = new HistoryViewModel();
+        }
+
+
+
+
+
+
+
+
+        private void InitializeAlarm() {
+            Alarm = new AlarmManager();
+            Alarm.AlarmRing += Alarm_AlarmRing;
+        }
+
+
+
+        private void AlarmActions(ParsedCommandData parsedData) {
+            
+            if (parsedData.OperationCommand == "") {
+                try {
+                    var ringTime = DateTimeOffset.Parse($"{parsedData.Hours}:{parsedData.Minutes}");
+                    Alarm.AddAlarm(ringTime);
+                    GetService.ToastManager.ShowToastNotification("Alarm", $"Set to {Utilities.TimeToString(ringTime)}", Icons.alarm);
+                }
+                catch (Exception) {
+                    GetService.ToastManager.ShowToastNotification("Alarm", "Enterd time is incorrect", Icons.error);
+                    Logger.Log("Time for alarm is incorrect", LogLevel.WARN);
+                }
+            }
+            else if (parsedData.OperationCommand == "clear") {
+                string message = Alarm.ClearAllAlarms() == true ? "All alarms was cleared" : "Nothing to clear";
+                GetService.ToastManager.ShowToastNotification("Alarm", message, Icons.alarm);
+            }
+            else if (parsedData.OperationCommand == "list") {
+                var list = Alarm.GetAlarmsList();
+
+                foreach (var item in list) {
+                    Logger.Log(item, LogLevel.INFO);
+                }
+            }
+        }
+
+
+
+
+
+
+        private void Alarm_AlarmRing(object sender, string e) {
+            Application.Current.Dispatcher.Invoke(new Action(() => { GetService.ToastManager.ShowToastNotification("Alarm", e, Icons.alarm, IsAlarm: true); }));
         }
 
         public void AddHistoryItem(HistoryItem historyitem) {
@@ -104,20 +153,11 @@ namespace TimeLine
                     StopwatchView = null;
 
             }
-            else if (parsedData.MainCommand == "alarm") {
-                //TODO: alarm
-                GetService.ToastManager.ShowToastNotification("Alarm", "test", Icons.alarm);
+            else if (parsedData.MainCommand == "alarm") {                            
+                AlarmActions(parsedData);
             }
             else if (parsedData.MainCommand == "mute") {
-
-                if (GetService.SoundPlayer.IsMuted == true) {
-                    GetService.SoundPlayer.UnMute();
-                    GetService.ToastManager.ShowToastNotification("TimeLine", "sound unmuted", Icons.info);
-                }
-                else {
-                    GetService.SoundPlayer.Mute();
-                    GetService.ToastManager.ShowToastNotification("TimeLine", "sound muted", Icons.info);
-                }
+                MuteSound();
             }
             else if (parsedData.MainCommand == "history") {
                 HistoryView history = new HistoryView() { DataContext = HistoryVM };
@@ -130,6 +170,23 @@ namespace TimeLine
                 GetService.ToastManager.ShowToastNotification("TimeLine", "Command is not recognized", Icons.error);
             }
         }
+
+
+        /// <summary>
+        /// Mute or Unmute sound.
+        /// </summary>
+        private static void MuteSound() {
+            if (GetService.SoundPlayer.IsMuted == true) {
+                GetService.SoundPlayer.UnMute();
+                GetService.ToastManager.ShowToastNotification("TimeLine", "Sound unmuted", Icons.info);
+            }
+            else {
+                GetService.SoundPlayer.Mute();
+                GetService.ToastManager.ShowToastNotification("TimeLine", "Sound muted", Icons.info);
+            }
+        }
+
+
 
         #endregion
 

@@ -168,7 +168,7 @@ namespace TimeLine
         HashSet<string> stopwatchSuggestions = new HashSet<string>() { "Start", "Reset", "Close", "Pause" };
         HashSet<string> stopwatchRunningSuggestions = new HashSet<string>() { "Pause", "Reset", "Close" };
 
-        HashSet<string> alarmSuggestions = new HashSet<string>() { "Skip", "Clear" };
+        HashSet<string> alarmSuggestions = new HashSet<string>() { "Skip", "Clear", "List" };
 
         private void GetSuggestions() {
             
