@@ -12,7 +12,7 @@ namespace TimeLine
 
         }
 
-        private void CreateTostHolder() {            
+        private void CreateTostHolder() {
             if (toastHolderView == null) {
                 toastHolderViewModel = new ToastHolderViewModel();
                 toastHolderViewModel.LastToastClosed += CloseHolderOnLastToastClosed;
@@ -23,8 +23,10 @@ namespace TimeLine
         }
 
         private void CloseHolderOnLastToastClosed(object sender, System.EventArgs e) {
-            toastHolderView.Close();
-            toastHolderView = null;
+            if (toastHolderView != null) {
+                toastHolderView.Close();
+                toastHolderView = null;
+            }
 
             toastHolderViewModel = null;
         }

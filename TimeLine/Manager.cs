@@ -297,6 +297,12 @@ namespace TimeLine
                     Logger.Log("Time for alarm is incorrect", LogLevel.WARN);
                 }
             }
+            else if (parsedData.OperationCommand == "in") {
+                var time = DateTimeOffset.Now.AddHours(parsedData.Hours).AddMinutes(parsedData.Minutes);
+
+                Alarm.AddAlarm(time);
+                GetService.ToastManager.ShowToastNotification("Alarm", $"Set to {Utilities.TimeToString(time)}", Icons.alarm);
+            }
             else if (parsedData.OperationCommand == "clear") {
                 string message = Alarm.ClearAllAlarms() == true ? "All alarms was cleared" : "Nothing to clear";
                 GetService.ToastManager.ShowToastNotification("Alarm", message, Icons.alarm);

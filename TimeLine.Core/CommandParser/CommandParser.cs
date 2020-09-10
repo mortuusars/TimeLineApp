@@ -21,7 +21,7 @@ namespace TimeLine.Core
         {
             "add", "stop", "info",
             "start", "reset", "pause", "close",
-            "clear", "skip", "list"
+            "in", "clear", "skip", "list"
         };
 
         private List<string> wordList;
