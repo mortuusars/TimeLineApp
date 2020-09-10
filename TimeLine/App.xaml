@@ -47,7 +47,7 @@
                         <Setter Property="BorderBrush" TargetName="border" Value="#00000000"/>
                     </Trigger>
                     <Trigger Property="IsEnabled" Value="false">
-                        <Setter Property="Background" TargetName="border" Value="#00000000"/>
+                        <Setter Property="Opacity" Value="0.6"/>
                         <Setter Property="BorderBrush" TargetName="border" Value="#00000000"/>
                         <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="#00000000"/>
                     </Trigger>

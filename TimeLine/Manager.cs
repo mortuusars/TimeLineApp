@@ -18,12 +18,12 @@ namespace TimeLine
         public RunCommandViewModel CurrentCommandVM { get; private set; }
 
         public bool TimerIsRunning { get { return Timer.IsRunning; } }
-
+        public bool StopwatchRunning { get { return StopwatchManager.IsRunning; } }
 
         public HistoryViewModel HistoryVM;
 
         Timer Timer;
-        StopwatchView StopwatchView;
+        StopwatchManager StopwatchManager;
         AlarmManager Alarm;
 
 
@@ -31,6 +31,8 @@ namespace TimeLine
             InitializeTimer();
             InitializeAlarm();
            
+            StopwatchManager = new StopwatchManager();
+
             HistoryVM = new HistoryViewModel();
         }
 
@@ -39,42 +41,7 @@ namespace TimeLine
 
 
 
-
-
-        private void InitializeAlarm() {
-            Alarm = new AlarmManager();
-            Alarm.AlarmRing += Alarm_AlarmRing;
-        }
-
-
-
-        private void AlarmActions(ParsedCommandData parsedData) {
-            
-            if (parsedData.OperationCommand == "") {
-                try {
-                    var ringTime = DateTimeOffset.Parse($"{parsedData.Hours}:{parsedData.Minutes}");
-                    Alarm.AddAlarm(ringTime);
-                    GetService.ToastManager.ShowToastNotification("Alarm", $"Set to {Utilities.TimeToString(ringTime)}", Icons.alarm);
-                }
-                catch (Exception) {
-                    GetService.ToastManager.ShowToastNotification("Alarm", "Enterd time is incorrect", Icons.error);
-                    Logger.Log("Time for alarm is incorrect", LogLevel.WARN);
-                }
-            }
-            else if (parsedData.OperationCommand == "clear") {
-                string message = Alarm.ClearAllAlarms() == true ? "All alarms was cleared" : "Nothing to clear";
-                GetService.ToastManager.ShowToastNotification("Alarm", message, Icons.alarm);
-            }
-            else if (parsedData.OperationCommand == "list") {
-                var list = Alarm.GetAlarmsList();
-
-                foreach (var item in list) {
-                    Logger.Log(item, LogLevel.INFO);
-                }
-            }
-        }
-
-
+        
 
 
 
@@ -142,19 +109,11 @@ namespace TimeLine
                 TimerCommands(parsedData);
             }
             else if (parsedData.MainCommand == "stopwatch") {
-                
-                if (StopwatchView == null) {
-                    StopwatchView = new StopwatchView();
-                    StopwatchView.DataContext = new StopwatchViewModel();
-
-                    StopwatchView.Show();
-                }
-                else 
-                    StopwatchView = null;
+                StopwatchCommands(parsedData);
 
             }
             else if (parsedData.MainCommand == "alarm") {                            
-                AlarmActions(parsedData);
+                AlarmCommands(parsedData);
             }
             else if (parsedData.MainCommand == "mute") {
                 MuteSound();
@@ -172,6 +131,15 @@ namespace TimeLine
         }
 
 
+
+
+
+
+
+
+        #endregion
+
+
         /// <summary>
         /// Mute or Unmute sound.
         /// </summary>
@@ -185,10 +153,6 @@ namespace TimeLine
                 GetService.ToastManager.ShowToastNotification("TimeLine", "Sound muted", Icons.info);
             }
         }
-
-
-
-        #endregion
 
 
         #region Timer
@@ -291,10 +255,60 @@ namespace TimeLine
 
         #region Stopwatch
 
+        private void StopwatchCommands(ParsedCommandData parsedData) {
+            if (parsedData.OperationCommand == "")
+                StopwatchManager.OpenCloseWindow();
+            else if (parsedData.OperationCommand == "start") 
+                StopwatchManager.Start();            
+            else if (parsedData.OperationCommand == "stop") {
+                if (StopwatchManager.Stop() == false)
+                    GetService.ToastManager.ShowToastNotification("Stopwatch", "Not running", Icons.error);
+            }
+            else if (parsedData.OperationCommand == "pause")
+                StopwatchManager.Pause();
+            else if (parsedData.OperationCommand == "close") {
+                StopwatchManager.Close();
+            }
+            else if (parsedData.OperationCommand == "reset") {
+                StopwatchManager.Reset();
+            }
+        }
+
         #endregion
 
 
         #region Alarm
+
+        private void InitializeAlarm() {
+            Alarm = new AlarmManager();
+            Alarm.AlarmRing += Alarm_AlarmRing;
+        }
+
+        private void AlarmCommands(ParsedCommandData parsedData) {
+
+            if (parsedData.OperationCommand == "") {
+                try {
+                    var ringTime = DateTimeOffset.Parse($"{parsedData.Hours}:{parsedData.Minutes}");
+                    Alarm.AddAlarm(ringTime);
+                    GetService.ToastManager.ShowToastNotification("Alarm", $"Set to {Utilities.TimeToString(ringTime)}", Icons.alarm);
+                }
+                catch (Exception) {
+                    GetService.ToastManager.ShowToastNotification("Alarm", "Enterd time is incorrect", Icons.error);
+                    Logger.Log("Time for alarm is incorrect", LogLevel.WARN);
+                }
+            }
+            else if (parsedData.OperationCommand == "clear") {
+                string message = Alarm.ClearAllAlarms() == true ? "All alarms was cleared" : "Nothing to clear";
+                GetService.ToastManager.ShowToastNotification("Alarm", message, Icons.alarm);
+            }
+            else if (parsedData.OperationCommand == "list") {
+                var list = Alarm.GetAlarmsList();
+
+                foreach (var item in list) {
+                    Logger.Log(item, LogLevel.INFO);
+                }
+            }
+        }
 
         #endregion
     }

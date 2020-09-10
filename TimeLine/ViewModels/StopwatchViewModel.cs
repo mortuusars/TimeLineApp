@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Text;
 using System.Windows.Input;
 
 namespace TimeLine
@@ -8,73 +9,65 @@ namespace TimeLine
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public string Time { get; set; }
+        public StopwatchCounter Stopwatch { get; set; }
 
-        public bool StopwatchRunning { get; set; }
+        public string Time { get; set; }
+        public string GhostTime { get; set; }
 
         public ICommand StartPauseCommand { get; private set; }
+        public ICommand StartCommand { get; private set; }
+        public ICommand PauseCommand { get; private set; }
         public ICommand StopCommand { get; private set; }
         public ICommand ResetCommand { get; private set; }
 
-
-        private int stopwatch;
-        private int Stopwatch
-        {
-            get { return stopwatch; }
-            set { stopwatch = value; UpdateTimeString(); }
-        }
-
-        System.Timers.Timer counter;
-
         public StopwatchViewModel() {
             
-            StartPauseCommand = new RelayCommand( act => { StartOrPause(); });
-            StopCommand = new RelayCommand(act => { Stop(); });
-            ResetCommand = new RelayCommand(act => { Reset(); });
+            StartPauseCommand = new RelayCommand( act => Stopwatch.StartPause());
+            StartCommand = new RelayCommand(act => Stopwatch.Start(), canEx => !IsStoppable());
+            PauseCommand = new RelayCommand(act => Stopwatch.Pause(), canEx => IsStoppable());
+            StopCommand = new RelayCommand(act => Stopwatch.Stop(), canEx => IsStoppable());
+            ResetCommand = new RelayCommand(act =>  Stopwatch.Reset());
 
-            UpdateTimeString();
+            Stopwatch = new StopwatchCounter();
+            Stopwatch.StopwatchTick += StopwatchTick;
 
-            counter = new System.Timers.Timer();
-            counter.Interval = 1000;
-            counter.Elapsed += Counter_Tick;
+            UpdateTimeString(0);
         }
 
-        private void Counter_Tick(object sender, System.Timers.ElapsedEventArgs e) {
-            Stopwatch++;
+        private void StopwatchTick(object sender, int stopwatchCounter) {
+            UpdateTimeString(stopwatchCounter);
         }
 
-        public void Start() {
-            counter.Start();
-            StopwatchRunning = true;
+        private void UpdateTimeString(int time) {            
+            string newTime = TimeSpan.FromSeconds(time).ToString();
+            
+            string newGhostTime = "";
+            string spacesToReplace = "";
+
+            foreach (var ch in newTime) {
+                if (ch == '0' || ch == ':') {
+                    newGhostTime += ch;
+                    spacesToReplace += " ";
+                }
+                else
+                    break;
+            }
+
+            GhostTime = newGhostTime;
+            
+            if (newGhostTime.Length == 1) {
+                var sb = new StringBuilder(newTime);
+                sb[0] = ' ';
+                Time = sb.ToString();                
+            }
+            else if (newGhostTime.Length > 1)
+                Time = newTime.Replace(newGhostTime, spacesToReplace);
+            else
+                Time = newTime;
         }
 
-        public void Pause() {
-            counter.Stop();
-            StopwatchRunning = false;
-        }
-
-        public void Stop() {
-            Pause();
-            Reset();
-        }
-
-        public void Reset() {
-            Stopwatch = 0;
-        }
-
-
-
-        private void StartOrPause() {
-            if (counter.Enabled)
-                Pause();
-            else 
-                Start();
-        }
-
-
-
-        private void UpdateTimeString() {
-            Time = TimeSpan.FromSeconds(Stopwatch).ToString();;
+        public bool IsStoppable() {
+            return Stopwatch.StopwatchRunning;
         }
     }
 }

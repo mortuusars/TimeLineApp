@@ -165,35 +165,20 @@ namespace TimeLine
         HashSet<string> timerRunningSuggestions = new HashSet<string>() { "Add", "Stop", "Info" };
         HashSet<string> timerTimeSuggestions = new HashSet<string>() { "3m", "5m", "10m", "15m", "25m", "1h" };
 
-        HashSet<string> stopwatchSuggestions = new HashSet<string>() { "Start", "Reset", "Close", "Pause" };
+        HashSet<string> stopwatchSuggestions = new HashSet<string>() { "Start", "Reset", "Close" };
         HashSet<string> stopwatchRunningSuggestions = new HashSet<string>() { "Pause", "Reset", "Close" };
 
         HashSet<string> alarmSuggestions = new HashSet<string>() { "Skip", "Clear", "List" };
 
         private void GetSuggestions() {
-            
+
             string lowercaseInput = string.IsNullOrWhiteSpace(Input) ? "" : Input.ToLower();
 
             HashSet<string> suggestionsSet = new HashSet<string>();
-            
+
             string lastWord = " ";
 
-            if (string.IsNullOrWhiteSpace(Input)) {
-                suggestionsSet = baseSuggestions;
-            }
-            else {
-                lastWord = new List<string>(lowercaseInput.Split(" ")).FindLast(word => word.Length != 0);              
-
-                if (lowercaseInput.Contains("timer ") || lowercaseInput.Contains("t "))
-                    suggestionsSet = GetService.Manager.TimerIsRunning ? timerRunningSuggestions : timerTimeSuggestions;
-                else if (lowercaseInput.Contains("stopwatch ") || lowercaseInput.Contains("s "))
-                    //TODO: stopwatch running
-                    suggestionsSet = stopwatchSuggestions;
-                else if (lowercaseInput.Contains("alarm ") || lowercaseInput.Contains("a "))
-                    suggestionsSet = alarmSuggestions;
-                else
-                    suggestionsSet = baseSuggestions;
-            }
+            suggestionsSet = DesideSuggestions(lowercaseInput, ref lastWord);
 
             Suggestions = new ObservableCollection<Suggestion>();
 
@@ -202,7 +187,7 @@ namespace TimeLine
                 foreach (var word in suggestionsSet) {
                     Suggestions.Add(new Suggestion(word));
                 }
-            }                
+            }
             else {
                 foreach (var word in suggestionsSet) {
                     if (word.ToLower().StartsWith(lastWord))
@@ -220,6 +205,28 @@ namespace TimeLine
 
             SuggestionsHeight = Suggestions.Count > 0 ? (Suggestions.Count * suggestionButtonHeight) + 2 : suggestionsHeight;
 
+        }
+
+        private HashSet<string> DesideSuggestions(string lowercaseInput, ref string lastWord) {            
+            HashSet<string> suggestionsSet;
+
+            if (string.IsNullOrWhiteSpace(Input)) {
+                suggestionsSet = baseSuggestions;
+            }
+            else {
+                lastWord = new List<string>(lowercaseInput.Split(" ")).FindLast(word => word.Length != 0);
+
+                if (lowercaseInput.Contains("timer ") || lowercaseInput.Contains("t "))
+                    suggestionsSet = GetService.Manager.TimerIsRunning ? timerRunningSuggestions : timerTimeSuggestions;
+                else if (lowercaseInput.Contains("stopwatch ") || lowercaseInput.Contains("s "))
+                    suggestionsSet = GetService.Manager.StopwatchRunning ? stopwatchRunningSuggestions : stopwatchSuggestions;
+                else if (lowercaseInput.Contains("alarm ") || lowercaseInput.Contains("a "))
+                    suggestionsSet = alarmSuggestions;
+                else
+                    suggestionsSet = baseSuggestions;
+            }
+
+            return suggestionsSet;
         }
 
         private void SetSuggestionsCornerRadius() {

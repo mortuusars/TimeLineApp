@@ -153,10 +153,10 @@ namespace TimeLine.Core
                     hours = minutes;
                     minutes = "";
                 }
-            }
 
-            if (hours == "") {
-                hours = "-1";
+                if (hours == "") {
+                    hours = "-1";
+                }
             }
         }
     }
