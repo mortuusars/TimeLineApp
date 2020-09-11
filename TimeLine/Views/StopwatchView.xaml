@@ -7,13 +7,31 @@
         mc:Ignorable="d"
         Title="StopwatchView" 
         Height="84" Width="326" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="False" Topmost="True"
-        Background="Transparent" AllowsTransparency="True" >
+        Background="Transparent" AllowsTransparency="True">
 
     <Window.Resources>
-        <DropShadowEffect x:Key="Shadow" BlurRadius="26" ShadowDepth="4" Direction="-90" Opacity="0.5"/>
+        <DropShadowEffect x:Key="Shadow" BlurRadius="22" ShadowDepth="6" Direction="-90" Opacity="0.5"/>
 
         <Duration x:Key="ButtonHoverDurationIn">0:0:0.05</Duration>
         <Duration x:Key="ButtonHoverDurationOut">0:0:0.4</Duration>
+
+        <Storyboard x:Key="WindowFadeIn">
+            <DoubleAnimation Duration="0:0:0.5" From="0" To="1" Storyboard.TargetProperty="Opacity" FillBehavior="Stop">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        
+        <Storyboard x:Key="WindowFadeOut">
+            <DoubleAnimation Duration="0:0:0.5" To="0" Storyboard.TargetProperty="Opacity">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        
+        
         
         
         <Storyboard x:Key="HoverAnimationInWidth">
@@ -45,6 +63,17 @@
         </Storyboard>
 
 
+        <Style TargetType="Border" x:Key="BorderStyle">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding WindowClosing}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource WindowFadeOut}"/>
+                    </DataTrigger.EnterActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>        
+        
+        
         <!--#region Buttons Style -->
 
         <Style x:Key="DefaultButton" TargetType="Button">
@@ -106,7 +135,16 @@
 
     </Window.Resources>
     
-    <Border Margin="18" Background="{StaticResource LightBrush}" CornerRadius="6" Effect="{StaticResource Shadow}" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+    <Border Margin="14 14 14 24" Background="{StaticResource LightBrush}" CornerRadius="6" Effect="{StaticResource Shadow}" 
+            Style="{StaticResource BorderStyle}" 
+            MouseLeftButtonDown="Border_MouseLeftButtonDown">
+
+        <Border.Triggers>
+            <EventTrigger RoutedEvent="Loaded">
+                <BeginStoryboard Storyboard="{StaticResource WindowFadeIn}"/>
+            </EventTrigger>
+        </Border.Triggers>
+                
         <Grid Margin="4">            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="42"/>
@@ -117,14 +155,19 @@
             <Button Grid.Column="0" Margin="2"
                     Style="{StaticResource StartPauseButton}" 
                     Template="{DynamicResource ButtonNoStyle}"
-                    Command="{Binding StartPauseCommand}"/>
+                    Command="{Binding StartPauseCommand}">
+                <Button.InputBindings>
+                    <MouseBinding Gesture="RightClick" Command="{Binding CloseCommand}"/>
+                </Button.InputBindings>
+            </Button>
+            
             <Button Grid.Column="1" Margin="2"
                     Style="{StaticResource StopButton}" 
                     Template="{DynamicResource ButtonNoStyle}" 
                     Command="{Binding StopCommand}"
                     >
                 <Button.InputBindings>
-                    <MouseBinding Gesture="RightClick" Command="{Binding ResetCommand}"/>
+                    <MouseBinding  Command="{Binding ResetCommand}" MouseAction="RightClick"/>
                 </Button.InputBindings>
             </Button>
 

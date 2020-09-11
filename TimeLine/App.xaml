@@ -25,8 +25,8 @@
 
 
             <!-- Window Properties -->
-            <Duration x:Key="ToastFadeOutDuration">0:0:0.8</Duration>
-            <sys:TimeSpan x:Key="ToastMoveUpBeginTime">0:0:0.01</sys:TimeSpan>
+            <Duration x:Key="ToastFadeOutDuration">0:0:0.6</Duration>
+            <sys:TimeSpan x:Key="ToastMoveUpBeginTime">0:0:0.6</sys:TimeSpan>
             <Duration x:Key="WindowFadeDuration">0:0:0.2</Duration>
 
 

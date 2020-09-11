@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using WpfScreenHelper;
 
 namespace TimeLine.Views
 {
@@ -19,6 +11,8 @@ namespace TimeLine.Views
     /// </summary>
     public partial class ToastHolderView : Window
     {
+        int width = 500;
+        int height = 600;
 
         public ToastHolderView() {
             InitializeComponent();
@@ -28,6 +22,12 @@ namespace TimeLine.Views
                 var win = new WindowInteropHelper(this);
                 win.Owner = GetDesktopWindow();
             };
+
+            this.Width = width;
+            this.Height = height;
+
+            this.Left = Screen.PrimaryScreen.Bounds.Right - width;
+            this.Top = Screen.PrimaryScreen.Bounds.Bottom - height * 1.05;
         }
 
         [DllImport("user32.dll", SetLastError = false)]

@@ -8,21 +8,11 @@ namespace TimeLine
 {
     public class ToastHolderViewModel
     {
-        public event EventHandler LastToastClosed;
-
-        public double Width { get; set; } = 500;
-        public double Height { get; set; } = 640;
-
-        public double Left { get; set; }
-        public double Top { get; set; }
+        public event EventHandler LastToastClosed;                
 
         public ObservableCollection<ToastControlViewModel> ToastList { get; set; }
 
-
-        public ToastHolderViewModel() {
-            Left = Screen.PrimaryScreen.Bounds.Right - Width;
-            Top = Screen.PrimaryScreen.Bounds.Bottom - Height * 1.05;
-
+        public ToastHolderViewModel() {            
             ToastList = new ObservableCollection<ToastControlViewModel>();
         }
 

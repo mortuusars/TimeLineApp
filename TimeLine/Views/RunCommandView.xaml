@@ -8,20 +8,24 @@
         Title="RunCommandView" 
         Width="600" Height="420" ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" ShowActivated="True"
         Background="Transparent" AllowsTransparency="True" Topmost="True" FocusManager.FocusedElement="{Binding ElementName=CommandTextBox}"
-        KeyDown="Window_KeyDown" Opacity="0.96">
+        KeyDown="Window_KeyDown">
 
     <Window.Resources>
         <DropShadowEffect x:Key="DropShadowWindow" ShadowDepth="6" BlurRadius="40" Direction="-90" Opacity="0.5"/>
         
-        <!-- Suggestion Border animations-->        
+
+        <Duration x:Key="GhostTextAnimation">0:0:0.3</Duration>
+
+
+        <!-- Suggestion Border animations-->
 
         <Storyboard x:Key="FadeInAnimation" >
-            <DoubleAnimation Duration="0:0:0.1" From="0" To="1" Storyboard.TargetProperty="Opacity" >
+            <DoubleAnimation Duration="0:0:0.1" From="0" To="0.97" Storyboard.TargetProperty="Opacity" >
             </DoubleAnimation>
         </Storyboard>
 
         <Storyboard x:Key="FadeOutAnimation" >
-            <DoubleAnimation Duration="0:0:0.1" From="1" To="0" Storyboard.TargetProperty="Opacity" >
+            <DoubleAnimation Duration="0:0:0.3" To="0" Storyboard.TargetProperty="Opacity" >
             </DoubleAnimation>
         </Storyboard>
 
@@ -29,21 +33,29 @@
 
 
         <Storyboard x:Key="GhostTextStartAnimation" Completed="GhostTextStartAnimation_Completed">
-            <DoubleAnimation Duration="0:0:0.1" Storyboard.TargetProperty="Opacity" From="0" To="1" FillBehavior="Stop">
+            <DoubleAnimation Duration="{StaticResource GhostTextAnimation}" Storyboard.TargetProperty="Opacity" From="0" To="1" FillBehavior="Stop">
                 <DoubleAnimation.EasingFunction>
                     <CubicEase EasingMode="EaseOut"/>
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
-            <ThicknessAnimation Duration="0:0:0.1" Storyboard.TargetProperty="Margin" From="70, 0, 0, 0" To="10, 0, 0, 0" FillBehavior="Stop"/>
+            <ThicknessAnimation Duration="{StaticResource GhostTextAnimation}" Storyboard.TargetProperty="Margin" From="130, 0, 0, 0" To="10, 0, 0, 0" FillBehavior="Stop">
+                <ThicknessAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </ThicknessAnimation.EasingFunction>
+            </ThicknessAnimation>
         </Storyboard>
 
         <Storyboard x:Key="GhostTextEndAnimation" Completed="GhostTextEndAnimation_Completed">
-            <DoubleAnimation Duration="0:0:0.1" Storyboard.TargetProperty="Opacity" From="1" To="0" FillBehavior="Stop">
+            <DoubleAnimation Duration="{StaticResource GhostTextAnimation}" Storyboard.TargetProperty="Opacity" From="1" To="0" FillBehavior="Stop">
                 <DoubleAnimation.EasingFunction>
                     <CubicEase EasingMode="EaseOut"/>
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
-            <ThicknessAnimation Duration="0:0:0.1" Storyboard.TargetProperty="Margin" From="10, 0, 0, 0" To="70, 0, 0, 0" FillBehavior="Stop"/>
+            <ThicknessAnimation Duration="{StaticResource GhostTextAnimation}" Storyboard.TargetProperty="Margin" From="10, 0, 0, 0" To="80, 0, 0, 0" FillBehavior="Stop">
+                <ThicknessAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </ThicknessAnimation.EasingFunction>
+            </ThicknessAnimation>
         </Storyboard>
 
 
@@ -123,7 +135,32 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <Border  Margin="30"  Effect="{StaticResource DropShadowWindow}" Height="65" Background="{StaticResource VeryLightBrush}" CornerRadius="6" BorderThickness="1" BorderBrush="{StaticResource HalfLightBrush}">
+        <Border  Margin="30"  Effect="{StaticResource DropShadowWindow}" Height="65" Background="{StaticResource VeryLightBrush}" 
+                 CornerRadius="6" BorderThickness="1" BorderBrush="{StaticResource HalfLightBrush}" Opacity="0.97">
+            <Border.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation From="0.0" To="0.97" Duration="0:0:0.3" Storyboard.TargetProperty="Opacity" FillBehavior="Stop"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Border.Triggers>
+            <Border.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Closing}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="{StaticResource WindowFadeDuration}" Storyboard.TargetProperty="Opacity" To="0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -192,7 +229,7 @@
         <!-- Suggestions Bar -->
         <Border x:Name="SuggestionsBorder" Height="{Binding SuggestionsHeight}" Effect="{StaticResource DropShadowWindow}" Grid.Row="1"  CornerRadius="6" 
                  d:Height="200" Width="240"
-                Background="{StaticResource LightBrush}" BorderThickness="1" BorderBrush="{StaticResource HalfLightBrush}">
+                Background="{StaticResource LightBrush}" BorderThickness="1" BorderBrush="{StaticResource HalfLightBrush}" Opacity="0.97">
             
             <ItemsControl ItemsSource="{Binding Suggestions}" IsTabStop="False">
                 <!-- Suggestion Buttons-->

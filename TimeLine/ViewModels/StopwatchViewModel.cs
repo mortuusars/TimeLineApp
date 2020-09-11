@@ -9,37 +9,54 @@ namespace TimeLine
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        StopwatchManager StopwatchManager;
         public StopwatchCounter Stopwatch { get; set; }
 
-        public string Time { get; set; }
-        public string GhostTime { get; set; }
+        public double Left { get; set; }
+        public double Top { get; set; }
+
+        public string Time { get; set; } = "";
+        public string GhostTime { get; set; } = "00:00:00";
+
+        public bool WindowClosing { get; set; }
 
         public ICommand StartPauseCommand { get; private set; }
         public ICommand StartCommand { get; private set; }
         public ICommand PauseCommand { get; private set; }
         public ICommand StopCommand { get; private set; }
         public ICommand ResetCommand { get; private set; }
+        public ICommand CloseCommand { get; private set; }
 
-        public StopwatchViewModel() {
-            
+        public StopwatchViewModel(StopwatchManager stopwatchManager) {            
+            StopwatchManager = stopwatchManager;
+
             StartPauseCommand = new RelayCommand( act => Stopwatch.StartPause());
             StartCommand = new RelayCommand(act => Stopwatch.Start(), canEx => !IsStoppable());
             PauseCommand = new RelayCommand(act => Stopwatch.Pause(), canEx => IsStoppable());
             StopCommand = new RelayCommand(act => Stopwatch.Stop(), canEx => IsStoppable());
             ResetCommand = new RelayCommand(act =>  Stopwatch.Reset());
+            CloseCommand = new RelayCommand(act => StopwatchManager.Close());
 
             Stopwatch = new StopwatchCounter();
-            Stopwatch.StopwatchTick += StopwatchTick;
-
-            UpdateTimeString(0);
+            Stopwatch.StopwatchTick += (s, count) => { SetTimeString(count); };
         }
 
-        private void StopwatchTick(object sender, int stopwatchCounter) {
-            UpdateTimeString(stopwatchCounter);
+
+        /// <summary>
+        /// Returns true if stopwatch is running and can be stopped.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsStoppable() {
+            return Stopwatch.StopwatchRunning;
         }
 
-        private void UpdateTimeString(int time) {            
-            string newTime = TimeSpan.FromSeconds(time).ToString();
+
+        /// <summary>
+        /// Sets Time and GhostTime to proper values based on elapsed seconds.
+        /// </summary>
+        /// <param name="seconds"></param>
+        private void SetTimeString(int seconds) {            
+            string newTime = TimeSpan.FromSeconds(seconds).ToString();
             
             string newGhostTime = "";
             string spacesToReplace = "";
@@ -64,10 +81,6 @@ namespace TimeLine
                 Time = newTime.Replace(newGhostTime, spacesToReplace);
             else
                 Time = newTime;
-        }
-
-        public bool IsStoppable() {
-            return Stopwatch.StopwatchRunning;
         }
     }
 }

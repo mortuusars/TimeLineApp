@@ -22,6 +22,8 @@ namespace TimeLine
 
         public HistoryViewModel HistoryVM;
 
+        ToastManager ToastManager = GetService.ToastManager;
+
         Timer Timer;
         StopwatchManager StopwatchManager;
         AlarmManager Alarm;
@@ -30,7 +32,7 @@ namespace TimeLine
         public Manager() {
             InitializeTimer();
             InitializeAlarm();
-           
+
             StopwatchManager = new StopwatchManager();
 
             HistoryVM = new HistoryViewModel();
@@ -41,13 +43,13 @@ namespace TimeLine
 
 
 
-        
+
 
 
 
 
         private void Alarm_AlarmRing(object sender, string e) {
-            Application.Current.Dispatcher.Invoke(new Action(() => { GetService.ToastManager.ShowToastNotification("Alarm", e, Icons.alarm, IsAlarm: true); }));
+            Application.Current.Dispatcher.Invoke(new Action(() => { ToastManager.ShowToastNotification("Alarm", e, Icons.alarm, IsAlarm: true); }));
         }
 
         public void AddHistoryItem(HistoryItem historyitem) {
@@ -73,8 +75,8 @@ namespace TimeLine
                 CommandView.Activate();
             }
             else {
-                //TODO: closing animation
                 CurrentCommandVM.Closing = true;
+                CurrentCommandVM.FadeBorder = true;
 
                 DispatcherTimer dispatcherTimer = new DispatcherTimer();
                 dispatcherTimer.Interval = ((Duration)App.Current.FindResource("WindowFadeDuration")).TimeSpan;
@@ -112,7 +114,7 @@ namespace TimeLine
                 StopwatchCommands(parsedData);
 
             }
-            else if (parsedData.MainCommand == "alarm") {                            
+            else if (parsedData.MainCommand == "alarm") {
                 AlarmCommands(parsedData);
             }
             else if (parsedData.MainCommand == "mute") {
@@ -126,7 +128,7 @@ namespace TimeLine
                 App.ExitApplication();
             }
             else {
-                GetService.ToastManager.ShowToastNotification("TimeLine", "Command is not recognized", Icons.error);
+                ToastManager.ShowToastNotification("TimeLine", "Command is not recognized", Icons.error);
             }
         }
 
@@ -143,14 +145,14 @@ namespace TimeLine
         /// <summary>
         /// Mute or Unmute sound.
         /// </summary>
-        private static void MuteSound() {
+        private void MuteSound() {
             if (GetService.SoundPlayer.IsMuted == true) {
                 GetService.SoundPlayer.UnMute();
-                GetService.ToastManager.ShowToastNotification("TimeLine", "Sound unmuted", Icons.info);
+                ToastManager.ShowToastNotification("TimeLine", "Sound unmuted", Icons.info);
             }
             else {
                 GetService.SoundPlayer.Mute();
-                GetService.ToastManager.ShowToastNotification("TimeLine", "Sound muted", Icons.info);
+                ToastManager.ShowToastNotification("TimeLine", "Sound muted", Icons.info);
             }
         }
 
@@ -161,7 +163,7 @@ namespace TimeLine
 
         public int TimerCountdown { get; private set; }
 
-        
+
         private void InitializeTimer() {
             Timer = new Timer();
             Timer.TimerEnded += Timer_TimerEnded;
@@ -231,7 +233,7 @@ namespace TimeLine
                     }
             }
 
-            GetService.ToastManager.ShowToastNotification(toastTitle, toastMessage, icon);
+            ToastManager.ShowToastNotification(toastTitle, toastMessage, icon);
         }
 
 
@@ -245,7 +247,7 @@ namespace TimeLine
 
             Application.Current.Dispatcher.Invoke(new Action(() =>
             {
-                GetService.ToastManager.ShowToastNotification("Timer", $"{Utilities.PrettyTime(timeForTimer)} has passed.", Icons.timer, IsAlarm: true);
+                ToastManager.ShowToastNotification("Timer", $"{Utilities.PrettyTime(timeForTimer)} has passed.", Icons.timer, IsAlarm: true);
             }));
 
         }
@@ -258,11 +260,11 @@ namespace TimeLine
         private void StopwatchCommands(ParsedCommandData parsedData) {
             if (parsedData.OperationCommand == "")
                 StopwatchManager.OpenCloseWindow();
-            else if (parsedData.OperationCommand == "start") 
-                StopwatchManager.Start();            
+            else if (parsedData.OperationCommand == "start")
+                StopwatchManager.Start();
             else if (parsedData.OperationCommand == "stop") {
                 if (StopwatchManager.Stop() == false)
-                    GetService.ToastManager.ShowToastNotification("Stopwatch", "Not running", Icons.error);
+                    ToastManager.ShowToastNotification("Stopwatch", "Not running", Icons.error);
             }
             else if (parsedData.OperationCommand == "pause")
                 StopwatchManager.Pause();
@@ -290,10 +292,10 @@ namespace TimeLine
                 try {
                     var ringTime = DateTimeOffset.Parse($"{parsedData.Hours}:{parsedData.Minutes}");
                     Alarm.AddAlarm(ringTime);
-                    GetService.ToastManager.ShowToastNotification("Alarm", $"Set to {Utilities.TimeToString(ringTime)}", Icons.alarm);
+                    ToastManager.ShowToastNotification("Alarm", $"Set to {Utilities.TimeToString(ringTime)}", Icons.alarm);
                 }
                 catch (Exception) {
-                    GetService.ToastManager.ShowToastNotification("Alarm", "Enterd time is incorrect", Icons.error);
+                    ToastManager.ShowToastNotification("Alarm", "Enterd time is incorrect", Icons.error);
                     Logger.Log("Time for alarm is incorrect", LogLevel.WARN);
                 }
             }
@@ -301,11 +303,11 @@ namespace TimeLine
                 var time = DateTimeOffset.Now.AddHours(parsedData.Hours).AddMinutes(parsedData.Minutes);
 
                 Alarm.AddAlarm(time);
-                GetService.ToastManager.ShowToastNotification("Alarm", $"Set to {Utilities.TimeToString(time)}", Icons.alarm);
+                ToastManager.ShowToastNotification("Alarm", $"Set to {Utilities.TimeToString(time)}", Icons.alarm);
             }
             else if (parsedData.OperationCommand == "clear") {
                 string message = Alarm.ClearAllAlarms() == true ? "All alarms was cleared" : "Nothing to clear";
-                GetService.ToastManager.ShowToastNotification("Alarm", message, Icons.alarm);
+                ToastManager.ShowToastNotification("Alarm", message, Icons.alarm);
             }
             else if (parsedData.OperationCommand == "list") {
                 var list = Alarm.GetAlarmsList();

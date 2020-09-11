@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Threading;
 using TimeLine.Views;
 
 namespace TimeLine
@@ -16,7 +17,7 @@ namespace TimeLine
             if (StopwatchView == null) {
 
                 StopwatchView = new StopwatchView();
-                StopwatchVM = new StopwatchViewModel();
+                StopwatchVM = new StopwatchViewModel(this);
 
                 StopwatchView.DataContext = StopwatchVM;
                 StopwatchView.Show();
@@ -77,16 +78,26 @@ namespace TimeLine
         }
 
         public void Close() {
+            if (StopwatchVM != null) {
+                StopwatchVM.WindowClosing = true;
+                
+                var timer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
+                timer.Tick += (s, e) => { CloseWindow(); timer.Stop(); };
+                timer.Start();
+            }            
+        }
+
+        private void CloseWindow() {
             if (CheckIfNullView() == false) {
                 StopwatchView.Close();
                 StopwatchView = null;
+                StopwatchVM = null;
             }
         }
 
         /// <summary>
         /// Returns true if StopwatchView is null.
         /// </summary>
-        /// <returns></returns>
         private bool CheckIfNullView() {
             return StopwatchView == null ? true : false;
         }
