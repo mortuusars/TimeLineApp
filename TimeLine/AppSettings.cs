@@ -10,5 +10,8 @@ namespace TimeLine
         public int SoundVolume { get; set; }
 
         public int ToastNotificationDelayInSeconds { get; set; }
+
+        public double StopwatchPositionLeft { get; set; }
+        public double StopwatchPositionTop { get; set; }
     }
 }

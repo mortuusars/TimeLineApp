@@ -12,8 +12,22 @@ namespace TimeLine
         StopwatchManager StopwatchManager;
         public StopwatchCounter Stopwatch { get; set; }
 
-        public double Left { get; set; }
-        public double Top { get; set; }
+        private double left;
+        public double Left
+        {
+            get { return left; }
+            set { left = value; SaveWindowPositionLeft(); }
+        }
+
+        private double top;
+        public double Top
+        {
+            get { return top; }
+            set { top = value; SaveWindowPositionTop(); }
+        }
+
+
+        public double Width { get; set; } = 326;
 
         public string Time { get; set; } = "";
         public string GhostTime { get; set; } = "00:00:00";
@@ -37,10 +51,36 @@ namespace TimeLine
             ResetCommand = new RelayCommand(act =>  Stopwatch.Reset());
             CloseCommand = new RelayCommand(act => StopwatchManager.Close());
 
+            SetWindowPosition();
+
             Stopwatch = new StopwatchCounter();
             Stopwatch.StopwatchTick += (s, count) => { SetTimeString(count); };
         }
 
+        private void SetWindowPosition() {
+            var left = GetService.Settings.AppSettings.StopwatchPositionLeft;
+
+            if (left == default)
+                left = WpfScreenHelper.Screen.PrimaryScreen.Bounds.Width / 2 - Width / 2;
+
+            Left = left;
+
+            var top = GetService.Settings.AppSettings.StopwatchPositionTop;
+
+            if (top == default)
+                top = WpfScreenHelper.Screen.PrimaryScreen.Bounds.Height / 2;
+
+            Top = top;
+        }
+
+        private void SaveWindowPositionLeft() {
+            GetService.Settings.AppSettings.StopwatchPositionLeft = Left;
+        }
+
+        private void SaveWindowPositionTop() {
+            GetService.Settings.AppSettings.StopwatchPositionTop = Top;
+
+        }
 
         /// <summary>
         /// Returns true if stopwatch is running and can be stopped.

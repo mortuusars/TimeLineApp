@@ -6,60 +6,73 @@
         xmlns:local="clr-namespace:TimeLine.Views"
         mc:Ignorable="d"
         Title="StopwatchView" 
-        Height="84" Width="326" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="False" Topmost="True"
+        Height="84" Width="{Binding Width, Mode=TwoWay}"
+        WindowStartupLocation="Manual" 
+        Left="{Binding Left, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        Top="{Binding Top, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        
+        ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="False" Topmost="True"
         Background="Transparent" AllowsTransparency="True">
 
     <Window.Resources>
+
+        <!-- Resources -->
+
         <DropShadowEffect x:Key="Shadow" BlurRadius="22" ShadowDepth="6" Direction="-90" Opacity="0.5"/>
 
         <Duration x:Key="ButtonHoverDurationIn">0:0:0.05</Duration>
         <Duration x:Key="ButtonHoverDurationOut">0:0:0.4</Duration>
 
+        <CircleEase x:Key="EaseOut" EasingMode="EaseOut"/>
+        <CircleEase x:Key="EaseInOut" EasingMode="EaseInOut"/>
+
+
+
+        <!-- Window Fade Animation -->
+
         <Storyboard x:Key="WindowFadeIn">
-            <DoubleAnimation Duration="0:0:0.5" From="0" To="1" Storyboard.TargetProperty="Opacity" FillBehavior="Stop">
-                <DoubleAnimation.EasingFunction>
-                    <CubicEase EasingMode="EaseOut"/>
-                </DoubleAnimation.EasingFunction>
-            </DoubleAnimation>
+            <DoubleAnimation Duration="0:0:0.5" From="0" To="1" Storyboard.TargetProperty="Opacity" FillBehavior="Stop" EasingFunction="{StaticResource EaseOut}"/>
         </Storyboard>
-        
+
         <Storyboard x:Key="WindowFadeOut">
-            <DoubleAnimation Duration="0:0:0.5" To="0" Storyboard.TargetProperty="Opacity">
-                <DoubleAnimation.EasingFunction>
-                    <CubicEase EasingMode="EaseOut"/>
-                </DoubleAnimation.EasingFunction>
-            </DoubleAnimation>
-        </Storyboard>
-        
-        
-        
-        
-        <Storyboard x:Key="HoverAnimationInWidth">
-            <DoubleAnimation Duration="{StaticResource ButtonHoverDurationIn}" Storyboard.TargetProperty="Width" To="30">
-                <DoubleAnimation.EasingFunction>
-                    <CubicEase EasingMode="EaseOut"/>
-                </DoubleAnimation.EasingFunction>
-            </DoubleAnimation>
+            <DoubleAnimation Duration="0:0:0.5" To="0" Storyboard.TargetProperty="Opacity" EasingFunction="{StaticResource EaseOut}"/>
         </Storyboard>
 
-        <Storyboard x:Key="HoverAnimationInHeight">
-            <DoubleAnimation Duration="{StaticResource ButtonHoverDurationIn}" Storyboard.TargetProperty="Height" To="30">
-                <DoubleAnimation.EasingFunction>
-                    <CubicEase EasingMode="EaseOut"/>
-                </DoubleAnimation.EasingFunction>
-            </DoubleAnimation>
+
+
+        <!-- Button Animations -->
+
+        <!-- Hover -->
+
+        <Storyboard x:Key="HoverAnimationIn">
+            <DoubleAnimation  Storyboard.TargetProperty="Height"
+                              Duration="{StaticResource ButtonHoverDurationIn}" EasingFunction="{StaticResource EaseOut}"
+                              To="30"/>
+            <DoubleAnimation  Storyboard.TargetProperty="Width"
+                              Duration="{StaticResource ButtonHoverDurationIn}" EasingFunction="{StaticResource EaseOut}"
+                              To="30"/>
         </Storyboard>
 
-        <Storyboard x:Key="HoverAnimationOutWidth">
-            <DoubleAnimation Duration="{StaticResource ButtonHoverDurationOut}" Storyboard.TargetProperty="Width" To="26" />
+
+        <Storyboard x:Key="HoverAnimationOut">
+            <DoubleAnimation Storyboard.TargetProperty="Height"  
+                             Duration="{StaticResource ButtonHoverDurationOut}" EasingFunction="{StaticResource EaseOut}"
+                             To="26"/>
+            <DoubleAnimation Storyboard.TargetProperty="Width"  
+                             Duration="{StaticResource ButtonHoverDurationOut}" EasingFunction="{StaticResource EaseOut}"
+                             To="26"/>
         </Storyboard>
 
-        <Storyboard x:Key="HoverAnimationOutHeight">
-            <DoubleAnimation Duration="{StaticResource ButtonHoverDurationOut}" Storyboard.TargetProperty="Height" To="26"/>
-        </Storyboard>
 
         <Storyboard x:Key="ButtonClick">
-            <DoubleAnimation Duration="0:0:0.8" Storyboard.TargetProperty="Opacity" From="0.0" To="0.85" FillBehavior="Stop"/>
+            <DoubleAnimation Storyboard.TargetProperty="Height"
+                             Duration="0:0:0.7"
+                             From="0" To="26" 
+                             FillBehavior="Stop" EasingFunction="{StaticResource EaseInOut}"/>
+            <DoubleAnimation Storyboard.TargetProperty="Width"
+                             Duration="0:0:0.7"  
+                             From="0" To="26" 
+                             FillBehavior="Stop" EasingFunction="{StaticResource EaseInOut}"/>
         </Storyboard>
 
 
@@ -71,9 +84,9 @@
                     </DataTrigger.EnterActions>
                 </DataTrigger>
             </Style.Triggers>
-        </Style>        
-        
-        
+        </Style>
+
+
         <!--#region Buttons Style -->
 
         <Style x:Key="DefaultButton" TargetType="Button">
@@ -86,12 +99,10 @@
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Opacity" Value="1"/>
                     <Trigger.EnterActions>
-                        <BeginStoryboard Storyboard="{StaticResource HoverAnimationInWidth}"/>
-                        <BeginStoryboard Storyboard="{StaticResource HoverAnimationInHeight}"/>
+                        <BeginStoryboard Storyboard="{StaticResource HoverAnimationIn}"/>
                     </Trigger.EnterActions>
                     <Trigger.ExitActions>
-                        <BeginStoryboard Storyboard="{StaticResource HoverAnimationOutWidth}"/>
-                        <BeginStoryboard Storyboard="{StaticResource HoverAnimationOutHeight}"/>
+                        <BeginStoryboard Storyboard="{StaticResource HoverAnimationOut}"/>
                     </Trigger.ExitActions>
                 </Trigger>
 
@@ -99,7 +110,7 @@
                     <BeginStoryboard Storyboard="{StaticResource ButtonClick}"/>
                 </EventTrigger>
             </Style.Triggers>
-            
+
         </Style>
 
         <Style x:Key="StartPauseButton" TargetType="Button" BasedOn="{StaticResource DefaultButton}">
@@ -126,7 +137,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <!--#endregion-->
 
         <Style x:Key="TextBlockStyle" TargetType="TextBlock">
@@ -134,7 +145,7 @@
         </Style>
 
     </Window.Resources>
-    
+
     <Border Margin="14 14 14 24" Background="{StaticResource LightBrush}" CornerRadius="6" Effect="{StaticResource Shadow}" 
             Style="{StaticResource BorderStyle}" 
             MouseLeftButtonDown="Border_MouseLeftButtonDown">
@@ -144,14 +155,15 @@
                 <BeginStoryboard Storyboard="{StaticResource WindowFadeIn}"/>
             </EventTrigger>
         </Border.Triggers>
-                
-        <Grid Margin="4">            
+
+        <Grid Margin="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="42"/>
                 <ColumnDefinition Width="42"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
+            <!-- Start-Pause-Close Button -->            
             <Button Grid.Column="0" Margin="2"
                     Style="{StaticResource StartPauseButton}" 
                     Template="{DynamicResource ButtonNoStyle}"
@@ -160,14 +172,16 @@
                     <MouseBinding Gesture="RightClick" Command="{Binding CloseCommand}"/>
                 </Button.InputBindings>
             </Button>
+
             
+            <!-- Stop-Reset Button-->
             <Button Grid.Column="1" Margin="2"
                     Style="{StaticResource StopButton}" 
                     Template="{DynamicResource ButtonNoStyle}" 
                     Command="{Binding StopCommand}"
                     >
                 <Button.InputBindings>
-                    <MouseBinding  Command="{Binding ResetCommand}" MouseAction="RightClick"/>
+                    <MouseBinding  Command="{Binding ResetCommand}" Gesture="RightClick"/>
                 </Button.InputBindings>
             </Button>
 
