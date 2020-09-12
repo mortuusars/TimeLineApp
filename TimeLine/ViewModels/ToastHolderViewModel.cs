@@ -30,11 +30,10 @@ namespace TimeLine
                 GetService.SoundPlayer.Play();
             }
             // Close after delay if it is regular toast
-            else {
+            else {                
+                var timerToClosing = new DispatcherTimer();            
                 
-                var timerToClosing = new DispatcherTimer();
-                //TODO: Easier changing of parameters like this:   <move them to some kind of settings>
-                timerToClosing.Interval = TimeSpan.FromSeconds(6);
+                timerToClosing.Interval = TimeSpan.FromSeconds(GetService.Settings.AppSettings.ToastNotificationDelayInSeconds);
                 timerToClosing.Tick += (sender, e) =>
                 {
                     CloseToast(newToast);

@@ -6,9 +6,10 @@ namespace TimeLine
 {
     public class SoundPlayer
     {
-        //TODO: Properties
-        readonly string soundPath = "Resources/Sounds/subtle.wav";
-        readonly int defaultVolume = 60;
+        AppSettings settings = GetService.Settings.AppSettings;
+
+        string soundPath;
+        int defaultVolume;
 
         const int FadeDelayMilliseconds = 30;
 
@@ -21,6 +22,9 @@ namespace TimeLine
         double volumeBeforeMute;
 
         public SoundPlayer() {
+            soundPath = settings.SoundFilePath;
+            defaultVolume = settings.SoundVolume;
+
             player = new MediaPlayer();
             SetVolume(defaultVolume);
         }

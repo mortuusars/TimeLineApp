@@ -126,6 +126,7 @@ namespace TimeLine
             }
             else if (parsedData.MainCommand == "exit") {
                 App.ExitApplication();
+                GetService.Settings.Save();
             }
             else {
                 ToastManager.ShowToastNotification("TimeLine", "Command is not recognized", Icons.error);

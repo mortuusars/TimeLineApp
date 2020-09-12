@@ -24,6 +24,16 @@ namespace TimeLine
             Logger.LoggingLevel = LogLevel.INFO;
 
 
+            GetService.Settings = new ApplicationSettings();
+            GetService.Settings.Load();
+
+            //TODO: this is not ideal
+            GetService.ToastManager = new ToastManager();
+            GetService.SoundPlayer = new SoundPlayer();
+            GetService.Manager = new Manager();
+
+
+
             // Dependency injection
 
 

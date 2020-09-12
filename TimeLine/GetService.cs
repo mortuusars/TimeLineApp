@@ -3,8 +3,9 @@ namespace TimeLine
 {
     public static class GetService
     {
-        public static SoundPlayer SoundPlayer { get; } = new SoundPlayer();
-        public static ToastManager ToastManager { get; } = new ToastManager();
-        public static Manager Manager { get; } = new Manager();
+        public static ApplicationSettings Settings { get; set; }
+        public static SoundPlayer SoundPlayer { get; set; }
+        public static ToastManager ToastManager { get; set; }
+        public static Manager Manager { get; set; }
     }
 }
