@@ -22,7 +22,7 @@ namespace TimeLine
 
         public HistoryViewModel HistoryVM;
 
-        ToastManager ToastManager = GetService.ToastManager;
+        ToastManager ToastManager = App.ToastManager;
 
         Timer Timer;
         StopwatchManager StopwatchManager;
@@ -126,7 +126,7 @@ namespace TimeLine
             }
             else if (parsedData.MainCommand == "exit") {
                 App.ExitApplication();
-                GetService.Settings.Save();
+                App.ApplicationSettings.Save();
             }
             else {
                 ToastManager.ShowToastNotification("TimeLine", "Command is not recognized", Icons.error);
@@ -147,12 +147,12 @@ namespace TimeLine
         /// Mute or Unmute sound.
         /// </summary>
         private void MuteSound() {
-            if (GetService.SoundPlayer.IsMuted == true) {
-                GetService.SoundPlayer.UnMute();
+            if (App.SoundPlayer.IsMuted == true) {
+                App.SoundPlayer.UnMute();
                 ToastManager.ShowToastNotification("TimeLine", "Sound unmuted", Icons.info);
             }
             else {
-                GetService.SoundPlayer.Mute();
+                App.SoundPlayer.Mute();
                 ToastManager.ShowToastNotification("TimeLine", "Sound muted", Icons.info);
             }
         }

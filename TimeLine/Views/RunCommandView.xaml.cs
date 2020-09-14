@@ -75,7 +75,7 @@ namespace TimeLine.Views
 
         private void Window_KeyDown(object sender, KeyEventArgs e) {
             if (e.Key == Key.Escape)
-                GetService.Manager.ShowOrCloseCommandView();
+                App.Manager.ShowOrCloseCommandView();
         }
 
 

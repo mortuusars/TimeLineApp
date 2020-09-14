@@ -64,14 +64,14 @@ namespace TimeLine
 
 
         private void SetWindowPosition() {
-            var left = GetService.Settings.AppSettings.StopwatchPositionLeft;
+            var left = App.ApplicationSettings.AppSettings.StopwatchPositionLeft;
 
             if (left == default)
                 left = WpfScreenHelper.Screen.PrimaryScreen.Bounds.Width / 2 - Width / 2;
 
             Left = left;
 
-            var top = GetService.Settings.AppSettings.StopwatchPositionTop;
+            var top = App.ApplicationSettings.AppSettings.StopwatchPositionTop;
 
             if (top == default)
                 top = WpfScreenHelper.Screen.PrimaryScreen.Bounds.Height / 2;
@@ -80,11 +80,11 @@ namespace TimeLine
         }
 
         private void SaveWindowPositionLeft() {
-            GetService.Settings.AppSettings.StopwatchPositionLeft = Left;
+            App.ApplicationSettings.AppSettings.StopwatchPositionLeft = Left;
         }
 
         private void SaveWindowPositionTop() {
-            GetService.Settings.AppSettings.StopwatchPositionTop = Top;
+            App.ApplicationSettings.AppSettings.StopwatchPositionTop = Top;
 
         }
 

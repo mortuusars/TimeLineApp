@@ -143,8 +143,8 @@ namespace TimeLine
 
 
         private void ConfirmAndClose() {
-            GetService.Manager.ShowOrCloseCommandView();
-            GetService.Manager.ParseInput(Input);
+            App.Manager.ShowOrCloseCommandView();
+            App.Manager.ParseInput(Input);
         }
 
         private void SetGhostTextVisibility() {
@@ -217,9 +217,9 @@ namespace TimeLine
                 lastWord = new List<string>(lowercaseInput.Split(" ")).FindLast(word => word.Length != 0);
 
                 if (lowercaseInput.Contains("timer ") || lowercaseInput.Contains("t "))
-                    suggestionsSet = GetService.Manager.TimerIsRunning ? timerRunningSuggestions : timerTimeSuggestions;
+                    suggestionsSet = App.Manager.TimerIsRunning ? timerRunningSuggestions : timerTimeSuggestions;
                 else if (lowercaseInput.Contains("stopwatch ") || lowercaseInput.Contains("s "))
-                    suggestionsSet = GetService.Manager.StopwatchRunning ? stopwatchRunningSuggestions : stopwatchSuggestions;
+                    suggestionsSet = App.Manager.StopwatchRunning ? stopwatchRunningSuggestions : stopwatchSuggestions;
                 else if (lowercaseInput.Contains("alarm ") || lowercaseInput.Contains("a "))
                     suggestionsSet = alarmSuggestions;
                 else

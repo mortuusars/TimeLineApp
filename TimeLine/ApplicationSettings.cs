@@ -15,7 +15,7 @@ namespace TimeLine
         public void Load() {
             try {
                 string file = File.ReadAllText(propertiesFilePath);
-                AppSettings = JsonSerializer.Deserialize<AppSettings>(file, new JsonSerializerOptions() {  WriteIndented = true });
+                AppSettings = JsonSerializer.Deserialize<AppSettings>(file);
             }
             catch (System.Exception ex) {
                 MortuusLogger.Logger.Log($"Failed to load settings: {ex.Message}.", MortuusLogger.LogLevel.ERROR);
@@ -32,7 +32,7 @@ namespace TimeLine
             string jsonString = "";
 
             if (AppSettings != null)
-                jsonString = JsonSerializer.Serialize(AppSettings);
+                jsonString = JsonSerializer.Serialize(AppSettings, new JsonSerializerOptions() { WriteIndented = true });
             else {
                 jsonString = JsonSerializer.Serialize(DefaultSettings());
                 MortuusLogger.Logger.Log($"Settings was null. Saving default settings", MortuusLogger.LogLevel.ERROR);

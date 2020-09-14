@@ -23,17 +23,17 @@ namespace TimeLine
 
             ToastList.Add(newToast);
 
-            GetService.Manager.AddHistoryItem(new Models.HistoryItem(title, message, icon));
+            App.Manager.AddHistoryItem(new Models.HistoryItem(title, message, icon));
 
             // Play sound and don't close toast if it is "ALARM"
             if (IsAlarm == true) {
-                GetService.SoundPlayer.Play();
+                App.SoundPlayer.Play();
             }
             // Close after delay if it is regular toast
             else {                
                 var timerToClosing = new DispatcherTimer();            
                 
-                timerToClosing.Interval = TimeSpan.FromSeconds(GetService.Settings.AppSettings.ToastNotificationDelayInSeconds);
+                timerToClosing.Interval = TimeSpan.FromSeconds(App.ApplicationSettings.AppSettings.ToastNotificationDelayInSeconds);
                 timerToClosing.Tick += (sender, e) =>
                 {
                     CloseToast(newToast);

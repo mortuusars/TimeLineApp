@@ -16,7 +16,7 @@ namespace TimeLine.Models
         public Suggestion(string header) {
             Header = header;
 
-            AddSuggestionCommand = new RelayCommand(act => { GetService.Manager.CommandView.AppendString(Header); });
+            AddSuggestionCommand = new RelayCommand(act => { App.Manager.CommandView.AppendString(Header); });
         }
     }
 }

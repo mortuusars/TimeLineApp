@@ -39,8 +39,8 @@ namespace TimeLine
             IconTintColor = GetTintColor(icon);
 
             CloseCommand = new RelayCommand( act => { 
-                GetService.ToastManager.CloseToastNotification(this); 
-                GetService.SoundPlayer.Stop();
+                App.ToastManager.CloseToastNotification(this); 
+                App.SoundPlayer.Stop();
             });
         }
 

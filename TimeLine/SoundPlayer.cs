@@ -6,7 +6,7 @@ namespace TimeLine
 {
     public class SoundPlayer
     {
-        AppSettings settings = GetService.Settings.AppSettings;
+        AppSettings settings = App.ApplicationSettings.AppSettings;
 
         string soundPath;
         int defaultVolume;

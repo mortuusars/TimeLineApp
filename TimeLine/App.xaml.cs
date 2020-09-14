@@ -15,6 +15,11 @@ namespace TimeLine
         private MainView mainView;
         private TaskbarIcon taskbarIcon;
 
+        public static ApplicationSettings ApplicationSettings { get; set; }
+        public static SoundPlayer SoundPlayer { get; set; }
+        public static ToastManager ToastManager { get; set; }
+        public static Manager Manager { get; set; }
+
         protected override void OnStartup(StartupEventArgs e) {
             base.OnStartup(e);
 
@@ -23,19 +28,13 @@ namespace TimeLine
             Logger.LoggerInstance.GotException += (s, e) => { MessageBox.Show($"Error writing to log file: {e.Message}"); };
             Logger.LoggingLevel = LogLevel.INFO;
 
+            
+            ApplicationSettings = new ApplicationSettings();
+            ApplicationSettings.Load();
 
-            GetService.Settings = new ApplicationSettings();
-            GetService.Settings.Load();
-
-            //TODO: this is not ideal
-            GetService.ToastManager = new ToastManager();
-            GetService.SoundPlayer = new SoundPlayer();
-            GetService.Manager = new Manager();
-
-
-
-            // Dependency injection
-
+            ToastManager = new ToastManager();
+            SoundPlayer = new SoundPlayer();
+            Manager = new Manager();
 
             taskbarIcon = (TaskbarIcon)FindResource("TrayIcon");
 

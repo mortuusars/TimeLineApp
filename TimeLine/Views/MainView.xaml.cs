@@ -20,11 +20,11 @@ namespace TimeLine.Views
             this.Show();
             this.Hide();
 
-            //var temp = GetService.Manager.GetHashCode();
+            //var temp = App.Manager.GetHashCode();
         }
 
         private void GlobalHotkey_Handle() {
-            GetService.Manager.ShowOrCloseCommandView();
+            App.Manager.ShowOrCloseCommandView();
         }
 
         #region Global Hotkey
