@@ -32,6 +32,9 @@ namespace TimeLine
         public string Time { get; set; } = "";
         public string GhostTime { get; set; } = "00:00:00";
 
+        public bool DayOne { get; set; }
+        public bool DayTwo { get; set; }
+
         public bool WindowClosing { get; set; }
 
         public ICommand StartPauseCommand { get; private set; }
@@ -54,8 +57,11 @@ namespace TimeLine
             SetWindowPosition();
 
             Stopwatch = new StopwatchCounter();
-            Stopwatch.StopwatchTick += (s, count) => { SetTimeString(count); };
+            Stopwatch.StopwatchTick += (s, count) => { SetTimeString(count); SetDayIsVisible(count); };
         }
+
+
+
 
         private void SetWindowPosition() {
             var left = GetService.Settings.AppSettings.StopwatchPositionLeft;
@@ -82,6 +88,9 @@ namespace TimeLine
 
         }
 
+
+
+
         /// <summary>
         /// Returns true if stopwatch is running and can be stopped.
         /// </summary>
@@ -97,6 +106,11 @@ namespace TimeLine
         /// <param name="seconds"></param>
         private void SetTimeString(int seconds) {            
             string newTime = TimeSpan.FromSeconds(seconds).ToString();
+            if (newTime.Length > 8) {
+                for (int i = newTime.Length; i > 8; i--) {
+                    newTime = newTime.Remove(0, 1);
+                }
+            }
             
             string newGhostTime = "";
             string spacesToReplace = "";
@@ -121,6 +135,23 @@ namespace TimeLine
                 Time = newTime.Replace(newGhostTime, spacesToReplace);
             else
                 Time = newTime;
+        }
+
+        private void SetDayIsVisible(int count) {
+            // One day
+            if (count > 172_800) {
+                DayOne = true;
+                DayTwo = true;
+            }
+            else if (count > 86_400) {
+                DayOne = true;
+                DayTwo = false;
+            }
+            else {
+                DayOne = false;
+                DayTwo = false;
+            }
+                
         }
     }
 }

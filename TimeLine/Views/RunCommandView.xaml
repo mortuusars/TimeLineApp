@@ -25,7 +25,10 @@
         </Storyboard>
 
         <Storyboard x:Key="FadeOutAnimation" >
-            <DoubleAnimation Duration="0:0:0.3" To="0" Storyboard.TargetProperty="Opacity" >
+            <DoubleAnimation Duration="{StaticResource WindowFadeDuration}" To="0" Storyboard.TargetProperty="Opacity" >
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
         </Storyboard>
 
@@ -153,7 +156,11 @@
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Duration="{StaticResource WindowFadeDuration}" Storyboard.TargetProperty="Opacity" To="0"/>
+                                        <DoubleAnimation Duration="{StaticResource WindowFadeDuration}" Storyboard.TargetProperty="Opacity" To="0" >
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </DataTrigger.EnterActions>

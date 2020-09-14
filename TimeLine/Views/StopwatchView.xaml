@@ -77,6 +77,10 @@
 
 
         <Style TargetType="Border" x:Key="BorderStyle">
+            <Setter Property="Background" Value="{StaticResource LightBrush}"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Effect" Value="{StaticResource Shadow}"/>
+
             <Style.Triggers>
                 <DataTrigger Binding="{Binding WindowClosing}" Value="True">
                     <DataTrigger.EnterActions>
@@ -145,9 +149,12 @@
         </Style>
 
     </Window.Resources>
+    
+    
+    <!-- Main Border -->
 
-    <Border Margin="14 14 14 24" Background="{StaticResource LightBrush}" CornerRadius="6" Effect="{StaticResource Shadow}" 
-            Style="{StaticResource BorderStyle}" 
+    <Border Margin="14 14 14 24" 
+            Style="{StaticResource BorderStyle}"
             MouseLeftButtonDown="Border_MouseLeftButtonDown">
 
         <Border.Triggers>
@@ -190,10 +197,32 @@
                        Text="{Binding GhostTime}" d:Text="00:00:00"
                        FontSize="38" IsHitTestVisible="False"/>
 
+            <Grid Grid.Column="2" Margin="80 -4 0 -4" Panel.ZIndex="0" Opacity="1" >
+                <Rectangle  Width="30" Height="60" Fill="LightSeaGreen" Visibility="{Binding DayOne, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <SkewTransform AngleX="30" AngleY="0"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+
+                <Rectangle Margin="30 0 0 0"  Width="30" Height="60" Fill="LightSteelBlue" Visibility="{Binding DayTwo, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <SkewTransform AngleX="30" AngleY="0"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+            </Grid>
+            
             <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10 1 0 0"
                        Style="{StaticResource TextBlockStyle}"
                        Text="{Binding Time}" d:Text="   12:01"
                        FontSize="38" IsHitTestVisible="False"/>
+
+
+
+            
 
         </Grid>
     </Border>

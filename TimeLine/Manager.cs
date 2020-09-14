@@ -75,8 +75,8 @@ namespace TimeLine
                 CommandView.Activate();
             }
             else {
-                CurrentCommandVM.Closing = true;
                 CurrentCommandVM.FadeBorder = true;
+                CurrentCommandVM.Closing = true;
 
                 DispatcherTimer dispatcherTimer = new DispatcherTimer();
                 dispatcherTimer.Interval = ((Duration)App.Current.FindResource("WindowFadeDuration")).TimeSpan;
