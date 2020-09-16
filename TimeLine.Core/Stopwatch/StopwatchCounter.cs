@@ -5,21 +5,29 @@ using System.Text;
 
 namespace TimeLine
 {
-    public class StopwatchCounter : INotifyPropertyChanged
+    public class StopwatchCounter
     {
-        public event EventHandler<int> StopwatchTick;
-        public event PropertyChangedEventHandler PropertyChanged;
+        /// <summary>
+        /// Raises every time stopwatch count changes.
+        /// </summary>
+        public event EventHandler<int> CountChanged;
 
-        System.Timers.Timer counter;
-
+        /// <summary>
+        /// Returns true if Stopwatch is counting.
+        /// </summary>
         public bool StopwatchRunning { get; set; }
 
-        private int stopwatchCount;
         private int StopwatchCount
         {
             get { return stopwatchCount; }
-            set { stopwatchCount = value; StopwatchTick?.Invoke(this, StopwatchCount); }
-        }
+            set { 
+                stopwatchCount = value; 
+                CountChanged?.Invoke(this, StopwatchCount); 
+            }
+        }        
+
+        System.Timers.Timer counter;
+        private int stopwatchCount;
 
         public StopwatchCounter() {
             counter = new System.Timers.Timer();

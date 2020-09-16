@@ -57,7 +57,7 @@ namespace TimeLine
             SetWindowPosition();
 
             Stopwatch = new StopwatchCounter();
-            Stopwatch.StopwatchTick += (s, count) => { SetTimeString(count); SetDayIsVisible(count); };
+            Stopwatch.CountChanged += (s, count) => { SetTimeString(count); SetDayIsVisible(count); };
         }
 
 

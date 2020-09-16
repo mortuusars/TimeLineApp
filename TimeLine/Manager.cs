@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Threading;
@@ -125,8 +126,8 @@ namespace TimeLine
                 history.Show();
             }
             else if (parsedData.MainCommand == "exit") {
+                SaveApplicationState();
                 App.ExitApplication();
-                App.ApplicationSettings.Save();
             }
             else {
                 ToastManager.ShowToastNotification("TimeLine", "Command is not recognized", Icons.error);
@@ -134,7 +135,13 @@ namespace TimeLine
         }
 
 
+        private void SaveApplicationState() {
+            App.ApplicationSettings.Save();
 
+            ApplicationState state = new ApplicationState();           
+            //TODO: finish
+            state.SaveCurrentState(Timer.RemainingSeconds, 0, new List<Alarm>());
+        }
 
 
 

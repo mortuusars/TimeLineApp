@@ -9,6 +9,7 @@ namespace TimeLine.Core
         public event EventHandler<int> TimerEnded;
         public event EventHandler<int> Countdown;
 
+        public int RemainingSeconds { get; set; }
         public bool IsRunning { get; set; }
 
         int startTime;
@@ -51,7 +52,8 @@ namespace TimeLine.Core
                 Stop();
             }
             else {
-                Countdown?.Invoke(this, timerTime - currentTime);
+                RemainingSeconds = timerTime - currentTime;
+                Countdown?.Invoke(this, RemainingSeconds);
                 currentTime = (int)DateTimeOffset.Now.ToUnixTimeSeconds();
             }
         }
