@@ -5,7 +5,7 @@ namespace TimeLine
 {
     public class State
     {
-        public int TimerRingTime { get; set; }
+        public long TimerRingTime { get; set; }
         public int StopwatchCount { get; set; }
         public List<Alarm> Alarms { get; set; }
     }

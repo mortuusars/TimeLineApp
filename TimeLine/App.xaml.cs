@@ -14,10 +14,11 @@ namespace TimeLine
     {
         private MainView mainView;
         private TaskbarIcon taskbarIcon;
+        public ToastManager ToastManager { get; private set; }
+
 
         public static ApplicationSettings ApplicationSettings { get; set; }
         public static SoundPlayer SoundPlayer { get; set; }
-        public static ToastManager ToastManager { get; set; }
         public static Manager Manager { get; set; }
 
         protected override void OnStartup(StartupEventArgs e) {
@@ -34,7 +35,7 @@ namespace TimeLine
 
             ToastManager = new ToastManager();
             SoundPlayer = new SoundPlayer();
-            Manager = new Manager();
+            Manager = new Manager(ToastManager);
 
             taskbarIcon = (TaskbarIcon)FindResource("TrayIcon");
 

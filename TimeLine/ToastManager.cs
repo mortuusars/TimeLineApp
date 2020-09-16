@@ -14,7 +14,7 @@ namespace TimeLine
 
         private void CreateTostHolder() {
             if (toastHolderView == null) {
-                toastHolderViewModel = new ToastHolderViewModel();
+                toastHolderViewModel = new ToastHolderViewModel(this);
                 toastHolderViewModel.LastToastClosed += CloseHolderOnLastToastClosed;
                 toastHolderView = new ToastHolderView() { DataContext = toastHolderViewModel, Owner = MainView.Main };
 

@@ -32,14 +32,19 @@ namespace TimeLine
         public TimeSpan SlideAnimationDuration = (TimeSpan)App.Current.FindResource("ToastMoveUpBeginTime");
         public Duration FadeAnimationDuration = (Duration)App.Current.FindResource("ToastFadeOutDuration");
 
-        public ToastControlViewModel(string title, string message, Icons icon) {
+
+        private ToastManager ToastManager;
+
+        public ToastControlViewModel(ToastManager toastManager, string title, string message, Icons icon) {
+            ToastManager = toastManager;
+
             Title = title;
             Message = message;
             Icon = IconHelper.GetIconPath(icon);
             IconTintColor = GetTintColor(icon);
 
-            CloseCommand = new RelayCommand( act => { 
-                App.ToastManager.CloseToastNotification(this); 
+            CloseCommand = new RelayCommand( act => {
+                ToastManager.CloseToastNotification(this); 
                 App.SoundPlayer.Stop();
             });
         }

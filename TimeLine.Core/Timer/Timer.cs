@@ -9,12 +9,21 @@ namespace TimeLine.Core
         public event EventHandler<int> TimerEnded;
         public event EventHandler<int> Countdown;
 
-        public int RemainingSeconds { get; set; }
+        public int RemainingSeconds
+        {
+            get { return remainingSeconds; }
+            set {
+                remainingSeconds = value;
+                Countdown?.Invoke(this, RemainingSeconds);
+            }
+        }
         public bool IsRunning { get; set; }
 
-        int startTime;
-        int currentTime;
-        int timerTime;
+        long startTime;
+        long currentTime;
+        long timerTime;
+
+        private int remainingSeconds;
 
         System.Timers.Timer timer;
 
@@ -26,6 +35,8 @@ namespace TimeLine.Core
             currentTime = (int)DateTimeOffset.Now.ToUnixTimeSeconds();
             startTime = currentTime;
             timerTime = currentTime + time;
+
+            RemainingSeconds = time;
 
             timer.Start();
             IsRunning = true;
@@ -39,21 +50,19 @@ namespace TimeLine.Core
             timer.Stop();
             timer.Dispose();
 
+            RemainingSeconds = 0;
             IsRunning = false;
-            // Pass 0, as timer is not running
-            Countdown?.Invoke(this, 0);
         }
 
 
 
         private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
             if (currentTime >= timerTime) {
-                TimerEnded?.Invoke(this, timerTime - startTime);
+                TimerEnded?.Invoke(this, (int)(timerTime - startTime));
                 Stop();
             }
             else {
-                RemainingSeconds = timerTime - currentTime;
-                Countdown?.Invoke(this, RemainingSeconds);
+                RemainingSeconds = (int)(timerTime - currentTime);
                 currentTime = (int)DateTimeOffset.Now.ToUnixTimeSeconds();
             }
         }

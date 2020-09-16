@@ -12,6 +12,7 @@ namespace TimeLine
         StopwatchViewModel StopwatchVM;
 
         public bool IsRunning { get { return StopwatchVM != null ? StopwatchVM.IsStoppable() : false; } }
+        public int GetCount { get { return StopwatchVM == null ? 0 : StopwatchVM.Count; }}
 
         public void OpenCloseWindow() {
             if (StopwatchView == null) {

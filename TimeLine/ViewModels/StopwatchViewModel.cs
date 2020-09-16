@@ -29,6 +29,17 @@ namespace TimeLine
 
         public double Width { get; set; } = 326;
 
+        private int count;
+        public int Count
+        {
+            get { return count; }
+            set {
+                count = value;
+                SetTimeString(count); 
+                SetDayIsVisible(count);
+            }
+        }
+
         public string Time { get; set; } = "";
         public string GhostTime { get; set; } = "00:00:00";
 
@@ -44,22 +55,21 @@ namespace TimeLine
         public ICommand ResetCommand { get; private set; }
         public ICommand CloseCommand { get; private set; }
 
-        public StopwatchViewModel(StopwatchManager stopwatchManager) {            
+        public StopwatchViewModel(StopwatchManager stopwatchManager) {
             StopwatchManager = stopwatchManager;
 
-            StartPauseCommand = new RelayCommand( act => Stopwatch.StartPause());
+            StartPauseCommand = new RelayCommand(act => Stopwatch.StartPause());
             StartCommand = new RelayCommand(act => Stopwatch.Start(), canEx => !IsStoppable());
             PauseCommand = new RelayCommand(act => Stopwatch.Pause(), canEx => IsStoppable());
             StopCommand = new RelayCommand(act => Stopwatch.Stop(), canEx => IsStoppable());
-            ResetCommand = new RelayCommand(act =>  Stopwatch.Reset());
+            ResetCommand = new RelayCommand(act => Stopwatch.Reset());
             CloseCommand = new RelayCommand(act => StopwatchManager.Close());
 
             SetWindowPosition();
 
             Stopwatch = new StopwatchCounter();
-            Stopwatch.CountChanged += (s, count) => { SetTimeString(count); SetDayIsVisible(count); };
+            Stopwatch.CountChanged += (s, time) => { Count = time; };
         }
-
 
 
 
@@ -104,14 +114,14 @@ namespace TimeLine
         /// Sets Time and GhostTime to proper values based on elapsed seconds.
         /// </summary>
         /// <param name="seconds"></param>
-        private void SetTimeString(int seconds) {            
+        private void SetTimeString(int seconds) {
             string newTime = TimeSpan.FromSeconds(seconds).ToString();
             if (newTime.Length > 8) {
                 for (int i = newTime.Length; i > 8; i--) {
                     newTime = newTime.Remove(0, 1);
                 }
             }
-            
+
             string newGhostTime = "";
             string spacesToReplace = "";
 
@@ -125,11 +135,11 @@ namespace TimeLine
             }
 
             GhostTime = newGhostTime;
-            
+
             if (newGhostTime.Length == 1) {
                 var sb = new StringBuilder(newTime);
                 sb[0] = ' ';
-                Time = sb.ToString();                
+                Time = sb.ToString();
             }
             else if (newGhostTime.Length > 1)
                 Time = newTime.Replace(newGhostTime, spacesToReplace);
@@ -151,7 +161,7 @@ namespace TimeLine
                 DayOne = false;
                 DayTwo = false;
             }
-                
+
         }
     }
 }

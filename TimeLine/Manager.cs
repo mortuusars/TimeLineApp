@@ -23,35 +23,95 @@ namespace TimeLine
 
         public HistoryViewModel HistoryVM;
 
-        ToastManager ToastManager = App.ToastManager;
+        ToastManager ToastManager;
 
         Timer Timer;
         StopwatchManager StopwatchManager;
         AlarmManager Alarm;
 
 
-        public Manager() {
+
+        public Manager(ToastManager toastManager) {
+            ToastManager = toastManager;
+            
             InitializeTimer();
             InitializeAlarm();
 
             StopwatchManager = new StopwatchManager();
 
             HistoryVM = new HistoryViewModel();
+
+            RestoreApplicationState();
         }
 
 
 
-
-
-
-
-
-
-
-
-        private void Alarm_AlarmRing(object sender, string e) {
-            Application.Current.Dispatcher.Invoke(new Action(() => { ToastManager.ShowToastNotification("Alarm", e, Icons.alarm, IsAlarm: true); }));
+        /// <summary>
+        /// Mute or Unmute sound.
+        /// </summary>
+        private void MuteSound() {
+            if (App.SoundPlayer.IsMuted == true) {
+                App.SoundPlayer.UnMute();
+                ToastManager.ShowToastNotification("TimeLine", "Sound unmuted", Icons.info);
+            }
+            else {
+                App.SoundPlayer.Mute();
+                ToastManager.ShowToastNotification("TimeLine", "Sound muted", Icons.info);
+            }
         }
+
+
+
+        
+
+        private void SaveApplicationState() {
+            App.ApplicationSettings.Save();
+
+            ApplicationState state = new ApplicationState();
+            //TODO: finish
+            long timerSavedTime = Timer.RemainingSeconds > 0 ? DateTimeOffset.Now.ToUnixTimeSeconds() + Timer.RemainingSeconds : 0;
+            int stopwatchSavedTime = StopwatchManager.GetCount > 0 ? StopwatchManager.GetCount : 0;
+            
+            state.SaveState(new State() 
+            { 
+                TimerRingTime = timerSavedTime, 
+                StopwatchCount = stopwatchSavedTime,
+                Alarms = new List<Alarm>() 
+            });
+        }
+
+        private void RestoreApplicationState() {
+            ApplicationState appState = new ApplicationState();
+            var state = appState.ReadState();
+
+            RestoreTimer(state.TimerRingTime);
+            RestoreStopwatch(state.StopwatchCount);
+        }
+
+        
+        // Restore timer if saved TimerTime is not 0, and has not already passed.
+        private void RestoreTimer(long _timerRingTime) {
+
+            long currentTime = DateTimeOffset.Now.ToUnixTimeSeconds();
+
+            if (_timerRingTime > 0 && _timerRingTime - currentTime > 0) {                
+                var remaining = _timerRingTime - currentTime;
+
+                Timer.Start((int)remaining);
+
+                var remainingString = Utilities.PrettyTime((int)(remaining));
+                ToastManager.ShowToastNotification("Timer", $"Restored: {remainingString} remaining", Icons.timer);
+            }
+        }
+
+        private void RestoreStopwatch(int stopwatchCount) {
+            
+            //TODO: rewrite stopwatch to start from not 0
+
+        }
+
+
+
 
         public void AddHistoryItem(HistoryItem historyitem) {
             if (HistoryVM.HistoryList.Count > 10)
@@ -135,34 +195,10 @@ namespace TimeLine
         }
 
 
-        private void SaveApplicationState() {
-            App.ApplicationSettings.Save();
-
-            ApplicationState state = new ApplicationState();           
-            //TODO: finish
-            state.SaveCurrentState(Timer.RemainingSeconds, 0, new List<Alarm>());
-        }
-
-
-
-
-
         #endregion
 
 
-        /// <summary>
-        /// Mute or Unmute sound.
-        /// </summary>
-        private void MuteSound() {
-            if (App.SoundPlayer.IsMuted == true) {
-                App.SoundPlayer.UnMute();
-                ToastManager.ShowToastNotification("TimeLine", "Sound unmuted", Icons.info);
-            }
-            else {
-                App.SoundPlayer.Mute();
-                ToastManager.ShowToastNotification("TimeLine", "Sound muted", Icons.info);
-            }
-        }
+        
 
 
         #region Timer
@@ -186,6 +222,7 @@ namespace TimeLine
 
             int overallSeconds = parsed.OverallSeconds();
 
+            //TODO: move to methods
             switch (parsed.OperationCommand) {
                 case "": {
                         if (overallSeconds <= 0) {
@@ -288,7 +325,7 @@ namespace TimeLine
 
 
         #region Alarm
-
+        
         private void InitializeAlarm() {
             Alarm = new AlarmManager();
             Alarm.AlarmRing += Alarm_AlarmRing;
@@ -324,6 +361,10 @@ namespace TimeLine
                     Logger.Log(item, LogLevel.INFO);
                 }
             }
+        }
+
+        private void Alarm_AlarmRing(object sender, string e) {
+            Application.Current.Dispatcher.Invoke(new Action(() => { ToastManager.ShowToastNotification("Alarm", e, Icons.alarm, IsAlarm: true); }));
         }
 
         #endregion

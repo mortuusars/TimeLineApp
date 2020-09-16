@@ -12,18 +12,23 @@ namespace TimeLine
 
         public ObservableCollection<ToastControlViewModel> ToastList { get; set; }
 
-        public ToastHolderViewModel() {            
+
+        private ToastManager ToastManager;
+
+        public ToastHolderViewModel(ToastManager toastManager) {
+            ToastManager = toastManager;
             ToastList = new ObservableCollection<ToastControlViewModel>();
         }
 
 
+
         public void ShowToast(string title, string message, Icons icon, bool IsAlarm = false) {
             
-            ToastControlViewModel newToast = new ToastControlViewModel(title, message, icon);
+            ToastControlViewModel newToast = new ToastControlViewModel(ToastManager, title, message, icon);
 
             ToastList.Add(newToast);
 
-            App.Manager.AddHistoryItem(new Models.HistoryItem(title, message, icon));
+            //App.Manager.AddHistoryItem(new Models.HistoryItem(title, message, icon));
 
             // Play sound and don't close toast if it is "ALARM"
             if (IsAlarm == true) {
@@ -67,7 +72,5 @@ namespace TimeLine
             if (ToastList.Count == 0)
                 LastToastClosed?.Invoke(this, EventArgs.Empty);
         }
-
-
     }
 }
