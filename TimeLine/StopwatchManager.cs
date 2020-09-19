@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using System.Windows.Input;
-using System.Windows.Threading;
 using TimeLine.Views;
 
 namespace TimeLine

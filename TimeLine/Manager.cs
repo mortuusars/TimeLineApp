@@ -35,9 +35,8 @@ namespace TimeLine
             ToastManager = toastManager;
 
             InitializeTimer();
-            InitializeAlarm();
-
             StopwatchManager = new StopwatchManager();
+            InitializeAlarm();
 
             HistoryVM = new HistoryViewModel();
 
@@ -65,31 +64,35 @@ namespace TimeLine
         #region State
 
         private void SaveApplicationState() {
-            App.ApplicationSettings.Save();
 
-            ApplicationState state = new ApplicationState();
-            //TODO: finish
             long timerSavedTime = Timer.RemainingSeconds > 0 ? DateTimeOffset.Now.ToUnixTimeSeconds() + Timer.RemainingSeconds : 0;
-
             int stopwatchCount = StopwatchManager.GetCount();
 
-            state.SaveState(new State() {
+            var state = new State() {
                 TimerRingTime = timerSavedTime,
                 StopwatchCount = stopwatchCount,
                 StopwatchRunning = StopwatchManager.IsRunning(),
                 StopwatchWindowOpen = StopwatchManager.IsWindowOpen(),
-                Alarms = new List<Alarm>()
-            });
+            };
+
+            JsonFileIO json = new JsonFileIO(Properties.StateFilePath);
+            try {
+                json.Write(state);
+            }
+            catch (Exception) {
+                Logger.Log("Failed to write state to file. Timer, stopwatch and alarms will not be restored on start", LogLevel.ERROR);
+            }
         }
 
         private void RestoreApplicationState() {
-            ApplicationState appState = new ApplicationState();
-            var state = appState.ReadState();
-
-            RestoreTimer(state.TimerRingTime);
-            RestoreStopwatch(state.StopwatchCount, state.StopwatchRunning, state.StopwatchWindowOpen);
+            
+            //RestoreTimer(state.TimerRingTime);
+            //RestoreStopwatch(state.StopwatchCount, state.StopwatchRunning, state.StopwatchWindowOpen);
             //RestoreAlarms();
         }
+
+
+
 
 
         // Restore timer if saved TimerTime is not 0, and has not already passed.
@@ -100,7 +103,12 @@ namespace TimeLine
             if (_timerRingTime > 0 && _timerRingTime - currentTime > 0) {
                 var remaining = _timerRingTime - currentTime;
 
-                Timer.Start((int)remaining);
+                try {
+                    Timer.Start((int)remaining);
+                }
+                catch (Exception) {
+                    Logger.Log("Incorrect stopwatch starting count", LogLevel.ERROR);
+                }
 
                 var remainingString = Utilities.PrettyTime((int)(remaining));
                 ToastManager.ShowToastNotification("Timer", $"Restored: {remainingString} remaining", Icons.timer);
@@ -202,6 +210,9 @@ namespace TimeLine
             }
             else if (parsedData.MainCommand == "exit") {
                 SaveApplicationState();
+
+                App.ApplicationSettings.Save();
+
                 App.ExitApplication();
             }
             else {
@@ -320,7 +331,7 @@ namespace TimeLine
         private void StopwatchCommands(ParsedCommandData parsedData) {
             if (parsedData.OperationCommand == "")
                 StopwatchManager.ToggleWindow();
-            else if (parsedData.OperationCommand == "start")
+            else if (parsedData.OperationCommand == "start") 
                 StopwatchManager.Start();
             else if (parsedData.OperationCommand == "stop") {
                 if (StopwatchManager.Stop() == false)

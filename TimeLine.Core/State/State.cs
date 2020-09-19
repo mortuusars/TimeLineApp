@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using TimeLine.Core;
 
-namespace TimeLine
+namespace TimeLine.Core
 {
     public class State
     {
@@ -10,5 +9,5 @@ namespace TimeLine
         public bool StopwatchRunning { get; set; }
         public bool StopwatchWindowOpen { get; set; }
         public List<Alarm> Alarms { get; set; }
-    }
+    }    
 }

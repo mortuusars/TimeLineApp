@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace TimeLine
 {
     public class SoundPlayer
     {
-        AppSettings settings = App.ApplicationSettings.AppSettings;
-
-        string soundPath;
-        int defaultVolume;
-
-        const int FadeDelayMilliseconds = 30;
-
+        string _soundFilePath;
+        int _defaultVolume;
 
         public bool IsPlaying { get; set; }
         public bool IsMuted { get; set; }
@@ -21,12 +15,12 @@ namespace TimeLine
         MediaPlayer player;
         double volumeBeforeMute;
 
-        public SoundPlayer() {
-            soundPath = settings.SoundFilePath;
-            defaultVolume = settings.SoundVolume;
+        public SoundPlayer(string soundFilePath, int defaultVolume) {
+            _soundFilePath = soundFilePath;
+            _defaultVolume = defaultVolume;
 
             player = new MediaPlayer();
-            SetVolume(defaultVolume);
+            SetVolume(_defaultVolume);
         }
 
         #region Public Methods        
@@ -34,11 +28,12 @@ namespace TimeLine
         public void Play() {
 
             try {
-                player.Open(new Uri(soundPath, UriKind.Relative));
+                player.Open(new Uri(_soundFilePath, UriKind.Relative));
             }
             catch (Exception ex) {
                 MortuusLogger.Logger.Log($"Error playing sound from file: {ex.Message}", MortuusLogger.LogLevel.ERROR);
-                return;
+                //TODO: Wrap sound methods
+                throw;
             }
 
             player.MediaEnded += (s, e) => { OnPlaybackEnd(); };
@@ -87,6 +82,7 @@ namespace TimeLine
 
         /*
          
+        const int FadeDelayMilliseconds = 30;
 
         private async void FadeOut() {
             if (IsMuted)
