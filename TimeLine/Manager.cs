@@ -33,7 +33,7 @@ namespace TimeLine
 
         public Manager(ToastManager toastManager) {
             ToastManager = toastManager;
-            
+
             InitializeTimer();
             InitializeAlarm();
 
@@ -62,7 +62,7 @@ namespace TimeLine
 
 
 
-        
+        #region State
 
         private void SaveApplicationState() {
             App.ApplicationSettings.Save();
@@ -70,15 +70,15 @@ namespace TimeLine
             ApplicationState state = new ApplicationState();
             //TODO: finish
             long timerSavedTime = Timer.RemainingSeconds > 0 ? DateTimeOffset.Now.ToUnixTimeSeconds() + Timer.RemainingSeconds : 0;
-            
+
             int stopwatchCount = StopwatchManager.GetCount();
-            //int stopwatchSavedTime = stopwatchCount > 0 ? stopwatchCount : 0;
-            
-            state.SaveState(new State() 
-            { 
-                TimerRingTime = timerSavedTime, 
+
+            state.SaveState(new State() {
+                TimerRingTime = timerSavedTime,
                 StopwatchCount = stopwatchCount,
-                Alarms = new List<Alarm>() 
+                StopwatchRunning = StopwatchManager.IsRunning(),
+                StopwatchWindowOpen = StopwatchManager.IsWindowOpen(),
+                Alarms = new List<Alarm>()
             });
         }
 
@@ -87,16 +87,17 @@ namespace TimeLine
             var state = appState.ReadState();
 
             RestoreTimer(state.TimerRingTime);
-            RestoreStopwatch(state.StopwatchCount);
+            RestoreStopwatch(state.StopwatchCount, state.StopwatchRunning, state.StopwatchWindowOpen);
+            //RestoreAlarms();
         }
 
-        
+
         // Restore timer if saved TimerTime is not 0, and has not already passed.
         private void RestoreTimer(long _timerRingTime) {
 
             long currentTime = DateTimeOffset.Now.ToUnixTimeSeconds();
 
-            if (_timerRingTime > 0 && _timerRingTime - currentTime > 0) {                
+            if (_timerRingTime > 0 && _timerRingTime - currentTime > 0) {
                 var remaining = _timerRingTime - currentTime;
 
                 Timer.Start((int)remaining);
@@ -106,10 +107,25 @@ namespace TimeLine
             }
         }
 
-        private void RestoreStopwatch(int stopwatchCount) {
-            if (stopwatchCount > 0)            
-                StopwatchManager.Start(stopwatchCount);
+        private void RestoreStopwatch(int count, bool isRunning, bool isWindowOpen) {            
+            if (isWindowOpen) {
+                if (count > 0)
+                    if (isRunning)
+                        StopwatchManager.Start(count);
+                    else {
+                        StopwatchManager.Start(count);
+                        StopwatchManager.Pause();
+                    }
+            } 
         }
+
+        private void RestoreAlarms() {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+
 
 
 
@@ -150,7 +166,7 @@ namespace TimeLine
 
         private void CloseCommandWindow() {
             CommandView?.Close();
-            CommandView = null;            
+            CommandView = null;
         }
 
         #endregion
@@ -197,7 +213,7 @@ namespace TimeLine
         #endregion
 
 
-        
+
 
 
         #region Timer
@@ -324,7 +340,7 @@ namespace TimeLine
 
 
         #region Alarm
-        
+
         private void InitializeAlarm() {
             Alarm = new AlarmManager();
             Alarm.AlarmRing += Alarm_AlarmRing;

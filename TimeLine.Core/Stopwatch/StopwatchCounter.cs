@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
 
 namespace TimeLine
 {
@@ -24,7 +21,9 @@ namespace TimeLine
                 count = value; 
                 CountChanged?.Invoke(this, EventArgs.Empty); 
             }
-        }        
+        }  
+        
+
 
         System.Timers.Timer stopwatchCounter;
         private int count;
@@ -34,6 +33,8 @@ namespace TimeLine
             stopwatchCounter.Interval = 1000;
             stopwatchCounter.Elapsed += Counter_Tick;
         }
+
+
 
 
         #region Public Methods

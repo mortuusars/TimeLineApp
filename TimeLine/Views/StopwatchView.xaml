@@ -104,7 +104,7 @@
                     <BeginStoryboard Storyboard="{StaticResource WindowFadeIn}"/>
                 </EventTrigger>
                 
-                <DataTrigger Binding="{Binding WindowClosing}" Value="True">
+                <DataTrigger Binding="{Binding Closing}" Value="True">
                     <DataTrigger.EnterActions>
                         <BeginStoryboard Storyboard="{StaticResource WindowFadeOut}"/>
                     </DataTrigger.EnterActions>

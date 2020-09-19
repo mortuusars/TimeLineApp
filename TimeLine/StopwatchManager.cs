@@ -83,6 +83,7 @@ namespace TimeLine
 
         public void Close() {
             Closing = true;
+            Reset();
             StopwatchView?.Close();
             StopwatchView = null;
         }
@@ -98,11 +99,9 @@ namespace TimeLine
             if (startFrom < 0)
                 throw new ArgumentOutOfRangeException(nameof(startFrom));
 
-            if (StopwatchView == null)
-                Open();
+            Start();
 
             StopwatchCounter.Count = startFrom;
-            StopwatchCounter.Start();
         }
 
         public void StartOrPause() {
@@ -137,6 +136,8 @@ namespace TimeLine
 
         public int GetCount() => StopwatchCounter.Count;
 
+        public bool IsWindowOpen() => StopwatchView == null ? false : true;
+
 
 
         /// <summary>
@@ -146,10 +147,14 @@ namespace TimeLine
         private void UpdateTimeString(int seconds) {
             string newTime = TimeSpan.FromSeconds(seconds).ToString();
             if (newTime.Length > 8) {  
+               OneDay = true;
+                
                 for (int i = newTime.Length; i > 8; i--) {
                     newTime = newTime.Remove(0, 1);
                 }
             }
+            else 
+                OneDay = false;
 
             string newGhostTime = "";
             string spacesToReplace = "";
