@@ -273,7 +273,7 @@
             <Border.Style>
                 <Style>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding FadeBorder}" Value="True">
+                        <DataTrigger Binding="{Binding SuggestionsClosing}" Value="True">
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard Storyboard="{StaticResource FadeOutAnimation}"/>
                             </DataTrigger.EnterActions>

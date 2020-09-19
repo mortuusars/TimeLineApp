@@ -32,7 +32,8 @@ namespace TimeLine
 
             // Play sound and don't close toast if it is "ALARM"
             if (IsAlarm == true) {
-                App.SoundPlayer.Play();
+                //App.SoundPlayer.Play();
+                //Do not close toast after delay
             }
             // Close after delay if it is regular toast
             else {                

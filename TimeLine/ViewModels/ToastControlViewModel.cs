@@ -50,20 +50,14 @@ namespace TimeLine
         }
 
         private SolidColorBrush GetTintColor(Icons icon) {
-            switch (icon) {
-                case Icons.timer:
-                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#6bb347");  // Green
-                case Icons.stopwatch:
-                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#4784b3");  // Light Blue
-                case Icons.alarm:
-                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#b37f47");  // Orange
-                case Icons.error:
-                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#d23429");  // Red
-                case Icons.clock:                
-                case Icons.info:
-                default:
-                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#000000");  // Black
-            }
+            return icon switch
+            {
+                Icons.timer =>      (SolidColorBrush)new BrushConverter().ConvertFromString("#6bb347"), // Green
+                Icons.stopwatch =>  (SolidColorBrush)new BrushConverter().ConvertFromString("#4784b3"), // Light Blue
+                Icons.alarm =>      (SolidColorBrush)new BrushConverter().ConvertFromString("#b37f47"), // Orange
+                Icons.error =>      (SolidColorBrush)new BrushConverter().ConvertFromString("#d23429"), // Red
+                _ =>                (SolidColorBrush)new BrushConverter().ConvertFromString("#000000"), // Black
+            };
         }
     }
 }

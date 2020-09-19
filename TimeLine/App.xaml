@@ -23,7 +23,7 @@
 
 
             <!-- Animation Properties -->
-            <Duration x:Key="WindowFadeDuration">0:0:0.22</Duration>
+            <Duration x:Key="WindowFadeDuration">0:0:0.2</Duration>
             
             <Duration x:Key="ToastFadeOutDuration">0:0:0.6</Duration>
             <sys:TimeSpan x:Key="ToastMoveUpBeginTime">0:0:0.6</sys:TimeSpan>

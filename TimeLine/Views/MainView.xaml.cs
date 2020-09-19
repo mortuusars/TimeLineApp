@@ -24,7 +24,7 @@ namespace TimeLine.Views
         }
 
         private void GlobalHotkey_Handle() {
-            App.Manager.ShowOrCloseCommandView();
+            App.Manager.ToggleRunCommandView();
         }
 
         #region Global Hotkey

@@ -17,7 +17,7 @@ namespace TimeLine.ViewModels
         public TrayViewModel() {
             TrayDoubleClickCommand = new RelayCommand(act => { }); //Empty for now
 
-            RunCommandWindowCommand = new RelayCommand(act => { App.Manager.ShowOrCloseCommandView(); });
+            RunCommandWindowCommand = new RelayCommand(act => { App.Manager.ToggleRunCommandView(); });
             ConfigCommand = new RelayCommand(act => { MessageBox.Show("Opened config window", "Config", 
                                                         MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, 
                                                         MessageBoxOptions.ServiceNotification); });

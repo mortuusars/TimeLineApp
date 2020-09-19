@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
@@ -11,6 +12,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace TimeLine.Views
 {
@@ -23,6 +25,8 @@ namespace TimeLine.Views
         static extern IntPtr GetDesktopWindow();
 
         RunCommandViewModel ViewModel;
+
+        bool IsClosing;
 
         public RunCommandView() {
             InitializeComponent();
@@ -75,7 +79,7 @@ namespace TimeLine.Views
 
         private void Window_KeyDown(object sender, KeyEventArgs e) {
             if (e.Key == Key.Escape)
-                App.Manager.ShowOrCloseCommandView();
+                App.Manager.ToggleRunCommandView();
         }
 
 
@@ -85,6 +89,24 @@ namespace TimeLine.Views
 
         private void GhostTextEndAnimation_Completed(object sender, EventArgs e) {
             GhostTextBlock.Opacity = 0;
+        }
+
+        protected override void OnClosing(CancelEventArgs e) {
+
+            if (IsClosing) {
+                e.Cancel = false;
+                return;
+            }
+            else
+                e.Cancel = true;
+
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Interval = ((Duration)App.Current.FindResource("WindowFadeDuration")).TimeSpan;
+            dispatcherTimer.Tick += (s, e) => { IsClosing = true; this.Close(); dispatcherTimer.Stop(); };
+
+            dispatcherTimer.Start();
+
+            base.OnClosing(e);
         }
     }
 }

@@ -31,11 +31,11 @@ namespace TimeLine
             get { return suggestionsHeight; }
             set { 
                 if (value == 0) {
-                    FadeBorder = true;
+                    SuggestionsClosing = true;
                     suggestionsHeight = value;
                 }                    
                 else {
-                    FadeBorder = false;
+                    SuggestionsClosing = false;
                     suggestionsHeight = value;
                 }
             }
@@ -43,7 +43,7 @@ namespace TimeLine
 
 
         public bool Closing { get; set; }
-        public bool FadeBorder { get; set; }
+        public bool SuggestionsClosing { get; set; }
 
         public string GhostText { get; set; } = "Type a command..";
         public bool GhostTextIsVisible { get; set; } = true;
@@ -143,7 +143,7 @@ namespace TimeLine
 
 
         private void ConfirmAndClose() {
-            App.Manager.ShowOrCloseCommandView();
+            App.Manager.ToggleRunCommandView();
             App.Manager.ParseInput(Input);
         }
 
@@ -199,9 +199,9 @@ namespace TimeLine
             SetSuggestionsCornerRadius();
 
             if (Suggestions.Count == 0)
-                FadeBorder = true;
+                SuggestionsClosing = true;
             else
-                FadeBorder = false;
+                SuggestionsClosing = false;
 
             SuggestionsHeight = Suggestions.Count > 0 ? (Suggestions.Count * suggestionButtonHeight) + 2 : suggestionsHeight;
 

@@ -34,7 +34,7 @@ namespace TimeLine
             ApplicationSettings.Load();
 
             ToastManager = new ToastManager();
-            SoundPlayer = new SoundPlayer();
+            SoundPlayer = new SoundPlayer(ApplicationSettings.AppSettings.SoundFilePath, ApplicationSettings.AppSettings.SoundVolume);
             Manager = new Manager(ToastManager);
 
             taskbarIcon = (TaskbarIcon)FindResource("TrayIcon");

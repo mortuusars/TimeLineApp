@@ -15,8 +15,8 @@ namespace TimeLine
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public RunCommandView CommandView { get; private set; }
-        public RunCommandViewModel CurrentCommandVM { get; private set; }
+        public RunCommandView RunCommandView { get; private set; }
+        public RunCommandViewModel RunCommandViewModel { get; private set; }
 
         public bool TimerIsRunning { get { return Timer.IsRunning; } }
         public bool StopwatchRunning { get { return StopwatchManager.IsRunning(); } }
@@ -136,8 +136,6 @@ namespace TimeLine
 
 
 
-
-
         public void AddHistoryItem(HistoryItem historyitem) {
             if (HistoryVM.HistoryList.Count > 10)
                 HistoryVM.HistoryList.RemoveAt(0);
@@ -149,32 +147,24 @@ namespace TimeLine
         #region Command Window
 
         /// <summary>
-        /// Creates and shows Command Window. Closes if window is open. Closing begins animation.
+        /// Creates and shows RunCommand Window. Closes if window is open.
         /// </summary>
-        public void ShowOrCloseCommandView() {
+        public void ToggleRunCommandView() {
 
-            if (CommandView == null) {
-                CurrentCommandVM = new RunCommandViewModel();
+            if (RunCommandView == null) {
+                RunCommandViewModel = new RunCommandViewModel();
 
-                CommandView = new RunCommandView() { DataContext = CurrentCommandVM };
-                CommandView.Show();
-                CommandView.Activate();
+                RunCommandView = new RunCommandView() { DataContext = RunCommandViewModel };
+                RunCommandView.Show();
+                RunCommandView.Activate();
             }
             else {
-                CurrentCommandVM.FadeBorder = true;
-                CurrentCommandVM.Closing = true;
+                RunCommandViewModel.SuggestionsClosing = true;
+                RunCommandViewModel.Closing = true;
 
-                DispatcherTimer dispatcherTimer = new DispatcherTimer();
-                dispatcherTimer.Interval = ((Duration)App.Current.FindResource("WindowFadeDuration")).TimeSpan;
-                dispatcherTimer.Tick += (s, e) => { CloseCommandWindow(); dispatcherTimer.Stop(); };
-
-                dispatcherTimer.Start();
+                RunCommandView?.Close();
+                RunCommandView = null;
             }
-        }
-
-        private void CloseCommandWindow() {
-            CommandView?.Close();
-            CommandView = null;
         }
 
         #endregion
@@ -275,25 +265,15 @@ namespace TimeLine
                         }
                         break;
                     }
-                case "stop": {
-                        if (TimerCountdown <= 0) {
-                            toastMessage = "Timer is not running";
-                            icon = Icons.error;
-                        }
-                        else {
-                            Timer.Stop();
-                            toastMessage = $"Stopped";
-                        }
+                case "stop": {                        
+                        toastMessage = TimerIsRunning ? "Stopped" : "Timer is not running";
+                        icon = TimerIsRunning ? Icons.timer : Icons.error;
+                        Timer.Stop();
                         break;
                     }
                 case "info": {
-                        if (TimerCountdown <= 0) {
-                            toastMessage = "Timer is not running";
-                            icon = Icons.error;
-                        }
-                        else {
-                            toastMessage = $"Remaining { Utilities.PrettyTime(TimerCountdown)}";
-                        }
+                        toastMessage = TimerIsRunning ? $"Remaining { Utilities.PrettyTime(TimerCountdown)}" : "Timer is not running";
+                        icon = TimerIsRunning ? Icons.timer : Icons.error;
                         break;
                     }
                 // Not recognized command
@@ -319,6 +299,7 @@ namespace TimeLine
             Application.Current.Dispatcher.Invoke(new Action(() =>
             {
                 ToastManager.ShowToastNotification("Timer", $"{Utilities.PrettyTime(timeForTimer)} has passed.", Icons.timer, IsAlarm: true);
+                App.SoundPlayer.Play();
             }));
 
         }
@@ -391,6 +372,7 @@ namespace TimeLine
 
         private void Alarm_AlarmRing(object sender, string e) {
             Application.Current.Dispatcher.Invoke(new Action(() => { ToastManager.ShowToastNotification("Alarm", e, Icons.alarm, IsAlarm: true); }));
+            App.SoundPlayer.Play();
         }
 
         #endregion

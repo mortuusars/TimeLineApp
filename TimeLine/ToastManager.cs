@@ -12,7 +12,7 @@ namespace TimeLine
 
         }
 
-        private void CreateTostHolder() {
+        private void CreateToastHolder() {
             if (toastHolderView == null) {
                 toastHolderViewModel = new ToastHolderViewModel(this);
                 toastHolderViewModel.LastToastClosed += CloseHolderOnLastToastClosed;
@@ -39,7 +39,7 @@ namespace TimeLine
         /// <param name="IsAlarm">Plays sound and makes toast stay until manually closed.</param>
         public void ShowToastNotification(string title, string message, Icons icon, bool IsAlarm = false) {
             if (toastHolderView == null || toastHolderViewModel == null)
-                CreateTostHolder();
+                CreateToastHolder();
 
             toastHolderViewModel.ShowToast(title, message, icon, IsAlarm);
         }
