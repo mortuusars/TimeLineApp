@@ -20,22 +20,30 @@
 
         <DropShadowEffect x:Key="Shadow" BlurRadius="22" ShadowDepth="6" Direction="-90" Opacity="0.5"/>
 
-        <Duration x:Key="ButtonHoverDurationIn">0:0:0.05</Duration>
+        <Duration x:Key="ButtonHoverDurationIn">0:0:0.04</Duration>
         <Duration x:Key="ButtonHoverDurationOut">0:0:0.4</Duration>
-
+        
         <CircleEase x:Key="EaseOut" EasingMode="EaseOut"/>
         <CircleEase x:Key="EaseInOut" EasingMode="EaseInOut"/>
 
 
-
+    <!--#region Animations -->
+        
         <!-- Window Fade Animation -->
 
         <Storyboard x:Key="WindowFadeIn">
-            <DoubleAnimation Duration="0:0:0.5" From="0" To="1" Storyboard.TargetProperty="Opacity" FillBehavior="Stop" EasingFunction="{StaticResource EaseOut}"/>
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                             From="0" To="1" 
+                             Duration="{StaticResource WindowFadeDuration}" 
+                             FillBehavior="Stop" 
+                             EasingFunction="{StaticResource EaseOut}"/>
         </Storyboard>
 
         <Storyboard x:Key="WindowFadeOut">
-            <DoubleAnimation Duration="0:0:0.5" To="0" Storyboard.TargetProperty="Opacity" EasingFunction="{StaticResource EaseOut}"/>
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                             To="0"
+                             Duration="{StaticResource WindowFadeDuration}"
+                             EasingFunction="{StaticResource EaseOut}"/>
         </Storyboard>
 
 
@@ -62,7 +70,11 @@
                              Duration="{StaticResource ButtonHoverDurationOut}" EasingFunction="{StaticResource EaseOut}"
                              To="26"/>
         </Storyboard>
+        
+        
+        
 
+        <!-- Click -->
 
         <Storyboard x:Key="ButtonClick">
             <DoubleAnimation Storyboard.TargetProperty="Height"
@@ -74,7 +86,12 @@
                              From="0" To="26" 
                              FillBehavior="Stop" EasingFunction="{StaticResource EaseInOut}"/>
         </Storyboard>
+        
+        
+    <!--#endregion-->
 
+        
+        <!-- Main Style -->
 
         <Style TargetType="Border" x:Key="BorderStyle">
             <Setter Property="Background" Value="{StaticResource LightBrush}"/>
@@ -82,11 +99,17 @@
             <Setter Property="Effect" Value="{StaticResource Shadow}"/>
 
             <Style.Triggers>
+                
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource WindowFadeIn}"/>
+                </EventTrigger>
+                
                 <DataTrigger Binding="{Binding WindowClosing}" Value="True">
                     <DataTrigger.EnterActions>
                         <BeginStoryboard Storyboard="{StaticResource WindowFadeOut}"/>
                     </DataTrigger.EnterActions>
                 </DataTrigger>
+                
             </Style.Triggers>
         </Style>
 
@@ -151,17 +174,16 @@
     </Window.Resources>
     
     
+    
+    
+    
+    
+    
     <!-- Main Border -->
 
     <Border Margin="14 14 14 24" 
             Style="{StaticResource BorderStyle}"
             MouseLeftButtonDown="Border_MouseLeftButtonDown">
-
-        <Border.Triggers>
-            <EventTrigger RoutedEvent="Loaded">
-                <BeginStoryboard Storyboard="{StaticResource WindowFadeIn}"/>
-            </EventTrigger>
-        </Border.Triggers>
 
         <Grid Margin="4">
             <Grid.ColumnDefinitions>
@@ -179,7 +201,6 @@
                     <MouseBinding Gesture="RightClick" Command="{Binding CloseCommand}"/>
                 </Button.InputBindings>
             </Button>
-
             
             <!-- Stop-Reset Button-->
             <Button Grid.Column="1" Margin="2"
@@ -197,8 +218,13 @@
                        Text="{Binding GhostTime}" d:Text="00:00:00"
                        FontSize="38" IsHitTestVisible="False"/>
 
+            
+            
+            
+            <!-- Days Strips -->
+            
             <Grid Grid.Column="2" Margin="80 -4 0 -4" Panel.ZIndex="0" Opacity="1" >
-                <Rectangle  Width="30" Height="60" Fill="LightSeaGreen" Visibility="{Binding DayOne, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Rectangle  Width="30" Height="60" Fill="LightSeaGreen" Visibility="{Binding OneDay, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <SkewTransform AngleX="30" AngleY="0"/>
@@ -206,7 +232,7 @@
                     </Rectangle.RenderTransform>
                 </Rectangle>
 
-                <Rectangle Margin="30 0 0 0"  Width="30" Height="60" Fill="LightSteelBlue" Visibility="{Binding DayTwo, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Rectangle Margin="30 0 0 0"  Width="30" Height="60" Fill="LightSteelBlue" Visibility="{Binding TwoDays, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <SkewTransform AngleX="30" AngleY="0"/>
@@ -214,6 +240,11 @@
                     </Rectangle.RenderTransform>
                 </Rectangle>
             </Grid>
+            
+            
+            
+            
+            <!-- Main Text -->
             
             <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10 1 0 0"
                        Style="{StaticResource TextBlockStyle}"

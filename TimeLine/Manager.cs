@@ -19,7 +19,7 @@ namespace TimeLine
         public RunCommandViewModel CurrentCommandVM { get; private set; }
 
         public bool TimerIsRunning { get { return Timer.IsRunning; } }
-        public bool StopwatchRunning { get { return StopwatchManager.IsRunning; } }
+        public bool StopwatchRunning { get { return StopwatchManager.IsRunning(); } }
 
         public HistoryViewModel HistoryVM;
 
@@ -70,12 +70,14 @@ namespace TimeLine
             ApplicationState state = new ApplicationState();
             //TODO: finish
             long timerSavedTime = Timer.RemainingSeconds > 0 ? DateTimeOffset.Now.ToUnixTimeSeconds() + Timer.RemainingSeconds : 0;
-            int stopwatchSavedTime = StopwatchManager.GetCount > 0 ? StopwatchManager.GetCount : 0;
+            
+            int stopwatchCount = StopwatchManager.GetCount();
+            //int stopwatchSavedTime = stopwatchCount > 0 ? stopwatchCount : 0;
             
             state.SaveState(new State() 
             { 
                 TimerRingTime = timerSavedTime, 
-                StopwatchCount = stopwatchSavedTime,
+                StopwatchCount = stopwatchCount,
                 Alarms = new List<Alarm>() 
             });
         }
@@ -105,9 +107,8 @@ namespace TimeLine
         }
 
         private void RestoreStopwatch(int stopwatchCount) {
-            
-            //TODO: rewrite stopwatch to start from not 0
-
+            if (stopwatchCount > 0)            
+                StopwatchManager.Start(stopwatchCount);
         }
 
 
@@ -302,7 +303,7 @@ namespace TimeLine
 
         private void StopwatchCommands(ParsedCommandData parsedData) {
             if (parsedData.OperationCommand == "")
-                StopwatchManager.OpenCloseWindow();
+                StopwatchManager.ToggleWindow();
             else if (parsedData.OperationCommand == "start")
                 StopwatchManager.Start();
             else if (parsedData.OperationCommand == "stop") {

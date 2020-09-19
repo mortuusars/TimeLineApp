@@ -10,66 +10,49 @@ namespace TimeLine
         /// <summary>
         /// Raises every time stopwatch count changes.
         /// </summary>
-        public event EventHandler<int> CountChanged;
+        public event EventHandler CountChanged;
 
         /// <summary>
         /// Returns true if Stopwatch is counting.
         /// </summary>
         public bool StopwatchRunning { get; set; }
 
-        private int StopwatchCount
+        public int Count
         {
-            get { return stopwatchCount; }
+            get { return count; }
             set { 
-                stopwatchCount = value; 
-                CountChanged?.Invoke(this, StopwatchCount); 
+                count = value; 
+                CountChanged?.Invoke(this, EventArgs.Empty); 
             }
         }        
 
-        System.Timers.Timer counter;
-        private int stopwatchCount;
+        System.Timers.Timer stopwatchCounter;
+        private int count;
 
         public StopwatchCounter() {
-            counter = new System.Timers.Timer();
-            counter.Interval = 1000;
-            counter.Elapsed += Counter_Tick;
+            stopwatchCounter = new System.Timers.Timer();
+            stopwatchCounter.Interval = 1000;
+            stopwatchCounter.Elapsed += Counter_Tick;
         }
 
-        private void Counter_Tick(object sender, System.Timers.ElapsedEventArgs e) {
-            StopwatchCount++;
-        }
 
-        /// <summary>
-        /// Starts or (if running) pauses stopwatch.
-        /// </summary>
-        public void StartPause() {
-            if (counter.Enabled == false) 
-                Start();
-            else 
-                Pause();
-        }
-
-        /// <summary>
-        /// Stops and resets stopwatch count.
-        /// </summary>
-        public void Stop() {
-            Pause();
-            Reset();
-        }
-
-        public void Reset() {
-            StopwatchCount = 0;
-        }
-
+        #region Public Methods
 
         public void Start() {
-            counter.Start();
+            stopwatchCounter.Start();
             StopwatchRunning = true;
+        }  
+
+        public void Stop() {
+            stopwatchCounter.Stop();
+            StopwatchRunning = false;
         }
 
-        public void Pause() {
-            counter.Stop();
-            StopwatchRunning = false;
+        #endregion
+
+
+        private void Counter_Tick(object sender, System.Timers.ElapsedEventArgs e) {
+            Count++;
         }
     }
 }

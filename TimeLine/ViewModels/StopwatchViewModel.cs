@@ -8,6 +8,7 @@ namespace TimeLine
     public class StopwatchViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        /*
 
         StopwatchManager StopwatchManager;
         public StopwatchCounter Stopwatch { get; set; }
@@ -36,7 +37,7 @@ namespace TimeLine
             set {
                 count = value;
                 SetTimeString(count); 
-                SetDayIsVisible(count);
+                SetDaysVisibilityTrigger(count);
             }
         }
 
@@ -72,42 +73,20 @@ namespace TimeLine
         }
 
 
-
-        private void SetWindowPosition() {
-            var left = App.ApplicationSettings.AppSettings.StopwatchPositionLeft;
-
-            if (left == default)
-                left = WpfScreenHelper.Screen.PrimaryScreen.Bounds.Width / 2 - Width / 2;
-
-            Left = left;
-
-            var top = App.ApplicationSettings.AppSettings.StopwatchPositionTop;
-
-            if (top == default)
-                top = WpfScreenHelper.Screen.PrimaryScreen.Bounds.Height / 2;
-
-            Top = top;
+        public void Close() {
+            WindowClosing = true;
         }
-
-        private void SaveWindowPositionLeft() {
-            App.ApplicationSettings.AppSettings.StopwatchPositionLeft = Left;
-        }
-
-        private void SaveWindowPositionTop() {
-            App.ApplicationSettings.AppSettings.StopwatchPositionTop = Top;
-
-        }
-
-
-
 
         /// <summary>
         /// Returns true if stopwatch is running and can be stopped.
         /// </summary>
-        /// <returns></returns>
         public bool IsStoppable() {
             return Stopwatch.StopwatchRunning;
         }
+
+
+
+
 
 
         /// <summary>
@@ -147,8 +126,7 @@ namespace TimeLine
                 Time = newTime;
         }
 
-        private void SetDayIsVisible(int count) {
-            // One day
+        private void SetDaysVisibilityTrigger(int count) {            
             if (count > 172_800) {
                 DayOne = true;
                 DayTwo = true;
@@ -161,7 +139,7 @@ namespace TimeLine
                 DayOne = false;
                 DayTwo = false;
             }
-
         }
+        */
     }
 }
