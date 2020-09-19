@@ -11,7 +11,7 @@
         KeyDown="Window_KeyDown">
 
     <Window.Resources>
-        <DropShadowEffect x:Key="DropShadowWindow" ShadowDepth="6" BlurRadius="40" Direction="-90" Opacity="0.5"/>
+        <DropShadowEffect x:Key="DropShadowWindow" ShadowDepth="10" BlurRadius="32" Direction="-90" Opacity="0.4"/>
         
 
         <Duration x:Key="GhostTextAnimation">0:0:0.3</Duration>
@@ -134,17 +134,22 @@
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="125"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
+        
+        <!-- Main Border -->
         <Border  Margin="30"  Effect="{StaticResource DropShadowWindow}" Height="65" Background="{StaticResource VeryLightBrush}" 
                  CornerRadius="6" BorderThickness="1" BorderBrush="{StaticResource HalfLightBrush}" Opacity="0.97">
             <Border.Triggers>
                 <EventTrigger RoutedEvent="Loaded">
                     <BeginStoryboard>
                         <Storyboard>
-                            <DoubleAnimation From="0.0" To="0.97" Duration="0:0:0.3" Storyboard.TargetProperty="Opacity" FillBehavior="Stop"/>
+                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                             From="0.0" To="0.97" 
+                                             Duration="{StaticResource WindowFadeDuration}"  
+                                             FillBehavior="Stop"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
@@ -234,7 +239,7 @@
 
         
         <!-- Suggestions Bar -->
-        <Border x:Name="SuggestionsBorder" Height="{Binding SuggestionsHeight}" Effect="{StaticResource DropShadowWindow}" Grid.Row="1"  CornerRadius="6" 
+        <Border Margin="0 -10 0 0" x:Name="SuggestionsBorder" Height="{Binding SuggestionsHeight}" Effect="{StaticResource DropShadowWindow}" Grid.Row="1"  CornerRadius="6" 
                  d:Height="200" Width="240"
                 Background="{StaticResource LightBrush}" BorderThickness="1" BorderBrush="{StaticResource HalfLightBrush}" Opacity="0.97">
             
@@ -259,7 +264,7 @@
                 <EventTrigger RoutedEvent="Loaded">
                     <BeginStoryboard>
                         <Storyboard>
-                            <DoubleAnimation From="0.0" To="1.0" Duration="0:0:0.2" Storyboard.TargetProperty="Opacity" FillBehavior="Stop"/>
+                            <DoubleAnimation From="0.0" To="1.0" Duration="{StaticResource WindowFadeDuration}" Storyboard.TargetProperty="Opacity" FillBehavior="Stop"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>                

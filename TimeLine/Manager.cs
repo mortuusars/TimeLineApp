@@ -148,10 +148,8 @@ namespace TimeLine
         }
 
         private void CloseCommandWindow() {
-            if (CommandView != null) {
-                CommandView.Close();
-                CommandView = null;
-            }
+            CommandView?.Close();
+            CommandView = null;            
         }
 
         #endregion
