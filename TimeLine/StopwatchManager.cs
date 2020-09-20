@@ -81,7 +81,7 @@ namespace TimeLine
 
         public void Close() {
             Closing = true;
-            Reset();
+            Stop();
             StopwatchView?.Close();
             StopwatchView = null;
         }

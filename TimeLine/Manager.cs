@@ -178,6 +178,7 @@ namespace TimeLine
                 $"[{parsedData.Minutes}], [{parsedData.Seconds}]", LogLevel.DEBUG);
 
             RunParsedCommand(parsedData);
+            SaveApplicationState();
         }
 
         private void RunParsedCommand(ParsedCommandData parsedData) {
@@ -199,10 +200,6 @@ namespace TimeLine
                 history.Show();
             }
             else if (parsedData.MainCommand == "exit") {
-                SaveApplicationState();
-
-                App.ApplicationSettings.Save();
-
                 App.ExitApplication();
             }
             else {

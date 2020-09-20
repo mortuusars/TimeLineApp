@@ -12,10 +12,9 @@ namespace TimeLine
     /// </summary>
     public partial class App : Application
     {
-        private MainView mainView;
         private TaskbarIcon taskbarIcon;
-        public ToastManager ToastManager { get; private set; }
 
+        public ToastManager ToastManager { get; private set; }
 
         public static ApplicationSettings ApplicationSettings { get; set; }
         public static SoundPlayer SoundPlayer { get; set; }
@@ -39,13 +38,15 @@ namespace TimeLine
 
             taskbarIcon = (TaskbarIcon)FindResource("TrayIcon");
 
-            mainView = new MainView {
+            MainView mainView = new MainView {
                 DataContext = new MainViewModel()
             };
         }
 
         protected override void OnExit(ExitEventArgs e) {
             Logger.Log("Closing Application\n", LogLevel.DEBUG);
+
+            ApplicationSettings.Save();
 
             taskbarIcon.Dispose(); // Make sure we remove TrayIcon before exiting app.
             base.OnExit(e);
