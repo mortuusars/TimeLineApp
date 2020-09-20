@@ -73,6 +73,7 @@ namespace TimeLine
                 StopwatchCount = stopwatchCount,
                 StopwatchRunning = StopwatchManager.IsRunning(),
                 StopwatchWindowOpen = StopwatchManager.IsWindowOpen(),
+                Alarms = Alarm.GetAlarmsList()
             };
 
             JsonFileIO json = new JsonFileIO(Properties.StateFilePath);
@@ -85,13 +86,23 @@ namespace TimeLine
         }
 
         private void RestoreApplicationState() {
-            
-            //RestoreTimer(state.TimerRingTime);
-            //RestoreStopwatch(state.StopwatchCount, state.StopwatchRunning, state.StopwatchWindowOpen);
-            //RestoreAlarms();
+
+            JsonFileIO json = new JsonFileIO(Properties.StateFilePath);
+
+            State state;
+
+            try {
+                state = json.Read<State>();
+            }
+            catch (Exception ex) {
+                Logger.Log($"Failed reading state from file: {ex.Message}", LogLevel.ERROR);
+                state = new State();
+            }
+
+            RestoreTimer(state.TimerRingTime);
+            RestoreStopwatch(state.StopwatchCount, state.StopwatchRunning, state.StopwatchWindowOpen);
+            RestoreAlarms(state.Alarms);
         }
-
-
 
 
 
@@ -115,7 +126,7 @@ namespace TimeLine
             }
         }
 
-        private void RestoreStopwatch(int count, bool isRunning, bool isWindowOpen) {            
+        private void RestoreStopwatch(int count, bool isRunning, bool isWindowOpen) {
             if (isWindowOpen) {
                 if (count > 0)
                     if (isRunning)
@@ -124,11 +135,17 @@ namespace TimeLine
                         StopwatchManager.Start(count);
                         StopwatchManager.Pause();
                     }
-            } 
+            }
         }
 
-        private void RestoreAlarms() {
-            throw new NotImplementedException();
+        private void RestoreAlarms(List<Alarm> alarms) {
+
+            if (alarms == null)
+                return;
+
+            foreach (var alarm in alarms) {
+                Alarm.AddAlarm(alarm.RingTime);
+            }
         }
 
         #endregion
@@ -262,7 +279,7 @@ namespace TimeLine
                         }
                         break;
                     }
-                case "stop": {                        
+                case "stop": {
                         toastMessage = TimerIsRunning ? "Stopped" : "Timer is not running";
                         icon = TimerIsRunning ? Icons.timer : Icons.error;
                         Timer.Stop();
@@ -309,7 +326,7 @@ namespace TimeLine
         private void StopwatchCommands(ParsedCommandData parsedData) {
             if (parsedData.OperationCommand == "")
                 StopwatchManager.ToggleWindow();
-            else if (parsedData.OperationCommand == "start") 
+            else if (parsedData.OperationCommand == "start")
                 StopwatchManager.Start();
             else if (parsedData.OperationCommand == "stop") {
                 if (StopwatchManager.Stop() == false)
@@ -336,7 +353,6 @@ namespace TimeLine
         }
 
         private void AlarmCommands(ParsedCommandData parsedData) {
-
             if (parsedData.OperationCommand == "") {
                 try {
                     var ringTime = DateTimeOffset.Parse($"{parsedData.Hours}:{parsedData.Minutes}");
@@ -361,8 +377,9 @@ namespace TimeLine
             else if (parsedData.OperationCommand == "list") {
                 var list = Alarm.GetAlarmsList();
 
-                foreach (var item in list) {
-                    Logger.Log(item, LogLevel.INFO);
+                foreach (var alarm in list) {                    
+                    string isDisabled = alarm.Disabled ? "(disabled)" : "";
+                    ToastManager.ShowToastNotification("Alarm", $"{Utilities.TimeToString(alarm.RingTime)}{isDisabled}", Icons.alarm);
                 }
             }
         }

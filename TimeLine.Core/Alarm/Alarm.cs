@@ -6,7 +6,7 @@ namespace TimeLine.Core
     {
         public DateTimeOffset RingTime { get; set; }
         public DateTimeOffset CreationTime { get; set; }
-        public bool ShouldRing { get; set; }
+        public bool Disabled { get; set; }
 
         private bool hasRangRecently;
 
@@ -21,11 +21,13 @@ namespace TimeLine.Core
             }
         }
 
+        public Alarm() {
+
+        }
 
         public Alarm(DateTimeOffset ringTime) {
             RingTime = ringTime;
             CreationTime = DateTimeOffset.Now;
-            ShouldRing = true;
         }
 
 

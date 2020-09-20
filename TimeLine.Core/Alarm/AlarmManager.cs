@@ -18,7 +18,11 @@ namespace TimeLine.Core
             CreateCheckTimer();
         }
 
-        public List<string> GetAlarmsList() {
+        public List<Alarm> GetAlarmsList() {
+            return Alarms;
+        }
+
+        public List<string> GetAlarmsStringList() {
             List<string> alarmsList = new List<string>();
 
             foreach (var alarm in Alarms) {
