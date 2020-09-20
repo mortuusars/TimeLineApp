@@ -59,6 +59,10 @@ namespace TimeLine
             }
         }
 
+        public void AddHistoryItem(string title, string message, Icons icon) {            
+            HistoryVM.AddItem(title, message, icon);
+        }
+
 
 
         #region State
@@ -149,16 +153,6 @@ namespace TimeLine
         }
 
         #endregion
-
-
-
-
-        public void AddHistoryItem(HistoryItem historyitem) {
-            if (HistoryVM.HistoryList.Count > 10)
-                HistoryVM.HistoryList.RemoveAt(0);
-
-            HistoryVM.HistoryList.Add(historyitem);
-        }
 
 
         #region Command Window
@@ -360,7 +354,7 @@ namespace TimeLine
                     ToastManager.ShowToastNotification("Alarm", $"Set to {Utilities.TimeToString(ringTime)}", Icons.alarm);
                 }
                 catch (Exception) {
-                    ToastManager.ShowToastNotification("Alarm", "Enterd time is incorrect", Icons.error);
+                    ToastManager.ShowToastNotification("Alarm", "Entered time is incorrect", Icons.error);
                     Logger.Log("Time for alarm is incorrect", LogLevel.WARN);
                 }
             }

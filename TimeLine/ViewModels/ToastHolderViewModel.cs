@@ -28,7 +28,7 @@ namespace TimeLine
 
             ToastList.Add(newToast);
 
-            //App.Manager.AddHistoryItem(new Models.HistoryItem(title, message, icon));
+            App.Manager.AddHistoryItem(title, message, icon);
 
             // Play sound and don't close toast if it is "ALARM"
             if (IsAlarm == true) {

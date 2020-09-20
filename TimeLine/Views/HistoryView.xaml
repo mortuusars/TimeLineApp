@@ -6,24 +6,34 @@
         xmlns:local="clr-namespace:TimeLine.Views"
         mc:Ignorable="d"
         Title="HistoryView" Height="500" Width="400">
-    
+
     <Grid Margin="6" >
         <ItemsControl ItemsSource="{Binding HistoryList}" Height="auto" Width="Auto" >
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid Margin="4">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="auto"/>
-                        </Grid.ColumnDefinitions>
+                    <Border Background="{StaticResource LightBrush}" CornerRadius="10">
+                        <Grid Margin="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <Image Margin="6 0" Source="{Binding Icon, Converter={StaticResource StringToImageConverter}}" Width="16" Height="16"/>
-                        <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="16" FontFamily="{StaticResource MontserratRegular}"/>
-                        <TextBlock Grid.Column="2" Margin="6 0" Text="{Binding Message}" FontSize="16" FontFamily="{StaticResource MontserratRegular}"/>
-                        <TextBlock Grid.Column="3" Margin="6 0" Text="{Binding Time}" FontSize="16" FontFamily="{StaticResource MontserratRegular}"/>
-                    </Grid>
+
+                            <TextBlock Grid.Column="0" Margin="6 0" Text="{Binding Time}" d:Text="16:52" FontSize="16" FontFamily="{StaticResource MontserratRegular}" 
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                            <Image Grid.Column="1" Margin="6 0" Source="{Binding Icon, Converter={StaticResource StringToImageConverter}}" 
+                   d:Source="/Resources/Icons/alarm_64.png" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                            <TextBlock Grid.Column="2" Text="{Binding Title}" d:Text="Alarm" FontSize="16" FontFamily="{StaticResource MontserratRegular}" 
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                            <TextBlock Grid.Column="3" Margin="6 0" Text="{Binding Message}" d:Text="At 12:50" FontSize="16" FontFamily="{StaticResource MontserratRegular}"
+                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        </Grid>
+                    </Border>
                 </DataTemplate>
 
             </ItemsControl.ItemTemplate>
